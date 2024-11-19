@@ -68,8 +68,6 @@ const MentalTuv = () => {
             ХЯЛБАР БҮРТГЭЛ
           </Button>
         </Link>
-
-        <Footer />
       </div>
     </div>
   );

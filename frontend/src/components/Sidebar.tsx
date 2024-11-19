@@ -8,6 +8,8 @@ import {
   BookOpenIcon,
   FolderIcon,
   MessageSquareIcon,
+  Search,
+  CirclePlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -62,53 +64,21 @@ export default function Component({
   };
 
   return (
-    <div className="flex w-1/4 h-[100%] rounded-l-lg bg-white text-black">
-      <div className=" border-white/10 flex flex-col">
-        <div className="">
-          <AlertDialog>
-            <AlertDialogTrigger className="m-4 outline-none w-[320px]">
-              <div
-                className={`w-full justify-start outline-none bg-white items-center text-sm flex pl-4 p-2 gap-2 rounded-lg ${bgchat} ${textchat}  border-white/10`}
-              >
-                <MessageSquareIcon className="h-4  w-4" />
-                New Chat
-              </div>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Search User by Name</AlertDialogTitle>
-                <AlertDialogDescription>
-                  <Input />
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-
-        <div className="mt-4 px-4">
-          <div className="text-sm text-black">Recent Chats</div>
-          <div className="mt-2 space-y-1">
-            <Button
-              variant="ghost"
-              className="w-[60%] justify-start text-white bg-[#325342]"
-            >
-              User1
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-black hover:text-white hover:bg-white/10"
-            >
-              User2
-            </Button>
+    <div className="flex w-1/4 h-[100%] rounded-l-lg bg-[#f3f3f3] text-black">
+      <div className="flex w-[100%] flex-col">
+        <div className="flex w-[97%] bg-white  rounded-2xl p-4 m-[10px] items-center justify-evenly">
+          <div className="font-bold text-xl text-[#325343]">Chat</div>
+          <div className="w-[220px] relative">
+            <Input className="focus-visible:outline-none rounded-2xl" />
+            <Search className="absolute top-2 right-2" />
           </div>
+          <button className="w-[24px] text-[#325343]">
+            <CirclePlus />
+          </button>
         </div>
-        <div className="mt-auto p-4">
-          <div className="flex items-center gap-2 text-sm text-white/70">
-            <UserButton />
+        <div className="bg-white w-[97%] h-full mb-4 p-4 ml-[10px] rounded-2xl px-4">
+          <div className="text-sm font-black py-4 px-2 text-black">
+            Recent Chats
           </div>
         </div>
       </div>

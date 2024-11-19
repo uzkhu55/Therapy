@@ -16,7 +16,7 @@ const Homepage = () => {
     <div className="relative h-full w-screen">
       <div className="w-screen h-[861px] bg-[#325343]"></div>
       <div className="absolute top-0 left-0 w-screen h-[861px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-10"></div>
-      <Header under="" bg1="" bg2="" under1="" under2="" bg="" />
+      <Header under="" bg1="white" bg2="white" under1="" under2="" bg="white" />
       <Section1 />
       <Section1svg />
       <Section2 />
