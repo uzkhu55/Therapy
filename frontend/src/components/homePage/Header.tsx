@@ -11,8 +11,22 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { HomeLogo } from "./HomeLogo";
 import { useState } from "react";
-import { Bell, FilePlus2, MessagesSquare, Users } from "lucide-react";
+import {
+  AlignJustify,
+  Bell,
+  FilePlus2,
+  MessagesSquare,
+  Users,
+} from "lucide-react";
 import { LogoLoggedin } from "./Homelogologgedin";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ComponentProps {
   bg: string;
@@ -33,17 +47,17 @@ const Header: React.FC<ComponentProps> = ({
   const { user, isSignedIn } = useUser();
 
   return (
-    <div className="absolute top-0 z-40 w-full h-[80px] flex justify-center items-center">
+    <div className="absolute top-0 w-full h-[80px]  flex justify-center items-center">
       {isSignedIn ? (
-        <div className="w-full h-[80px] flex justify-center items-center bg-white ">
+        <div className="w-full h-[80px] fixed z-50 bg-[#325343] flex justify-center items-center  ">
           <div className="flex w-full max-w-[1120px] text-black justify-between">
             <Link className="flex items-center justify-center" href="/">
-              <LogoLoggedin />
+              <HomeLogo />
             </Link>
-            <div className="flex w-[250px] justify-evenly">
+            <div className="flex w-[650px] justify-evenly">
               <Link
                 href="chat"
-                className={`flex flex-col top-2 relative w-[80px] hover:text-[#325343] ${bg}  h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 relative w-[80px] text-white hover:text-[#F3EFE9] ${bg}  h-[80px] items-center gap-2 justify-center`}
               >
                 <MessagesSquare />
                 <div className=" text-xs">Чат</div>
@@ -53,7 +67,7 @@ const Header: React.FC<ComponentProps> = ({
               </Link>
               <Link
                 href="createPost"
-                className={`flex flex-col top-2 relative w-[80px] hover:text-[#325343] ${bg1}  h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 relative w-[80px] text-white hover:text-[#F3EFE9] ${bg}  h-[80px] items-center gap-2 justify-center`}
               >
                 <FilePlus2 />
                 <div className=" text-xs">Пост</div>
@@ -63,7 +77,7 @@ const Header: React.FC<ComponentProps> = ({
               </Link>
               <Link
                 href="niitlel"
-                className={`flex flex-col top-2 relative w-[80px] hover:text-[#325343] ${bg2}  h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 relative w-[80px] text-white hover:text-[#F3EFE9] ${bg}  h-[80px] items-center gap-2 justify-center`}
               >
                 <Users />
                 <div className=" text-xs">Форум</div>
@@ -71,9 +85,45 @@ const Header: React.FC<ComponentProps> = ({
                   className={`${under2} border-1px border-[#325343] h-2 w-12`}
                 ></div>
               </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <AlignJustify className="outline-none text-white" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <Link
+                      href="about"
+                      aria-label="Бидний тухай"
+                      className="hover:text-[#325343]"
+                    >
+                      Бидний тухай
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link
+                      href=""
+                      aria-label="Мэргэжилтэн"
+                      className="hover:text-[#325343]"
+                    >
+                      Мэргэжилтэн
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link
+                      href="contact"
+                      aria-label="Холбоо барих"
+                      className="hover:text-[#325343]"
+                    >
+                      Холбоо барих
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <div className="flex items-center w-fit gap-[30px] text-white text-base font-['inter'] font-semibold"></div>
             </div>
-            <div className="flex items-center justify-center gap-6">
-              <div className="flex flex-col w-[80px] hover:text-[#325343] h-[80px] items-center gap-2 justify-center">
+            <div className="flex items-center cursor-pointer  justify-center gap-6">
+              <div className="flex flex-col w-[80px] hover:text-[#F3EFE9] text-white h-[80px] items-center gap-2 justify-center">
                 <Bell />
                 <div className=" text-xs">Мэдэгдэл</div>
               </div>

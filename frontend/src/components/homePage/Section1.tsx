@@ -13,7 +13,7 @@ const Section1 = () => {
 
   return (
     <div
-      className={`flex absolute top-[206px] justify-center items-center w-screen z-40 ${rubik.className}`}
+      className={`flex absolute top-[206px] justify-center items-center w-screen z-40 `}
     >
       <div className="flex justify-between items-center w-[1120px]">
         <div className="flex flex-col w-full max-w-[651px] gap-8">

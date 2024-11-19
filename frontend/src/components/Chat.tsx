@@ -15,6 +15,7 @@ import Chatheader from "./Chatheader";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import Header from "./homePage/Header";
+import { Ellipsis } from "lucide-react";
 
 interface Message {
   _id: string;
@@ -135,22 +136,24 @@ const Chat: React.FC = () => {
         bg="text-[#325343]"
       />
       <div className="flex absolute w-screen top-80px bg-white">
-        <div className="flex relative h-[978px] rounded-lg top-[81px] border-[1px] border-black w-screen ">
+        <div className="flex relative h-[978px] rounded-lg top-[81px] w-screen ">
           <Component
             textchat="text-black"
             bgchat=""
             text="text-white/70"
             bg=""
           />
-          <div className="border-r-[1px] border-[#325343]"></div>
+          {/* <div className="border-r-[1px] border-[#325343]"></div> */}
           <div className="w-3/4  bg-[#f3f3f3] flex flex-col rounded-r-lg ">
-            <div className="flex border-[1px] rounded-r-lg bg-[#ffffff] p-4 justify-between">
-              <div>
+            <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
+              <div className="flex gap-4">
                 <div>{message.username}</div>
                 <div className="text-green-400">Online</div>
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger>...</DropdownMenuTrigger>
+                <DropdownMenuTrigger>
+                  <Ellipsis />
+                </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Block</DropdownMenuItem>
@@ -160,8 +163,7 @@ const Chat: React.FC = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
-            <div className="flex flex-col w-full top-[20px] relative mx-12 gap-4 overflow-y-auto h-[800px]">
+            <div className="flex flex-col mx-[10px] rounded-2xl bg-white  relative gap-4 overflow-y-auto h-[800px]">
               {getmessages.map((msg, index) => (
                 <div
                   key={index}
@@ -183,7 +185,7 @@ const Chat: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex mx-12 items-center">
+            <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
               <input
                 type="text"
                 className="flex-1 outline-none p-2 border border-gray-300 rounded-xl"
