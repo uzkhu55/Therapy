@@ -12,7 +12,9 @@ const AdminHeader = () => {
         </div>
         <div className="flex flex-row gap-5">
           <Bell size={26} />
-          <CircleUserRound size={26} />
+          <button>
+            <CircleUserRound size={26} />
+          </button>
         </div>
       </div>
       <div className="flex border-b-2"></div>

@@ -4,13 +4,14 @@ import {
   CalendarDays,
   FileChartColumn,
   Settings,
+  StickyNote,
   Users,
   UsersRound,
 } from "lucide-react";
 import { useState } from "react";
 import Clients from "./Clients";
 import Specialist from "./Specialist";
-import Appointment from "./Appoinments";
+import Appointment from "./Post";
 import Analytics from "./Analytics";
 
 type SideBarProps = {
@@ -23,7 +24,7 @@ const SideBar = ({ toggleHandler, toggle }: SideBarProps) => {
   const rightSide = [
     { label: "Clients", icon: <UsersRound /> },
     { label: "Specialist", icon: <Users /> },
-    { label: "Appointment", icon: <CalendarDays /> },
+    { label: "Post", icon: <StickyNote /> },
     { label: "Analytics", icon: <CalendarDays /> },
     { label: "Settings", icon: <Settings /> },
   ];
