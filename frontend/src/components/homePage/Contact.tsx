@@ -27,14 +27,6 @@ export const ContactPage = () => {
         </div>
       </div>
       <img src="/mental.jpg" alt="" className="ml-[800px]" />
-      <div className="flex flex-col  items-center">
-        <div className="font-bold text-[50px] mt-[50px] text-[#102d3f]">
-          Сэтгэл зүйн төвүүд ✨
-        </div>
-        <div>
-          <MentalTuv />
-        </div>
-      </div>
     </div>
   );
 };
