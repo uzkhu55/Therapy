@@ -3,7 +3,7 @@ import Niitlel1 from "@/components/Niitlel/Niitlel1";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export const allNiitlel = [
+const allNiitlel = [
   {
     id: "1",
     title: "Улирал солигдох нь сэтгэл зүйд хэрхэн нөлөөлдөг вэ?",

@@ -7,7 +7,7 @@ const Page = () => {
     <div className="relative h-full w-screen">
       <div className="w-screen h-[100px] bg-[#325343]"></div>
       <div className="absolute top-0 left-0 w-screen h-[100px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-10"></div>
-      <Header />
+      <Header bg="" bg1="" bg2="" under="" under1="" under2="" />
       <ContactPage />
       <Footer />
     </div>
