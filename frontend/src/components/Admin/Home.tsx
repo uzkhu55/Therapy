@@ -4,10 +4,10 @@ import { useState } from "react";
 import AdminHeader from "./AdminHeader";
 import SideBar from "./SideBar";
 import Specialist from "./Specialist";
-import Appointment from "./Appoinments";
 import Analytics from "./Analytics";
 import Settings from "./Settings";
 import Clients from "./Clients";
+import Post from "./Post";
 
 const Home = () => {
   const [toggle, setToggle] = useState("Clients");
@@ -25,7 +25,7 @@ const Home = () => {
         <SideBar toggleHandler={toggleHandler} toggle={toggle} />
         {toggle === "Clients" && <Clients />}
         {toggle === "Specialist" && <Specialist />}
-        {toggle === "Appointment" && <Appointment />}
+        {toggle === "Post" && <Post />}
         {toggle === "Analytics" && <Analytics />}
         {toggle === "Setting" && <Settings />}
       </div>
