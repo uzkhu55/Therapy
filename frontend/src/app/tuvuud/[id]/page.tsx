@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import MentalTuv1 from "@/components/mentalTuv/MentalTuv1";
 
-export const BuhTuv = [
+const BuhTuv = [
   {
     id: "1",
     title: "Mindfit төв",
