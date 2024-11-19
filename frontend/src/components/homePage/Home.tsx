@@ -10,6 +10,7 @@ import Section3 from "@/components/homePage/Section3";
 import { Section1svg } from "./Section1svg";
 import { Section2svg } from "./Section2svg";
 import { Section3svg } from "./Section3svg";
+import MentalTuv from "../mentalTuv/MentalTuv";
 
 const Homepage = () => {
   return (
@@ -24,6 +25,7 @@ const Homepage = () => {
       <Section3 />
       <Section3svg />
       <Nuutslal />
+      <MentalTuv />
       <FooterDeed />
       <Footer />
     </div>
