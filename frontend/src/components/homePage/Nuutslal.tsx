@@ -6,8 +6,8 @@ import { NuutslalSVG3 } from "./NuutslalSVG3";
 
 const Nuutslal = () => {
   return (
-    <div className="w-full h-[847px] flex justify-center mx-auto bg-white">
-      <div className="w-full max-w-[1120px] h-[688px] mt-[31px] mb-[128px] flex items-start justify-between">
+    <div className="w-full h-[747px] flex justify-center mx-auto bg-white">
+      <div className="w-full max-w-[1120px] h-[588px] mt-[31px]  flex items-start justify-between">
         <div className="w-full max-w-[544px] text-[#102d3f] text-4xl font-medium font-['Rubik'] leading-[50px] mb-8">
           Таны нууцлал болон аюулгүй байдал бол бидний нэн тэргүүний зорилт юм.
         </div>
