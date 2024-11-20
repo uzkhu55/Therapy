@@ -1,6 +1,6 @@
 export const Section3svg = () => {
   return (
-    <div className="absolute top-0 w-full h-[2990px] z-10">
+    <div className="<absolute w-full bottom-[-3px] z-50">
       <svg
         className="absolute bottom-0 w-full h-auto"
         width="1440"

@@ -32,11 +32,8 @@ const page = () => {
   }, [isLoaded, user]);
 
   return (
-    <div className="flex items-center w-full bg-[#325343]">
+    <div className="flex items-center w-full">
       <Homepage />
-      {/* {user.isLoaded && <div> hello {user.user?.username}</div>}*/}
-
-      <Link href="chat">Open the chat</Link>
     </div>
   );
 };
