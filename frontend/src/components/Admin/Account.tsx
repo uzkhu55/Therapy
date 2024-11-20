@@ -26,7 +26,7 @@ const Account = () => {
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuItem>
             <LogOut />
-            <span>Log sss out</span>
+            <span>Log out</span>
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
