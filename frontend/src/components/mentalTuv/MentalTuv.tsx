@@ -76,7 +76,7 @@ const MentalTuv = () => {
             return (
               <div key={id} className="flex w-[300px] ">
                 <Link href={`/tuvuud/${id}`}>
-                  <div className="shadow-gray-300 shadow-xl rounded-3xl  hover: bg-pink-500">
+                  <div className="shadow-gray-300 shadow-xl rounded-3xl  ">
                     <div className="bg-white w-[300px] h-[] p-5 rounded-b-3xl flex justify-between text-[#102d3f] ">
                       <div className=" mb-[30px] text-sm font-bold">
                         {title}
