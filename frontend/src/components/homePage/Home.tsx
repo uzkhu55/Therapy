@@ -5,28 +5,23 @@ import Section1 from "./Section1";
 import Section2 from "./Section2";
 import Footer from "@/components/homePage/Footer";
 import FooterDeed from "@/components/homePage/FooterDeed";
-import Nuutslal from "@/components/homePage/Nuutslal";
+import Section4 from "@/components/homePage/Section4";
 import Section3 from "@/components/homePage/Section3";
-import { Section1svg } from "./Section1svg";
-import { Section2svg } from "./Section2svg";
-import { Section3svg } from "./Section3svg";
 import MentalTuv from "../mentalTuv/MentalTuv";
+import { Section5 } from "./Section5";
 
 const Homepage = () => {
   return (
-    <div className="relative h-full w-screen">
-      <div className="w-screen h-[861px] bg-[#325343]"></div>
-      <div className="absolute top-0 left-0 w-screen h-[861px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-10"></div>
-      <Header under="" bg1="white" bg2="white" under1="" under2="" bg="white" />
+    <div className="relative h-full bg-white w-screen ">
+      <div className="w-screen h-[903px] md:h-[683px] lg:h-[862px] bg-[#325343] z-[-1]">
+        <div className="absolute top-0 left-0 w-screen h-[903px] md:h-[683px] lg:h-[862px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-0"></div>
+      </div>
+      <Header />
       <Section1 />
-      <Section1svg />
       <Section2 />
-      <Section2svg />
       <Section3 />
-      <Section3svg />
-      <Nuutslal />
-      <MentalTuv />
-      <FooterDeed />
+      <Section4 />
+      <Section5 />
       <Footer />
     </div>
   );
