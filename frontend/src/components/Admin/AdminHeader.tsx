@@ -2,6 +2,8 @@
 
 import { Bell, CircleUserRound } from "lucide-react";
 import Logo from "./Logo";
+import Account from "./Account";
+import Notifications from "./Notificatoin";
 
 const AdminHeader = () => {
   return (
@@ -11,9 +13,11 @@ const AdminHeader = () => {
           <Logo />
         </div>
         <div className="flex flex-row gap-5">
-          <Bell size={26} />
           <button>
-            <CircleUserRound size={26} />
+            <Notifications />
+          </button>
+          <button>
+            <Account />
           </button>
         </div>
       </div>

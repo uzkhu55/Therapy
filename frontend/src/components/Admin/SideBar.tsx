@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import Clients from "./Clients";
 import Specialist from "./Specialist";
-import Appointment from "./Post";
 import Analytics from "./Analytics";
 
 type SideBarProps = {
