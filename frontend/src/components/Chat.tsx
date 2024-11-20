@@ -1,17 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import Component from "./Sidebar";
-import Chatheader from "./Chatheader";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import Header from "./homePage/Header";
@@ -27,67 +26,24 @@ interface Message {
   __v: number;
 }
 
-const socket: Socket = io("https://if-project8.onrender.com");
+const socket: Socket = io("http://localhost:8000");
 
 const Chat: React.FC = () => {
   const [message, setMessage] = useState<Record<string, string>>({});
-  const [getmessages, setGetmessages] = useState<Message[]>([]);
-  const [getUserdetail, setGetUserdetail] = useState("");
+  console.log(message, "asd");
 
+  const [getmessages, setGetmessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [room, setRoom] = useState<string>("chat-room");
-
   const user = useUser();
 
-  useEffect(() => {
-    const getUserdetail = async () => {
-      const res = window.localStorage.getItem("userDetail");
-      if (res) {
-        const userDetail = JSON.parse(res);
-        setMessage(userDetail);
-      }
-      // console.log(res);
-    };
-    getUserdetail();
-  }, []);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://if-project8.onrender.com/user/userdetail"
-  //       );
-  //       setGetUserdetail(response.data[0]);
-  //       console.log(response.data[0]);
-  //     } catch (error) {
-  //       // console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<Message[]>(
-          "https://if-project8.onrender.com/user/getmessage"
-        );
-        setGetmessages(response.data);
-        // console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    socket.emit("join-room", room, message.firstName);
-
-    socket.on("chat-message", (newMessage: Message) => {
-      setGetmessages((prevMessages) => [...prevMessages, newMessage]);
-    });
-
-    return () => {
-      socket.off("chat-message");
-    };
-  }, [room, message.firstName]);
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "instant" });
+    }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -97,33 +53,74 @@ const Chat: React.FC = () => {
     if (inputValue.trim() === "") return;
 
     try {
-      const res = await axios.post(
-        "https://if-project8.onrender.com/user/addmessage",
-        {
-          author: message.authId,
-          inputValue,
-        }
-      );
+      const res = await axios.post("http://localhost:8000/user/addmessage", {
+        author: message.authId,
+        inputValue,
+      });
+      console.log(res.data);
 
-      socket.emit("send-chat-message", inputValue);
-
-      setGetmessages((prevMessages) => [
-        ...prevMessages,
-        {
-          _id: res.data._id,
-          author: message.authId,
-          content: inputValue,
-          timeStamp: new Date().toString(),
-          isRead: false,
-          __v: 0,
-        },
-      ]);
-
+      socket.emit("send-chat-message", { inputValue, user: message });
       setInputValue("");
     } catch (error) {
       console.error("Error adding message:", error);
     }
   };
+
+  useEffect(() => {
+    const getUserdetail = async () => {
+      const res = window.localStorage.getItem("userDetail");
+      if (res) {
+        const userDetail = JSON.parse(res);
+        setMessage(userDetail);
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get<Message[]>(
+          "http://localhost:8000/user/getmessage"
+        );
+        console.log({ data });
+
+        if (!data[0].content.length) {
+          setGetmessages([]);
+        } else {
+          setGetmessages(data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+    getUserdetail();
+    scrollToBottom();
+  }, []);
+  useEffect(() => {
+    scrollToBottom();
+  }, [getmessages]);
+
+  useEffect(() => {
+    socket.emit("join-room", room, message.firstName);
+
+    socket.on("chat-message", (newMessage: Message) => {
+      setGetmessages((prevMessages) =>
+        prevMessages.map((el) =>
+          el.author === newMessage.author
+            ? {
+                ...el,
+                content: [...el.content, newMessage.content as string],
+              }
+            : el
+        )
+      );
+      // scrollToBottom();
+    });
+
+    return () => {
+      socket.off("chat-message");
+    };
+  }, []);
 
   return (
     <div className="h-screen w-screen gap-12 flex flex-col bg-white">
@@ -163,26 +160,26 @@ const Chat: React.FC = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex flex-col mx-[10px] rounded-2xl bg-white  relative gap-4 overflow-y-auto h-[800px]">
-              {getmessages.map((msg, index) => (
+            <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white  relative gap-4 overflow-auto h-[800px]">
+              {getmessages?.map((msg, index) => (
                 <div
                   key={index}
                   className="flex flex-col bg-white gap-8 w-[70%] p-4 rounded-lg"
                 >
-                  {Array.isArray(msg) ? (
-                    msg.map(({ content, author }, contentIndex) => (
-                      <div className="flex gap-12" key={contentIndex}>
-                        {content}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="flex w-full gap-[200px]">
-                      <div>{msg.author}</div>
-                      <div>{msg.content}</div>
-                    </div>
-                  )}
+                  <div className="flex flex-col gap-5">
+                    {Array.isArray(msg?.content) &&
+                      msg?.content.map((el, index) => {
+                        return (
+                          <div key={index} className="flex flex-col gap-2">
+                            <div>{msg.author}</div>
+                            <div>{el}</div>
+                          </div>
+                        );
+                      })}
+                  </div>
                 </div>
               ))}
+              <div ref={messagesEndRef}></div>
             </div>
 
             <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
