@@ -28,11 +28,10 @@ const Notifications = () => {
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Notifications</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-            <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
+          <DropdownMenuRadioGroup
+            value={position}
+            onValueChange={setPosition}
+          ></DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
