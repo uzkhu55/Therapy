@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
-
 import axios from "axios";
 
 interface ComponentProps {
@@ -22,8 +21,10 @@ interface ComponentProps {
   textchat: string;
   bgchat: string;
 }
+
 interface Detail {
   username: string;
+  _id: string; // Add _id to capture user ID
 }
 
 export default function Component({
@@ -36,25 +37,58 @@ export default function Component({
   const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
   const [recentChats, setRecentChats] = useState<string[]>([]);
 
+  const [authId, setAuthId] = useState<string | null>(null); // To store authId
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://if-project8.onrender.com/user/userdetail"
+          "http://localhost:8000/user/userdetail"
         );
+        console.log(response.data);
+
         setGetUserdetail(response.data);
+        console.log("User details fetched:", response.data); // Check the entire response
+
+        setAuthId(response.data[0]._id); // Assuming the first item has _id
+        console.log("Authenticated user ID set:", response.data[0]._id); // Ensure _id is set properly
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
     };
-    fetchData();
+    fetchUserData();
   }, []);
 
-  const handleAddToRecentChats = (username: string) => {
+  const handleAddToRecentChats = (username: string, userId: string) => {
     if (!recentChats.includes(username)) {
       setRecentChats((prevChats) => [...prevChats, username]);
     }
     setSearchValue("");
+    createFolder(userId); // Create folder with chosen user
+  };
+
+  const createFolder = async (chosenUserId: string) => {
+    if (!authId) {
+      console.error("Authenticated user ID not found.");
+      return;
+    }
+
+    console.log(
+      "Creating folder with authId:",
+      authId,
+      "and chosenUserId:",
+      chosenUserId
+    ); // Added log for debugging
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/folder", // Update with your API endpoint
+        { authId, chosenUserId }
+      );
+      console.log("Folder created successfully:", response.data);
+    } catch (error) {
+      console.error("Error creating folder:", error);
+    }
   };
 
   return (
@@ -81,7 +115,9 @@ export default function Component({
                     <div
                       className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
                       key={index}
-                      onClick={() => handleAddToRecentChats(el.username)}
+                      onClick={
+                        () => handleAddToRecentChats(el.username, el._id) // Pass userId
+                      }
                     >
                       {el.username}
                     </div>
