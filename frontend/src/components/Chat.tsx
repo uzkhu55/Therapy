@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
-
+import { Search, CirclePlus } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +11,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import Component from "./Sidebar";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import Header from "./homePage/Header";
 import { Ellipsis } from "lucide-react";
+
+interface ComponentProps {
+  bg: string;
+  text: string;
+  textchat: string;
+  bgchat: string;
+}
+
+interface Detail {
+  username: string;
+  _id: string; // Add _id to capture user ID
+}
 
 interface Message {
   _id: string;
@@ -30,21 +42,85 @@ const socket: Socket = io("http://localhost:8000");
 
 const Chat: React.FC = () => {
   const [message, setMessage] = useState<Record<string, string>>({});
-  console.log(message, "asd");
-
   const [getmessages, setGetmessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const [chosenUserId, setChosenUserId] = useState<string>(""); // Track the selected user
+
   const [room, setRoom] = useState<string>("chat-room");
   const user = useUser();
-
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [searchValue, setSearchValue] = useState("");
 
+  const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
+  const [recentChats, setRecentChats] = useState<string[]>([]);
+
+  const [authId, setAuthId] = useState<string | null>(null); // To store authId
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/user/userdetail"
+        );
+        console.log(response.data);
+        const getUserdetail = async () => {
+          const res = window.localStorage.getItem("userDetail");
+          if (res) {
+            const userDetail = JSON.parse(res);
+            setMessage(userDetail);
+            setAuthId(userDetail.authId); // Assuming the first item has _id
+          }
+        };
+        getUserdetail();
+
+        setGetUserdetail(response.data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const handleAddToRecentChats = (username: string, userId: string) => {
+    if (!recentChats.includes(username)) {
+      setRecentChats((prevChats) => [...prevChats, username]);
+    }
+    setSearchValue("");
+    createFolder(userId); // Create folder with chosen user
+  };
+
+  const createFolder = async (chosenUserId: string) => {
+    if (!authId) {
+      console.error("Authenticated user ID not found.");
+      return;
+    }
+
+    console.log(
+      "Creating folder with authId:",
+      authId,
+      "and chosenUserId:",
+      chosenUserId
+    ); // Added log for debugging
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/folder", // Update with your API endpoint
+        { authId, chosenUserId }
+      );
+      console.log("Folder created successfully:", response.data);
+    } catch (error) {
+      console.error("Error creating folder:", error);
+    }
+  };
+
+  // Scroll to bottom after message is sent
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "instant" });
     }
   };
 
+  // Handle message input change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
@@ -55,9 +131,10 @@ const Chat: React.FC = () => {
     try {
       const res = await axios.post("http://localhost:8000/user/addmessage", {
         author: message.authId,
+        chosenUserId,
         inputValue,
       });
-      console.log(res.data);
+      console.log(res);
 
       socket.emit("send-chat-message", { inputValue, user: message });
       setInputValue("");
@@ -66,12 +143,14 @@ const Chat: React.FC = () => {
     }
   };
 
+  // Fetch initial user details and messages
   useEffect(() => {
     const getUserdetail = async () => {
       const res = window.localStorage.getItem("userDetail");
       if (res) {
         const userDetail = JSON.parse(res);
         setMessage(userDetail);
+        console.log(userDetail);
       }
     };
 
@@ -80,9 +159,7 @@ const Chat: React.FC = () => {
         const { data } = await axios.get<Message[]>(
           "http://localhost:8000/user/getmessage"
         );
-        console.log({ data });
-
-        if (!data[0].content.length) {
+        if (!data[0]?.content.length) {
           setGetmessages([]);
         } else {
           setGetmessages(data);
@@ -96,10 +173,13 @@ const Chat: React.FC = () => {
     getUserdetail();
     scrollToBottom();
   }, []);
+
+  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [getmessages]);
 
+  // Socket event listeners for chat messages
   useEffect(() => {
     socket.emit("join-room", room, message.firstName);
 
@@ -114,7 +194,6 @@ const Chat: React.FC = () => {
             : el
         )
       );
-      // scrollToBottom();
     });
 
     return () => {
@@ -133,15 +212,66 @@ const Chat: React.FC = () => {
         bg="text-[#325343]"
       />
       <div className="flex absolute w-screen top-80px bg-white">
-        <div className="flex relative h-[978px] rounded-lg top-[81px] w-screen ">
-          <Component
-            textchat="text-black"
-            bgchat=""
-            text="text-white/70"
-            bg=""
-          />
-          {/* <div className="border-r-[1px] border-[#325343]"></div> */}
-          <div className="w-3/4  bg-[#f3f3f3] flex flex-col rounded-r-lg ">
+        <div className="flex relative h-[978px] rounded-lg top-[81px] w-screen">
+          <div className="flex w-1/4 h-[100%] rounded-l-lg bg-[#f3f3f3] text-black">
+            <div className="flex w-[100%] flex-col">
+              <div className="flex w-[97%] bg-white rounded-2xl p-4 m-[10px] items-center justify-evenly">
+                <div className="font-bold text-xl text-[#325343]">Chat</div>
+                <div className="w-[220px] relative">
+                  <Input
+                    className="focus-visible:outline-none rounded-2xl"
+                    placeholder="Search username"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                  />
+                  <div className="absolute flex flex-col gap-2 top-14 bg-white rounded-xl shadow-md z-10 w-full">
+                    {searchValue &&
+                      getUserdetail
+                        .filter((user) =>
+                          user.username
+                            .toLocaleLowerCase()
+                            .includes(searchValue.toLocaleLowerCase())
+                        )
+                        .map((el, index) => (
+                          <div
+                            className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
+                            key={index}
+                            onClick={
+                              () => handleAddToRecentChats(el.username, el._id) // Pass userId
+                            }
+                          >
+                            {el.username}
+                          </div>
+                        ))}
+                  </div>
+                  <Search className="absolute top-2 right-2 text-gray-400" />
+                </div>
+                <button className="w-[24px] text-[#325343]">
+                  <CirclePlus />
+                </button>
+              </div>
+              <div className="bg-white w-[97%] h-full mb-4 p-4 ml-[10px] rounded-2xl px-4">
+                <div className="text-sm font-black py-4 px-2 text-black">
+                  Recent Chats
+                </div>
+                <div className="flex flex-col gap-2">
+                  {recentChats.length > 0 ? (
+                    recentChats.map((chat, index) => (
+                      <div
+                        className="p-2 bg-[#325342] text-white   rounded-xl text-md font-bold shadow-sm"
+                        key={index}
+                      >
+                        {chat}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 text-sm">No recent chats</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-3/4 bg-[#f3f3f3] flex flex-col rounded-r-lg">
             <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
               <div className="flex gap-4">
                 <div>{message.username}</div>
@@ -160,7 +290,7 @@ const Chat: React.FC = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white  relative gap-4 overflow-auto h-[800px]">
+            <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white relative gap-4 overflow-auto h-[800px]">
               {getmessages?.map((msg, index) => (
                 <div
                   key={index}
@@ -168,14 +298,12 @@ const Chat: React.FC = () => {
                 >
                   <div className="flex flex-col gap-5">
                     {Array.isArray(msg?.content) &&
-                      msg?.content.map((el, index) => {
-                        return (
-                          <div key={index} className="flex flex-col gap-2">
-                            <div>{msg.author}</div>
-                            <div>{el}</div>
-                          </div>
-                        );
-                      })}
+                      msg?.content.map((el, index) => (
+                        <div key={index} className="flex flex-col gap-2">
+                          <div>{msg.author}</div>
+                          <div>{el}</div>
+                        </div>
+                      ))}
                   </div>
                 </div>
               ))}
