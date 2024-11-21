@@ -1,36 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { CircleUserRound, LogOut } from "lucide-react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Account = () => {
   return (
-    <div>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <CircleUserRound size={26} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>
-            <LogOut />
-            <span>Log out</span>
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className="flex items-center justify-center gap-5">
+      <SignedOut>
+        <SignInButton aria-label="Бүртгүүлэх">Нэвтрэх</SignInButton>
+      </SignedOut>
+      <SignedIn>
+        <UserButton aria-label="Хэрэглэгчийн мэдээлэл" />
+      </SignedIn>
     </div>
   );
 };
