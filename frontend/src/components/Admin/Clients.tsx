@@ -25,16 +25,18 @@ type ClientData = {
 
 const Clients = () => {
   const [clients, setClients] = useState<ClientData[]>([]);
-  const getClients = async () => {
-    try {
-      const { data } = await axios.get("http://localhost:8000/user/getClients");
-      setClients(data);
-    } catch (error) {
-      console.log("error fetching data", error);
-    }
-  };
 
   useEffect(() => {
+    const getClients = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:8000/user/getClients"
+        );
+        setClients(data);
+      } catch (error) {
+        console.log("error fetching data", error);
+      }
+    };
     getClients();
   }, []);
 
@@ -56,7 +58,7 @@ const Clients = () => {
             <TableHead className="w-[100px]">ID</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Username</TableHead>
-            <TableHead className="text-left">Огноо</TableHead>
+            <TableHead className="text-left">CreatedAt</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

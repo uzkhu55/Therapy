@@ -2,7 +2,7 @@ import React from "react";
 
 export const Section1svg = () => {
   return (
-    <div className="absolute top-0 w-full h-[862px] z-30">
+    <div className="absolute top-0 w-full h-[904px] md:h-[684px] lg:h-[863px] z-30">
       <svg
         viewBox="0 0 1440 134"
         fill="none"

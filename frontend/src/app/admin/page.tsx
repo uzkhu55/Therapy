@@ -1,6 +1,4 @@
 "use client";
-
-import Appointment from "@/components/Admin/Post";
 import Home from "@/components/Admin/Home";
 
 const admin = () => {

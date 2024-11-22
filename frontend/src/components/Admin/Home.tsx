@@ -7,7 +7,7 @@ import Specialist from "./Specialist";
 import Analytics from "./Analytics";
 import Settings from "./Settings";
 import Clients from "./Clients";
-import Post from "./Post";
+import { AdminAllPost } from "./Post";
 
 const Home = () => {
   const [toggle, setToggle] = useState("Clients");
@@ -25,7 +25,7 @@ const Home = () => {
         <SideBar toggleHandler={toggleHandler} toggle={toggle} />
         {toggle === "Clients" && <Clients />}
         {toggle === "Specialist" && <Specialist />}
-        {toggle === "Post" && <Post />}
+        {toggle === "Post" && <AdminAllPost />}
         {toggle === "Analytics" && <Analytics />}
         {toggle === "Setting" && <Settings />}
       </div>
