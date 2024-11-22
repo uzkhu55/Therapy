@@ -26,7 +26,7 @@ const AnonymousSection: React.FC = () => {
               <div className="text-[#102d3f] text-[21px] font-bold font-['Inter']">
                 Онцгой нэр
               </div>
-              <div className="w-full h-[136px] text-justify text-[#102d3f] text-lg font-normal font-['Inter']">
+              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter']">
                 Qwell-д бүртгүүлснээр та онцгой хэрэглэгчийн нэр үүсгэдэг тул
                 таныг хэн гэдгийг хэн ч мэдэхгүй. Бид таны нэрийг асуухгүй.
               </div>
@@ -40,7 +40,7 @@ const AnonymousSection: React.FC = () => {
               <div className="text-[#102d3f] text-[21px] font-bold font-['Inter']">
                 Хувийн мэдээлэл
               </div>
-              <div className="w-full h-[136px] text-justify text-[#102d3f] text-lg font-normal font-['Inter']">
+              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter']">
                 Бид танд үйлчилгээ үзүүлэхийн тулд зарим хувийн мэдээллийг
                 цуглуулах шаардлагатай. Мөн мэдээлэл нь бидний үйл ажиллагааг
                 хэмжих, үйлчилгээгээ сайжруулахад тусалдаг.
@@ -55,7 +55,7 @@ const AnonymousSection: React.FC = () => {
               <div className="text-[#102d3f] text-[21px] font-bold font-['Inter']">
                 Хамгаалалт
               </div>
-              <div className="w-full h-[136px] text-justify text-[#102d3f] text-lg font-normal font-['Inter']">
+              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter']">
                 Бид таны аюулгүй байдлыг нэн тэргүүнд тавьж ажилладаг бөгөөд
                 зөвхөн таны аюулгүй байдалд санаа зовох тодорхой нөхцөлд л
                 холбогдох үйлчилгээтэй таны мэдээллийг хуваалцах болно.
