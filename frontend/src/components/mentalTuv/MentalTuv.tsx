@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@mui/material";
 import Link from "next/link";
 
 const MentalTuvuud = [
@@ -54,6 +55,7 @@ const MentalTuvuud = [
     img: "/pos.jpg",
   },
   {
+    id: 11,
     title: "Хөөрхөн зүрх ТББ",
     img: "/heart.jpg",
   },
@@ -93,21 +95,6 @@ const MentalTuv = () => {
             );
           })}
         </div>
-
-        <div className="h-[1px] w-[800px] bg-[#213B4A] mt-[120px]"></div>
-        <div className="text-xl mb-[20px]">
-          Өнөөдөр бүртгүүлээд сэтгэл зүйгээ дэмжих олон янзын сэдвүүдээс
-          сонирхоорой.
-        </div>
-        <Link href={"/sign-up"}>
-          <Button
-            className="bg-[#FECE57] text-[#325343] items-center rounded-full
-    w-[230px] text-center text-base font-bold font-['Inter'] leading-9 
-    hover:bg-[#F9B927] transition-colors duration-300 ease-in-out mb-[40px]"
-          >
-            ХЯЛБАР БҮРТГЭЛ
-          </Button>
-        </Link>
       </div>
     </div>
   );

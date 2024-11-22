@@ -36,7 +36,8 @@ const page = () => {
       <Homepage />
       {/* {user.isLoaded && <div> hello {user.user?.username}</div>}*/}
 
-      <Link href="chat">Open the chat</Link>
+      {/* <Link href="chat">Open the chat</Link> */}
+      {/* <Link href="/userDetail">Tap here</Link> */}
     </div>
   );
 };
