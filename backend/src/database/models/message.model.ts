@@ -6,6 +6,7 @@ export type AttachmentType = {
 };
 
 export type MessageModelType = {
+  chosenUserId: string;
   _id: Schema.Types.ObjectId;
   senderId: Schema.Types.ObjectId;
   receiverId: Schema.Types.ObjectId;
@@ -21,6 +22,11 @@ export type MessageModelType = {
 };
 
 const MessageSchema = new Schema<MessageModelType>({
+  chosenUserId: {
+    type: String,
+    required: true,
+    ref: "User",
+  },
   author: {
     type: String,
     required: true,

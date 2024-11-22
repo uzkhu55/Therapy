@@ -2,6 +2,7 @@
 
 import { Button } from "@mui/material";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 const MentalTuvuud = [
   {
@@ -68,26 +69,29 @@ const MentalTuvuud = [
 
 const MentalTuv = () => {
   return (
-    <div>
-      <div className="flex flex-col justify-center items-center w-full pb-[100px]  bg-white">
-        <div className="font-bold text-[40px]  text-[#102d3f] mb-[50px]">
+    <div className="w-full bg-[#F3EFE9] items-center justify-center flex px-4 md:px-6 lg:px-8">
+      <div className="flex flex-col justify-center items-center w-full max-w-[1120px] pb-[100px]">
+        <div className="font-bold text-[40px] text-[#102d3f] mt-[50px] mb-[50px]">
           Сэтгэл зүйн төвүүд ✨
         </div>
-        <div className="flex flex-wrap w-[1120px] gap-[50px] items-center justify-center">
-          {MentalTuvuud.map(({ title, img, id }) => {
+
+        <div className="max-w-[1120px] w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[50px] items-center justify-center mb-[100px]">
+          {MentalTuvuud.map(({ title, img, id }, index) => {
             return (
-              <div key={id} className="flex w-[300px] ">
+              <div key={index} className="w-full">
                 <Link href={`/tuvuud/${id}`}>
-                  <div className="shadow-gray-300 shadow-xl rounded-3xl  ">
-                    <div className="bg-white w-[300px] h-[] p-5 rounded-b-3xl flex justify-between text-[#102d3f] ">
-                      <div className=" mb-[30px] text-sm font-bold">
+                  <div className="shadow-gray-300 shadow-lg w-full rounded-3xl">
+                    <div className="bg-white w-full p-5 rounded-3xl flex justify-between items-center gap-5 text-[#102d3f]">
+                      <div className="text-sm font-bold flex items-center justify-start w-full">
                         {title}
                       </div>
-                      <img
-                        src={img}
-                        alt=""
-                        className="h-[100px] w-[100px] rounded-t-3xl object-cover"
-                      />
+                      <div className="h-[100px] min-w-[100px] max-w-[100px] w-[100px] flex items-center justify-center rounded-2xl bg-[#F6F6F6] p-1">
+                        <img
+                          src={img}
+                          alt={title}
+                          className="w-full h-full object-cover rounded-2xl"
+                        />
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -99,4 +103,5 @@ const MentalTuv = () => {
     </div>
   );
 };
+
 export default MentalTuv;

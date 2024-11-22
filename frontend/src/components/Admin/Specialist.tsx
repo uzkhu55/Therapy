@@ -1,16 +1,6 @@
 "use client";
 
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
-import {
   Table,
   TableBody,
   TableCaption,
@@ -19,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import axios from "axios";
-import { log } from "console";
 import { useEffect, useState } from "react";
 
 type SpecialistData = {
@@ -37,19 +27,17 @@ type SpecialistData = {
 const Specialist = () => {
   const [specialist, setSpecialist] = useState<SpecialistData[]>([]);
 
-  const getSpecialist = async () => {
-    try {
-      const { data } = await axios.get(
-        "http://localhost:8000/user/getSpecialists"
-      );
-      setSpecialist(data);
-    } catch (error) {
-      console.log("error fetching datd", error);
-    }
-  };
-  console.log(specialist);
-
   useEffect(() => {
+    const getSpecialist = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:8000/user/getSpecialists"
+        );
+        setSpecialist(data);
+      } catch (error) {
+        console.log("error fetching datd", error);
+      }
+    };
     getSpecialist();
   }, []);
   return (
@@ -86,31 +74,6 @@ const Specialist = () => {
           })}
         </TableBody>
       </Table>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 };

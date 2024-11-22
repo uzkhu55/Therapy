@@ -1,22 +1,25 @@
+import React from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { Section2svg } from "./Section2svg";
 
 const Section2 = () => {
   return (
-    <div className="flex justify-center h-[731px] bg-white">
-      <div className="flex flex-col gap-10 max-w-[1120px] justify-between mb-[272px] z-40">
-        <div className="w-full max-w-[832px] text-[#102d3f] text-[38px] font-medium font-['Rubik'] leading-[55px]">
-          Таны хэрэгцээнд нийцсэн олон төрлийн тусламжийн сонголтууд
+    <div className="flex flex-col bg-white px-4 md:px-6 lg:px-8 relative">
+      <div className="max-w-[1120px] mx-auto mb-[220px] mt-[30px] z-50">
+        <div className="w-full text-[#102d3f] text-[28px] sm:text-[32px] md:text-[38px] lg:text-[42px] font-medium font-['Rubik'] mb-[64px] break-words text-start sm:text-left">
+          Таны хэрэгцээнд нийцсэн олон төрлийн{" "}
+          <br className="hidden md:block" />
+          тусламжийн сонголтууд
         </div>
-
-        <div className="flex flex-wrap gap-[50px] justify-center">
-          {/* Card 1 */}
-          <div className="w-[340px] h-[280px] flex flex-col justify-between items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[50px]">
+          {/* Professional support */}
+          <div className="">
             <div className="flex flex-col justify-center items-center gap-6">
-              <div className="w-full h-8 text-[#102d3f] text-[22px] font-bold font-['Inter'] leading-[30.02px]">
+              <div className="w-full text-[#102d3f] text-[22px] font-bold font-['Inter']">
                 Мэргэжлийн дэмжлэг
               </div>
-              <div className="w-full h-36 text-justify text-[#102d3f] text-lg font-normal font-['Inter'] leading-[30px]">
+              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
                 Манай мэргэжлийн баг таны том жижиг ямар ч асуудалд дэмжлэг
                 үзүүлэхэд бэлэн байна. Ямар нэгэн лавлагаа шаардлагагүй, зүгээр
                 л чатлах хүсэлтээ илгээгээрэй.
@@ -29,14 +32,16 @@ const Section2 = () => {
             </Link>
           </div>
 
-          {/* Card 2 */}
-          <div className="w-[340px] h-[280px] flex flex-col justify-between items-start">
-            <div className="w-full h-8 text-[#102d3f] text-[22px] font-bold font-['Inter'] leading-[30.02px]">
-              Нийгмийн дэмжлэг
-            </div>
-            <div className="w-full h-36 text-justify text-[#102d3f] text-lg font-normal font-['Inter'] leading-[30px]">
-              Манай хамтын форум аюулгүй байдлыг харгалзан үзэж хянадаг бөгөөд
-              хүмүүс хоорондоо асуудлаа хуваалцаж, хэлэлцэх боломжийг олгодог.
+          {/* Community support */}
+          <div className="">
+            <div className="flex flex-col justify-center items-center gap-6">
+              <div className="w-full text-[#102d3f] text-[22px] font-bold font-['Inter']">
+                Нийгмийн дэмжлэг
+              </div>
+              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
+                Манай хамтын форум аюулгүй байдлыг харгалзан үзэж хянадаг бөгөөд
+                хүмүүс хоорондоо асуудлаа хуваалцаж, хэлэлцэх боломжийг олгодог.
+              </div>
             </div>
             <Link href="" className="text-center">
               <Button className="w-[160px] rounded-full bg-[#6A915C] text-center text-base font-semibold hover:bg-[#5A7A46] transition-colors">
@@ -45,14 +50,16 @@ const Section2 = () => {
             </Link>
           </div>
 
-          {/* Card 3 */}
-          <div className="w-[340px] h-[280px] flex flex-col justify-between items-start">
-            <div className="w-full h-8 text-[#102d3f] text-[22px] font-bold font-['Inter'] leading-[30.02px]">
-              Хувийн хөгжлийн хэрэгсэл
-            </div>
-            <div className="w-full h-36 text-justify text-[#102d3f] text-lg font-normal font-['Inter'] leading-[30px]">
-              Манай өөртөө туслах хэрэгслийн багц нь танд тэмдэглэл хөтлөх,
-              сэтгэл хөдлөлөө хянах, зорилго тавих боломжийг олгодог.
+          {/* Personal development tools */}
+          <div className="">
+            <div className="flex flex-col justify-center items-center gap-6">
+              <div className="w-full text-[#102d3f] text-[22px] font-bold font-['Inter']">
+                Хувийн хөгжлийн хэрэгсэл
+              </div>
+              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
+                Манай өөртөө туслах хэрэгслийн багц нь танд тэмдэглэл хөтлөх,
+                сэтгэл хөдлөлөө хянах, зорилго тавих боломжийг олгодог.
+              </div>
             </div>
             <Link href="" className="text-center">
               <Button className="w-[160px] rounded-full bg-[#6A915C] text-center text-base font-semibold hover:bg-[#5A7A46] transition-colors">
@@ -62,6 +69,7 @@ const Section2 = () => {
           </div>
         </div>
       </div>
+      <Section2svg />
     </div>
   );
 };

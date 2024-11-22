@@ -1,170 +1,60 @@
 "use client";
-
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  useUser,
-} from "@clerk/nextjs";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { HomeLogo } from "./HomeLogo";
 import { useState } from "react";
-import {
-  AlignJustify,
-  Bell,
-  FilePlus2,
-  MessagesSquare,
-  Users,
-} from "lucide-react";
-import { LogoLoggedin } from "./Homelogologgedin";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { HomeLogo } from "./HomeLogo";
+import Link from "next/link";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-interface ComponentProps {
-  bg: string;
-  bg1: string;
-  bg2: string;
-  under: string;
-  under1: string;
-  under2: string;
-}
-const Header: React.FC<ComponentProps> = ({
-  bg,
-  under,
-  under1,
-  under2,
-  bg1,
-  bg2,
-}) => {
-  const { user, isSignedIn } = useUser();
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
 
   return (
-    <div className="absolute top-0 w-full h-[80px]  flex justify-center items-center">
-      {isSignedIn ? (
-        <div className="w-full h-[80px] fixed z-50 bg-[#325343] flex justify-center items-center  ">
-          <div className="flex w-full max-w-[1120px] text-black justify-between">
-            <Link className="flex items-center justify-center" href="/">
-              <HomeLogo />
-            </Link>
-            <div className="flex w-[650px] justify-evenly">
-              <Link
-                href="chat"
-                className={`flex flex-col top-2 relative w-[80px] text-white hover:text-[#F3EFE9] ${bg}  h-[80px] items-center gap-2 justify-center`}
-              >
-                <MessagesSquare />
-                <div className=" text-xs">Чат</div>
-                <div
-                  className={`${under} border-1px border-[#325343] h-2 w-12`}
-                ></div>
-              </Link>
-              <Link
-                href="createPost"
-                className={`flex flex-col top-2 relative w-[80px] text-white hover:text-[#F3EFE9] ${bg}  h-[80px] items-center gap-2 justify-center`}
-              >
-                <FilePlus2 />
-                <div className=" text-xs">Пост</div>
-                <div
-                  className={`${under1} border-1px border-[#325343] h-2 w-12`}
-                ></div>
-              </Link>
-              <Link
-                href="niitlel"
-                className={`flex flex-col top-2 relative w-[80px] text-white hover:text-[#F3EFE9] ${bg}  h-[80px] items-center gap-2 justify-center`}
-              >
-                <Users />
-                <div className=" text-xs">Форум</div>
-                <div
-                  className={`${under2} border-1px border-[#325343] h-2 w-12`}
-                ></div>
-              </Link>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <AlignJustify className="outline-none text-white" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Link
-                      href="about"
-                      aria-label="Бидний тухай"
-                      className="hover:text-[#325343]"
-                    >
-                      Бидний тухай
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link
-                      href=""
-                      aria-label="Мэргэжилтэн"
-                      className="hover:text-[#325343]"
-                    >
-                      Мэргэжилтэн
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link
-                      href="contact"
-                      aria-label="Холбоо барих"
-                      className="hover:text-[#325343]"
-                    >
-                      Холбоо барих
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <div className="flex items-center w-fit gap-[30px] text-white text-base font-['inter'] font-semibold"></div>
-            </div>
-            <div className="flex items-center cursor-pointer  justify-center gap-6">
-              <div className="flex flex-col w-[80px] hover:text-[#F3EFE9] text-white h-[80px] items-center gap-2 justify-center">
-                <Bell />
-                <div className=" text-xs">Мэдэгдэл</div>
-              </div>
-              <div>
-                <SignedIn>
-                  <UserButton aria-label="Хэрэглэгчийн мэдээлэл" />
-                </SignedIn>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="w-full max-w-[1120px] flex justify-between items-center">
+    <nav className="flex justify-center absolute top-0 items-center px-4 md:px-6 lg:px-8 py-4 w-full z-50">
+      <div className="flex w-full max-w-[1120px] justify-between items-center">
+        <div className="text-white text-2xl">
           <Link href="/">
             <HomeLogo />
           </Link>
-          <div className="flex items-center gap-[30px] text-white text-base font-['inter'] font-semibold">
-            <Link
-              href=""
-              aria-label="Бидний тухай"
-              className="hover:text-[#D4FF00]"
+        </div>
+        <ul
+          className={`lg:flex gap-8 items-center transition-all duration-300 ${
+            isMenuOpen
+              ? "flex-col absolute top-[80px] left-0 right-0 bg-[#4e6f57] z-50 text-center py-4"
+              : "hidden"
+          }`}
+        >
+          <li className="py-4">
+            <a
+              href="/about"
+              className="text-white text-base font-['inter'] font-semibold"
             >
               Бидний тухай
-            </Link>
-            <Link
-              href=""
-              aria-label="Мэргэжилтэн"
-              className="hover:text-[#D4FF00]"
+            </a>
+          </li>
+          <li className="py-4">
+            <a
+              href="#"
+              className="text-white text-base font-['inter'] font-semibold"
             >
               Мэргэжилтэн
-            </Link>
-            <Link
-              href=""
-              aria-label="Холбоо барих"
-              className="hover:text-[#D4FF00]"
+            </a>
+          </li>
+          <li className="py-4">
+            <a
+              href="#"
+              className="text-white text-base font-['inter'] font-semibold"
             >
               Холбоо барих
-            </Link>
+            </a>
+          </li>
 
+          <li className="py-4">
             <div className="flex items-center justify-center gap-5">
-              <div className="w-[130px] h-[36px] flex items-center font-bold justify-center rounded-full text-white text-center text-base bg-gradient-to-l from-[#5A7A46] to-[#A8C06B] hover:scale-105 hover:shadow-lg transition-all duration-300">
+              <div className="w-[130px] h-[36px] flex items-center font-bold justify-center rounded-full text-white text-center text-base bg-gradient-to-l from-[#5A7A46] to-[#A8C06B]">
                 <SignedOut>
                   <SignInButton aria-label="Бүртгүүлэх">Нэвтрэх</SignInButton>
                 </SignedOut>
@@ -173,10 +63,22 @@ const Header: React.FC<ComponentProps> = ({
                 </SignedIn>
               </div>
             </div>
+          </li>
+        </ul>
+        <div className="lg:hidden">
+          <div
+            className="text-white text-2xl cursor-pointer transition-all duration-300 ease-in-out transform"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? (
+              <FaTimes className="transform rotate-180 opacity-100" />
+            ) : (
+              <FaBars className="transform rotate-0 opacity-100" />
+            )}
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </nav>
   );
 };
 

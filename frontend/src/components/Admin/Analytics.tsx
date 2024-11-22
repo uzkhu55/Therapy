@@ -3,7 +3,7 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
-  type ChartConfig,
+  ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { month: "January", Client: 186, Specialist: 80 },
-  { month: "February", Client: 305, Specialist: 200 },
-  { month: "March", Client: 237, Specialist: 120 },
-  { month: "April", Client: 73, Specialist: 190 },
-  { month: "May", Client: 209, Specialist: 130 },
-  { month: "June", Client: 214, Specialist: 140 },
+  { month: "January", client: 186, Specialist: 80 },
+  { month: "February", client: 305, Specialist: 200 },
+  { month: "March", client: 237, Specialist: 120 },
+  { month: "April", client: 73, Specialist: 190 },
+  { month: "May", client: 209, Specialist: 130 },
+  { month: "June", client: 214, Specialist: 140 },
 ];
 
 const chartConfig = {
@@ -33,11 +33,8 @@ const chartConfig = {
 
 const Analytics = () => {
   return (
-    // <div className="flexflex w-full pl-10 pt-5 bg-gray-50 rounded-xl flex-col gap-3">
-    //   <div className="flex ">Analyticsfvfv</div>
-    // </div>
-    <div className="flex">
-      <ChartContainer config={chartConfig} className="min-h-[500px] w-full ">
+    <div className="flexflex w-[900px] pl-10 pt-5 bg-gray-50 rounded-xl flex-col gap-3">
+      <ChartContainer config={chartConfig} className="h-[500px] w-[800px]">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -49,12 +46,11 @@ const Analytics = () => {
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-          <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+          <Bar dataKey="client" fill="var(--color-desktop)" radius={4} />
+          <Bar dataKey="Specialist" fill="var(--color-mobile)" radius={4} />
         </BarChart>
       </ChartContainer>
     </div>
   );
 };
-
 export default Analytics;
