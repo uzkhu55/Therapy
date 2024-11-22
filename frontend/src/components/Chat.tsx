@@ -204,7 +204,7 @@ const Chat: React.FC = () => {
               </div>
               <div className="bg-white w-[97%] h-full mb-4 p-4 ml-[10px] rounded-2xl px-4">
                 <div className="text-sm font-black py-4 px-2 text-black">
-                  Recent Chat
+                  Recent Chats
                 </div>
                 <div className="flex flex-col gap-2">
                   {recentChats.length > 0 ? (
