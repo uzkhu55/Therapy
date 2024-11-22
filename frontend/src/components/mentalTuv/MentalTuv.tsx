@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@mui/material";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
@@ -75,12 +74,10 @@ const MentalTuv = () => {
           Сэтгэл зүйн төвүүд ✨
         </div>
 
-
         <div className="max-w-[1120px] w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[50px] items-center justify-center mb-[100px]">
           {MentalTuvuud.map(({ title, img, id }, index) => {
             return (
               <div key={index} className="w-full">
-
                 <Link href={`/tuvuud/${id}`}>
                   <div className="shadow-gray-300 shadow-lg w-full rounded-3xl">
                     <div className="bg-white w-full p-5 rounded-3xl flex justify-between items-center gap-5 text-[#102d3f]">

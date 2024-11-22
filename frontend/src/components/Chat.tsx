@@ -162,14 +162,7 @@ const Chat: React.FC = () => {
 
   return (
     <div className="h-screen w-screen gap-12 flex flex-col bg-white">
-      <Header
-        bg1=""
-        bg2=""
-        under1=""
-        under2=""
-        under="border-b-2"
-        bg="text-[#325343]"
-      />
+      <Header />
       <div className="flex absolute w-screen top-80px bg-white">
         <div className="flex relative h-[978px] rounded-lg top-[81px] w-screen">
           <div className="flex w-1/4 h-[100%] rounded-l-lg bg-[#f3f3f3] text-black">
