@@ -73,9 +73,9 @@ const MentalTuv = () => {
           Сэтгэл зүйн төвүүд ✨
         </div>
         <div className="flex flex-wrap w-[1120px] gap-[50px] items-center justify-center">
-          {MentalTuvuud.map(({ title, img, id }) => {
+          {MentalTuvuud.map(({ title, img, id }, index) => {
             return (
-              <div key={id} className="flex w-[300px] ">
+              <div key={index} className="flex w-[300px] ">
                 <Link href={`/tuvuud/${id}`}>
                   <div className="shadow-gray-300 shadow-xl rounded-3xl  ">
                     <div className="bg-white w-[300px] h-[] p-5 rounded-b-3xl flex justify-between text-[#102d3f] ">
