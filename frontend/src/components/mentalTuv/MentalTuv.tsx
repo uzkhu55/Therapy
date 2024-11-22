@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@mui/material";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
@@ -55,6 +56,7 @@ const MentalTuvuud = [
     img: "/pos.jpg",
   },
   {
+    id: 11,
     title: "Хөөрхөн зүрх ТББ",
     img: "/heart.jpg",
   },
@@ -97,6 +99,7 @@ const MentalTuv = () => {
             );
           })}
         </div>
+<<<<<<< HEAD
 
         <div className="max-w-[1120px] w-full flex flex-col items-start justify-center">
           <div className="text-2xl font-medium text-[#102d3f] font-['Rubik'] text-left mb-[20px]">
@@ -110,6 +113,8 @@ const MentalTuv = () => {
             </Button>
           </Link>
         </div>
+=======
+>>>>>>> 8dbbd77 (fe-question)
       </div>
     </div>
   );

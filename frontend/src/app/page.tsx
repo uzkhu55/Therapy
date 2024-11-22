@@ -31,6 +31,10 @@ const page = () => {
   return (
     <div className="flex items-center w-full">
       <Homepage />
+      {/* {user.isLoaded && <div> hello {user.user?.username}</div>}*/}
+
+      {/* <Link href="chat">Open the chat</Link> */}
+      {/* <Link href="/userDetail">Tap here</Link> */}
     </div>
   );
 };
