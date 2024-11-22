@@ -12,14 +12,11 @@ const page = () => {
     const addUserToDatabase = async () => {
       if (isLoaded && user) {
         try {
-          const res = await axios.post(
-            "https://if-project8.onrender.com/user/signup",
-            {
-              username: user.username,
-              email: user.primaryEmailAddress?.emailAddress,
-              authId: user.id,
-            }
-          );
+          const res = await axios.post("http://localhost:8000/user/signup", {
+            username: user.username,
+            email: user.primaryEmailAddress?.emailAddress,
+            authId: user.id,
+          });
           if (res.config.data) {
             window.localStorage.setItem("userDetail", res.config.data);
           }

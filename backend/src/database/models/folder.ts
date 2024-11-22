@@ -2,13 +2,15 @@ import { Schema, model, Document } from "mongoose";
 
 // Define the Folder interface
 interface IFolder extends Document {
-  users: string[]; // Array of user IDs
+  userOne: string; // Array of user IDs
   createdAt: Date;
+  userTwo: string;
 }
 
 // Folder schema
 const folderSchema = new Schema<IFolder>({
-  users: { type: [String], required: true },
+  userOne: { type: String, required: true },
+  userTwo: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 

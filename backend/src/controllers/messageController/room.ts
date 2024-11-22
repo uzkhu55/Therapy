@@ -7,12 +7,13 @@ export const createFolder = async (req: any, res: any) => {
   if (!authId || !chosenUserId) {
     return res.status(400).json({ message: "Missing required fields." });
   }
-  console.log(authId, chosenUserId);
 
   try {
     const newFolder = new FolderModel({
-      users: [authId, chosenUserId], // Example schema assuming you want a folder for both users
+      userOne: authId,
+      userTwo: chosenUserId,
     });
+
     await newFolder.save();
     res.status(201).json({ message: "Folder created successfully" });
   } catch (error) {

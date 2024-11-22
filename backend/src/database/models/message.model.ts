@@ -6,36 +6,26 @@ export type AttachmentType = {
 };
 
 export type MessageModelType = {
-  chosenUserId: string;
   _id: Schema.Types.ObjectId;
   senderId: Schema.Types.ObjectId;
-  receiverId: Schema.Types.ObjectId;
   content: {
-    type: [String];
+    type: String;
     required: true;
   };
   timeStamp: Date;
-  roomChatId: Schema.Types.ObjectId;
+  conversationId: Schema.Types.ObjectId;
   isRead: boolean;
   attachments?: AttachmentType[];
-  author: string;
 };
 
 const MessageSchema = new Schema<MessageModelType>({
-  chosenUserId: {
-    type: String,
-    required: true,
-    ref: "User",
+  senderId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
+  conversationId: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    ref: "Folder",
   },
-  author: {
-    type: String,
-    required: true,
-    ref: "User",
-  },
-  senderId: { type: Schema.Types.ObjectId, required: false, ref: "User" },
-  receiverId: { type: Schema.Types.ObjectId, required: false, ref: "User" },
-  roomChatId: { type: Schema.Types.ObjectId, required: false, ref: "ChatRoom" },
-  content: [{ type: String, required: true }],
+  content: { type: String, required: true },
   timeStamp: { type: Date, default: Date.now, required: true },
   isRead: { type: Boolean, default: false },
   attachments: [
