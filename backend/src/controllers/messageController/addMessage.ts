@@ -1,35 +1,44 @@
+import FolderModel from "../../database/models/folder";
 import { MessageModel } from "../../database/models/message.model";
+import { UserModel } from "../../database/models/user.model";
 
 export const addMessage = async (req: any, res: any) => {
   const { inputValue, author, chosenUserId } = req.body;
-  // console.log(chosenUserId);
+  const sender = await UserModel.findOne({ authId: author });
 
   try {
-    const existMessage = await MessageModel.findOne({ author });
+    const existingConvo = await FolderModel.findOne({
+      $and: [{ userOne: author }, { userTwo: chosenUserId }],
+    });
 
-    if (!existMessage) {
-      const message = await MessageModel.create({
-        chosenUserId,
-        content: [inputValue],
-        author,
+    if (!existingConvo) {
+      const conversation = await FolderModel.create({
+        userOne: sender?._id,
+        userTwo: chosenUserId,
+      });
+
+      await MessageModel.create({
+        senderId: sender?._id,
+        content: inputValue,
+        conversationId: conversation._id,
         timeStamp: new Date(),
         isRead: false,
       });
 
-      res.status(201).send({ message: "Message added" });
-      return;
-    } else {
-      await MessageModel.updateOne(
-        { author },
-        { $push: { content: inputValue } }
-      );
-
-      res.status(200).send("Message added to existing author");
-
+      res.send("Success");
       return;
     }
+
+    await MessageModel.create({
+      senderId: sender?._id,
+      content: inputValue,
+      conversationId: existingConvo._id,
+      timeStamp: new Date(),
+      isRead: false,
+    });
+
+    res.send("Success");
   } catch (error) {
-    console.error(error);
     res.status(500);
   }
 };

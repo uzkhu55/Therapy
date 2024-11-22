@@ -30,7 +30,7 @@ interface Detail {
 
 interface Message {
   _id: string;
-  author: string;
+  senderId: any;
   content: string | string[];
   isRead: boolean;
   timeStamp: string;
@@ -41,20 +41,18 @@ interface Message {
 const socket: Socket = io("http://localhost:8000");
 
 const Chat: React.FC = () => {
-  const [message, setMessage] = useState<Record<string, string>>({});
   const [getmessages, setGetmessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [chosenUserId, setChosenUserId] = useState<string>(""); // Track the selected user
-
   const [room, setRoom] = useState<string>("chat-room");
-  const user = useUser();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [searchValue, setSearchValue] = useState("");
+  const { user } = useUser();
 
   const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
   const [recentChats, setRecentChats] = useState<string[]>([]);
 
-  const [authId, setAuthId] = useState<string | null>(null); // To store authId
+  // const [authId, setAuthId] = useState<string | null>(null); // To store authId
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,144 +60,105 @@ const Chat: React.FC = () => {
         const response = await axios.get(
           "http://localhost:8000/user/userdetail"
         );
-        console.log(response.data);
-        const getUserdetail = async () => {
-          const res = window.localStorage.getItem("userDetail");
-          if (res) {
-            const userDetail = JSON.parse(res);
-            setMessage(userDetail);
-            setAuthId(userDetail.authId); // Assuming the first item has _id
-          }
-        };
-        getUserdetail();
-
         setGetUserdetail(response.data);
+
+        const convos = await axios.get(
+          `http://localhost:8000/user/myConvorsations/${user?.id}`
+        );
+
+        setRecentChats(convos.data);
+        scrollToBottom();
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
     };
     fetchUserData();
-  }, []);
+  }, [user]);
 
-  const handleAddToRecentChats = (username: string, userId: string) => {
+  const handleAddToRecentChats = async (
+    username: string,
+    chosenUserId: string
+  ) => {
     if (!recentChats.includes(username)) {
       setRecentChats((prevChats) => [...prevChats, username]);
     }
-    setSearchValue("");
-    createFolder(userId); // Create folder with chosen user
-  };
+    setChosenUserId(chosenUserId);
 
-  const createFolder = async (chosenUserId: string) => {
-    if (!authId) {
-      console.error("Authenticated user ID not found.");
+    const isThereConversationExisting = await axios.get(
+      `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
+    );
+    if (!isThereConversationExisting.data.message) {
+      setGetmessages([]);
       return;
     }
 
-    console.log(
-      "Creating folder with authId:",
-      authId,
-      "and chosenUserId:",
-      chosenUserId
-    ); // Added log for debugging
+    const getConversationMessages = await axios.get(
+      `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+    );
 
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/folder", // Update with your API endpoint
-        { authId, chosenUserId }
-      );
-      console.log("Folder created successfully:", response.data);
-    } catch (error) {
-      console.error("Error creating folder:", error);
-    }
-  };
-
-  // Scroll to bottom after message is sent
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "instant" });
-    }
-  };
-
-  // Handle message input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+    setGetmessages(getConversationMessages.data);
+    setSearchValue("");
   };
 
   const addMessage = async () => {
-    if (inputValue.trim() === "") return;
+    if (inputValue.trim() === "") {
+      console.error("Message input is empty.");
+      return;
+    }
 
     try {
-      const res = await axios.post("http://localhost:8000/user/addmessage", {
-        author: message.authId,
+      await axios.post("http://localhost:8000/user/addmessage", {
+        author: user?.id,
         chosenUserId,
         inputValue,
       });
-      console.log(res);
 
-      socket.emit("send-chat-message", { inputValue, user: message });
+      // Emit message through Socket.IO
+      // socket.emit("send-chat-message", { inputValue, user: { user?.id } });
+
       setInputValue("");
     } catch (error) {
       console.error("Error adding message:", error);
     }
   };
 
-  // Fetch initial user details and messages
-  useEffect(() => {
-    const getUserdetail = async () => {
-      const res = window.localStorage.getItem("userDetail");
-      if (res) {
-        const userDetail = JSON.parse(res);
-        setMessage(userDetail);
-        console.log(userDetail);
-      }
-    };
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "instant" });
+    }
+  };
 
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get<Message[]>(
-          "http://localhost:8000/user/getmessage"
-        );
-        if (!data[0]?.content.length) {
-          setGetmessages([]);
-        } else {
-          setGetmessages(data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // // Handle message input change
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
 
-    fetchData();
-    getUserdetail();
-    scrollToBottom();
-  }, []);
+  // // Scroll to bottom when messages change
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [getmessages]);
 
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    scrollToBottom();
-  }, [getmessages]);
+  // // Socket event listeners for chat messages
+  // useEffect(() => {
+  //   socket.emit("join-room", room, message.firstName);
 
-  // Socket event listeners for chat messages
-  useEffect(() => {
-    socket.emit("join-room", room, message.firstName);
+  //   socket.on("chat-message", (newMessage: Message) => {
+  //     setGetmessages((prevMessages) =>
+  //       prevMessages.map((el) =>
+  //         el.author === newMessage.author
+  //           ? {
+  //               ...el,
+  //               content: [...el.content, newMessage.content as string],
+  //             }
+  //           : el
+  //       )
+  //     );
+  //   });
 
-    socket.on("chat-message", (newMessage: Message) => {
-      setGetmessages((prevMessages) =>
-        prevMessages.map((el) =>
-          el.author === newMessage.author
-            ? {
-                ...el,
-                content: [...el.content, newMessage.content as string],
-              }
-            : el
-        )
-      );
-    });
-
-    return () => {
-      socket.off("chat-message");
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("chat-message");
+  //   };
+  // }, []);
 
   return (
     <div className="h-screen w-screen gap-12 flex flex-col bg-white">
@@ -274,7 +233,7 @@ const Chat: React.FC = () => {
           <div className="w-3/4 bg-[#f3f3f3] flex flex-col rounded-r-lg">
             <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
               <div className="flex gap-4">
-                <div>{message.username}</div>
+                <div>{user?.username}</div>
                 <div className="text-green-400">Online</div>
               </div>
               <DropdownMenu>
@@ -297,13 +256,18 @@ const Chat: React.FC = () => {
                   className="flex flex-col bg-white gap-8 w-[70%] p-4 rounded-lg"
                 >
                   <div className="flex flex-col gap-5">
-                    {Array.isArray(msg?.content) &&
+                    {/* {Array.isArray(msg?.content) &&
                       msg?.content.map((el, index) => (
                         <div key={index} className="flex flex-col gap-2">
                           <div>{msg.author}</div>
                           <div>{el}</div>
                         </div>
-                      ))}
+                      ))} */}
+
+                    <div key={index} className="flex flex-col gap-2">
+                      <div>{msg?.senderId?.username}</div>
+                      <div>{msg.content}</div>
+                    </div>
                   </div>
                 </div>
               ))}
