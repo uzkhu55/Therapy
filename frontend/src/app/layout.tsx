@@ -31,7 +31,13 @@ export default function RootLayout({
         <body
           className={`${inter.className} ${rubik.className} w-screen flex flex-col items-center justify-center antialiased`}
         >
+
+       
           {children}
+       
+
+
+
         </body>
       </html>
     </ClerkProvider>

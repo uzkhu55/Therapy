@@ -16,7 +16,7 @@ export const ClickButton = ({
   return (
     <button
       onClick={clickhandler}
-      className="flex-1 p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full"
+      className="flex-1 p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full  transition-all duration-300 ease-in-out"
     >
       <img className="w-5 h-5" src={src} alt="zurag" />
       {desc}
