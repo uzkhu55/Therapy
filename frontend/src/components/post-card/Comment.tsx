@@ -1,33 +1,53 @@
 "use client";
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Camera, ImagePlay, SmilePlus } from "lucide-react";
+import { CommentData } from "./CommentComponent"; // Assuming CommentData is defined somewhere else
+import { formatDistanceToNow } from "date-fns";
+import { DeleteComment } from "./DeleteComment";
 
-export const CommentComponent = () => {
+function getRelativeTime(date: Date): string {
+  return formatDistanceToNow(date, { addSuffix: true });
+}
+
+interface CommentProps {
+  comment: CommentData;
+}
+
+export const Comment: React.FC<CommentProps> = ({ comment }) => {
+  const relativeTime = comment.createdAt
+    ? getRelativeTime(new Date(comment.createdAt))
+    : "N/A";
+
   return (
-    <div className="w-[590px] h-auto p-3 rounded-md shadow-md mx-auto bg-[#fdfcf6] flex gap-10">
-      <div className="flex gap-3 mt-1">
-        <img
-          className="w-10 h-10 rounded-full"
-          src="https://scontent.fuln1-1.fna.fbcdn.net/v/t39.30808-1/317618240_1307099933387439_7595242074711560404_n.jpg?stp=dst-jpg_s320x320&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=YDs60qhGOuMQ7kNvgGDjPEB&_nc_zt=24&_nc_ht=scontent.fuln1-1.fna&_nc_gid=Agp49QvYxNdmn6dEWr0Xyp7&oh=00_AYDSSqMTV2GahTqD8F6dVxNVnYRLs3xOBgnvJOUhWlAxgQ&oe=67411C5D"
-          alt="profile"
-        />
-        <div>
-          <p className="text-sm font-bold flex items-center">tsovoo</p>
-          <p className="text-sm">24.11.18</p>
-        </div>
-      </div>
-      <div className="flex w-full items-center space-x-2">
-        <div className="w-full space-x-2">
-          <Input type="text" placeholder="Comment as Tsovoo Ganbold" />
-          <div className="flex gap-3">
-            <SmilePlus />
-            <Camera />
-            <ImagePlay />
+    <div className="w-[560px] h-auto p-4 rounded-lg mx-auto bg-white shadow-md flex flex-col gap-4 border border-gray-100">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-4">
+          <img
+            className="w-12 h-12 rounded-full border border-gray-300 object-cover"
+            src={comment.userId?.image}
+            alt="profile"
+          />
+          <div className="flex flex-col">
+            <p className="text-base font-semibold text-gray-800">
+              {comment.userId.username}
+            </p>
+            <p className="text-sm text-gray-500">{relativeTime}</p>
           </div>
         </div>
+        <DeleteComment comment={comment} />
       </div>
+      <div className="text-gray-700 text-sm leading-relaxed break-words ">
+        {comment.content}
+      </div>
+      {comment.image && (
+        <div className="w-full flex justify-center">
+          <img
+            className="w-auto max-w-[150px]  rounded-md border border-gray-300"
+            src={comment.image}
+            alt="comment-related"
+          />
+        </div>
+      )}
+      reply
     </div>
   );
 };

@@ -4,7 +4,8 @@ import env from "dotenv";
 env.config();
 
 export const signUpController = async (req: any, res: any) => {
-  const { username, email, authId } = req.body;
+  const { username, email, authId, image } = req.body;
+
   const isUserExist = await UserModel.findOne({ authId });
 
   if (!isUserExist) {
@@ -12,6 +13,7 @@ export const signUpController = async (req: any, res: any) => {
       username,
       authId,
       email,
+      image,
     });
     res.status(201).send({ message: "User created successfully", data: user });
     return;

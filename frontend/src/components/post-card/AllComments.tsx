@@ -1,28 +1,29 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Post } from "./Post";
+
+import { Comment } from "./Comment";
 import { LoadingComponent } from "../LoadingComponent";
 
-export const AllPosts = () => {
-  const [posts, setPosts] = useState([]);
+export const AllComments = ({ postId }: { postId: string }) => {
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchComments = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          "http://localhost:8000/posts/fetchPosts"
+          `http://localhost:8000/posts/fetchComments/${postId}`
         );
-        setPosts(data);
+        setComments(data);
         setLoading(false);
       } catch (error) {
         console.log("Error fetching data:", error);
         setLoading(false);
       }
     };
-    fetchPosts();
+    fetchComments();
   }, []);
 
   if (loading) {
@@ -31,8 +32,8 @@ export const AllPosts = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {posts.map((post, i) => {
-        return <Post post={post} key={i} />;
+      {comments.map((comment, i) => {
+        return <Comment comment={comment} key={i} />;
       })}
     </div>
   );

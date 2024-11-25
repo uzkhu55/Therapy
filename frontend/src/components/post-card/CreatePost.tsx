@@ -29,7 +29,7 @@ export const CreatePost = () => {
   };
 
   return (
-    <div className="w-[590px] h-[135px] p-3 rounded-md shadow-md bg-[#fdfcf6]">
+    <div className="w-[590px] h-[135px] p-3 rounded-md mx-auto shadow-md bg-[#fdfcf6]">
       <div className="flex gap-3 w-[558px] mb-2">
         <div className="flex gap-2 mt-1">
           <img className="w-10 h-10 rounded-full" src={user?.imageUrl} alt="" />
@@ -50,7 +50,7 @@ export const CreatePost = () => {
       <div className="flex w-[558px] border-t-[1px] pt-3">
         <label
           htmlFor="picture"
-          className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f8f0e5] rounded-md"
+          className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full"
         >
           <ImageIcon size={22} strokeWidth={1.2} />
           Image
@@ -58,7 +58,7 @@ export const CreatePost = () => {
             type="file"
             onClick={handleOpen}
             onChange={(e) => handleClick(e)}
-            className="opacity-0 absolute"
+            className="opacity-0 absolute w-[50%]"
             id="picture"
             name="picture"
           />

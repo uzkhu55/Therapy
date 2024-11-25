@@ -4,6 +4,11 @@ import { deletePostController } from "../../controllers/postController/deletePos
 import { updatePostController } from "../../controllers/postController/updatePost";
 import { fetchPostController } from "../../controllers/postController/fetchPost";
 import { fetchPostsController } from "../../controllers/postController/fetchPosts";
+import { createCommentController } from "../../controllers/commentController/createComment";
+import { likeCountController } from "../../controllers/postController/likeCount";
+import { fetchCommentsController } from "../../controllers/commentController/fetchComments";
+import { deleteCommentController } from "../../controllers/commentController/deleteComment";
+import { fetchCommenttController } from "../../controllers/commentController/fetchComment";
 
 const postRouter = Router();
 
@@ -12,5 +17,11 @@ postRouter.route("/posts/deletePost/:id").delete(deletePostController);
 postRouter.route("/posts/updatePost/:id").put(updatePostController);
 postRouter.route("/posts/fetchPost/:id").get(fetchPostController);
 postRouter.route("/posts/fetchPosts").get(fetchPostsController);
+
+postRouter.route("/posts/fetchComments/:postId").get(fetchCommentsController);
+postRouter.route("/posts/fetchComment/:commentId").get(fetchCommenttController);
+postRouter.route("/posts/createComment").post(createCommentController);
+postRouter.route("/posts/likeCount/:id").put(likeCountController);
+postRouter.route("/posts/deleteComment/:id").delete(deleteCommentController);
 
 export default postRouter;

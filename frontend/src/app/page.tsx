@@ -16,12 +16,13 @@ const page = () => {
             username: user.username,
             email: user.primaryEmailAddress?.emailAddress,
             authId: user.id,
+            image: user.imageUrl,
           });
           if (res.config.data) {
             window.localStorage.setItem("userDetail", res.config.data);
           }
         } catch (error) {
-          console.error("Error adding user:", error);
+          console.log("Error adding user:", error);
         }
       }
     };

@@ -1,18 +1,22 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
+import CircularProgress from "@mui/material/CircularProgress";
 
-export default function LoadingComponent() {
+export function LoadingComponent() {
   return (
-    <Box
+    <Stack
       sx={{
-        width: "100%",
-        color: "greenyellow",
-        top: "8px",
-        position: "absolute",
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 9999,
+        color: "grey.500",
       }}
+      spacing={2}
+      direction="row"
     >
-      <LinearProgress color="success" />
-    </Box>
+      <CircularProgress color="success" />
+    </Stack>
   );
 }
