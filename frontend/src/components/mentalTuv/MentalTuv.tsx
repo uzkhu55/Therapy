@@ -98,7 +98,6 @@ const MentalTuv = () => {
             );
           })}
         </div>
-<<<<<<< HEAD
 
         <div className="max-w-[1120px] w-full flex flex-col items-start justify-center">
           <div className="text-2xl font-medium text-[#102d3f] font-['Rubik'] text-left mb-[20px]">
@@ -112,8 +111,6 @@ const MentalTuv = () => {
             </Button>
           </Link>
         </div>
-=======
->>>>>>> 8dbbd77 (fe-question)
       </div>
     </div>
   );
