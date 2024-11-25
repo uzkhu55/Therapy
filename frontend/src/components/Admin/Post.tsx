@@ -85,7 +85,7 @@ export const AdminAllPost = () => {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <img
-                          src={posts.image[0]}
+                          src={posts.image?.[0]}
                           alt="profile"
                           className="w-8 h-8 rounded-full"
                         />
