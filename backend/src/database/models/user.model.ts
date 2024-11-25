@@ -10,7 +10,7 @@ export type UsersModelType = {
   email: string;
   bio: string;
   address: string;
-  image: string[];
+  image: string;
   available: string;
   isSpecialist: boolean;
   createdAt: Date;
@@ -26,7 +26,7 @@ const UserSchema = new Schema<UsersModelType>({
   phoneNumber: { type: String, required: false },
   bio: { type: String, required: false },
   address: { type: String, required: false },
-  image: [{ type: String, required: false }],
+  image: { type: String, required: false },
   available: { type: String, required: false },
   isSpecialist: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now, required: true, immutable: true },

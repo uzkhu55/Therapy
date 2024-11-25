@@ -20,7 +20,14 @@ import { ClickButtonEmoji } from "./ClickButtonEmoji";
 import { CircleX, Image as ImageIcon } from "lucide-react";
 import axios from "axios";
 import Image from "next/image";
-import LoadingComponent from "../LoadingComponent";
+
+import { uploadImage } from "@/lib/Utils/get-presigned-url";
+import {
+  handleClear,
+  handleClickEmoji,
+  handleEmojiSelect,
+} from "@/lib/Utils/piker-emoji-function";
+import { LoadingComponent } from "../LoadingComponent";
 
 type PostModalProps = {
   isOpen: boolean;
@@ -45,42 +52,16 @@ export function PostModal({
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const onClickEmoji = () => handleClickEmoji(showPicker, setShowPicker);
 
-  const getPresignedURL = async () => {
-    const { data } = await axios.get("http://localhost:8000/cloudflare");
-    return data as { uploadUrl: string; accessUrls: string };
-  };
+  const onEmojiSelect = (value: { native: string }) =>
+    handleEmojiSelect(value, setInput, setShowPicker);
 
-  const uploadImage = async () => {
-    if (image) {
-      const data = await getPresignedURL();
-      await axios.put(data.uploadUrl, image, {
-        headers: { "Content-Type": image.type },
-      });
-      return data.accessUrls;
-    }
-    return "";
-  };
-
-  const handleClickEmoji = () => {
-    setShowPicker(!showPicker);
-  };
-
-  const handleEmojiSelect = (value: { native: string }) => {
-    setInput((prev) => prev + value.native);
-    setShowPicker(false);
-  };
-
-  const handleClear = () => {
-    setInput("");
-    setImage(undefined);
-    setImagePreview("");
-  };
+  const onClear = () => handleClear(setInput, setImage, setImagePreview);
 
   const handleSubmit = async () => {
     setLoading(true);
-
-    const uploadedImageUrl = await uploadImage();
+    const uploadedImageUrl = await uploadImage({ image });
 
     if (uploadedImageUrl || input.trim()) {
       try {
@@ -95,8 +76,7 @@ export function PostModal({
         console.log(error);
         setLoading(false);
       }
-
-      handleClear();
+      onClear();
     }
   };
 
@@ -114,7 +94,7 @@ export function PostModal({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="w-[375px] rounded-md border-none hover:bg-[#f8f0e5]"
+          className="w-[375px] rounded-full border-none bg-[#f2eee9] hover:bg-[#e9e2db] "
           variant="outline"
         >
           {`What's on your mind, ${user?.username}?`}
@@ -123,7 +103,6 @@ export function PostModal({
       <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create post</DialogTitle>
-
           <div>
             <div className="flex gap-2 mt-2">
               <img
@@ -148,13 +127,13 @@ export function PostModal({
         <div className="flex w-[376px] border-t-[1px] pt-1 relative">
           <label
             htmlFor="picture"
-            className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f8f0e5] rounded-md"
+            className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full"
           >
             <ImageIcon size={22} strokeWidth={1.2} />
             Image
             <input
               type="file"
-              className="opacity-0 absolute"
+              className="opacity-0 absolute w-[50%]  "
               id="picture"
               name="picture"
               onChange={handleFileChange}
@@ -165,11 +144,11 @@ export function PostModal({
               "https://cdn.icon-icons.com/icons2/3288/PNG/512/happy_emo_emoticon_emoji_icon_208299.png"
             }
             desc={"Emoji"}
-            clickhandler={handleClickEmoji}
+            clickhandler={onClickEmoji}
           >
             {showPicker && (
               <div className="absolute -left-[300px] -top-[50px] z-10">
-                <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+                <Picker data={data} onEmojiSelect={onEmojiSelect} />
               </div>
             )}
           </ClickButtonEmoji>
@@ -198,7 +177,7 @@ export function PostModal({
             typeof="submit"
             disabled={isPostButtonDisabled || loading}
             onClick={handleSubmit}
-            className="w-[378px]"
+            className="w-[378px] bg-[#335141]"
             type="submit"
           >
             Post

@@ -7,7 +7,7 @@ export const fetchPostController = async (
 ): Promise<void> => {
   const { id } = req.params;
   try {
-    const post = await PostModel.findById({ _id: id });
+    const post = await PostModel.findById({ _id: id }).populate("userId");
 
     if (!post) {
       res.status(404).send({ message: "Post not found" });
@@ -15,7 +15,7 @@ export const fetchPostController = async (
     }
     res.status(200).json(post);
   } catch (error) {
-    console.error("Error fetching post:", error);
+    console.log("Error fetching post:", error);
     res.status(500).send({ message: "Failed to fetch post" });
   }
 };

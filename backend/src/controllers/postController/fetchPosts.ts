@@ -9,7 +9,6 @@ export const fetchPostsController = async (
     const posts = await PostModel.find()
       .populate("userId")
       .sort({ createdAt: -1 });
-    console.log(posts);
 
     res.status(200).send(posts);
   } catch (error) {
