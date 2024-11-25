@@ -32,14 +32,14 @@ export default function RootLayout({
         <body
           className={`${inter.className} ${rubik.className} w-screen flex flex-col items-center justify-center antialiased`}
         >
-          <ThemeProvider
+          {/* <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          > */}
+          {children}
+          {/* </ThemeProvider> */}
         </body>
       </html>
     </ClerkProvider>

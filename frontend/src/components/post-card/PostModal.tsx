@@ -127,7 +127,7 @@ export function PostModal({
         <div className="flex w-[376px] border-t-[1px] pt-1 relative">
           <label
             htmlFor="picture"
-            className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full"
+            className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full  transition-all duration-300 ease-in-out"
           >
             <ImageIcon size={22} strokeWidth={1.2} />
             Image

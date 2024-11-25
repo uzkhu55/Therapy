@@ -5,7 +5,7 @@ import { GoArrowRight } from "react-icons/go";
 import Footer from "../homePage/Footer";
 import { Button } from "@/components/ui/button";
 
-const Niitleluud = [
+export const Niitleluud = [
   {
     id: 1,
     title: "Улирал солигдох нь сэтгэл зүйд хэрхэн нөлөөлдөг вэ?",

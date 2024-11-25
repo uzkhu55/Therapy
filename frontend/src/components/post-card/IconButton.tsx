@@ -7,7 +7,10 @@ type IconProps = {
 
 export const IconButton = ({ children, onclick }: IconProps) => {
   return (
-    <div className="relative" onClick={onclick}>
+    <div
+      className="relative  transition-all duration-300 ease-in-out"
+      onClick={onclick}
+    >
       {children}
     </div>
   );

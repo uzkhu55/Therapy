@@ -30,7 +30,7 @@ export const AllPosts = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 ">
       {posts.map((post, i) => {
         return <Post post={post} key={i} />;
       })}
