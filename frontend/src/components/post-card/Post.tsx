@@ -60,7 +60,6 @@ export const Post: React.FC<PostProps> = ({ post }) => {
   const { user } = useUser();
   const isUserCreatePost = user?.id;
   const isUserCanUpdate = post.userId?.authId;
-  console.log(isUserCanUpdate);
 
   const canUpdate = isUserCreatePost === isUserCanUpdate;
   return (
@@ -91,7 +90,9 @@ export const Post: React.FC<PostProps> = ({ post }) => {
           <DeletePostModal post={post} />
         </div>
       </div>
-      <div className="pl-1">{post.content}</div>
+      <div className="pl-1 text-gray-700 font-medium text-sm leading-relaxed break-words ">
+        {post.content}
+      </div>
       {post.image && <img className="rounded-md" src={post.image} alt="" />}
       {isOpen && (
         <UpdatePostModal

@@ -9,7 +9,6 @@ const page = async ({ params }: { params: { id: string } }) => {
   const { data } = await axios.get(
     `http://localhost:8000/posts/fetchPost/${id}`
   );
-  console.log(data);
 
   return (
     <div className="flex justify-between bg-[#f2eee9] w-lvw min-h-[100%]">
