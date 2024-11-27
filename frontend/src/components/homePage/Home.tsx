@@ -11,10 +11,10 @@ import { Section5 } from "./Section5";
 const Homepage = () => {
   return (
     <div className="relative h-full bg-white w-screen ">
+      <Header />
       <div className="w-screen h-[903px] md:h-[683px] lg:h-[862px] bg-[#325343] z-[-1]">
         <div className="absolute top-0 left-0 w-screen h-[903px] md:h-[683px] lg:h-[862px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-0"></div>
       </div>
-      <Header />
       <Section1 />
       <Section2 />
       <Section3 />
