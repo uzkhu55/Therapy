@@ -52,54 +52,92 @@ const Chat: React.FC = () => {
   const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
   const [recentChats, setRecentChats] = useState<string[]>([]);
 
-  // const [authId, setAuthId] = useState<string | null>(null); // To store authId
+  // console.log(recentChats);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchInitialData = async () => {
       try {
+        const recentUserId = localStorage.getItem("chosenUserId");
+
+        // Fetch user details
         const response = await axios.get(
           "http://localhost:8000/user/userdetail"
         );
         setGetUserdetail(response.data);
 
+        // Fetch conversations for the current user
         const convos = await axios.get(
           `http://localhost:8000/user/myConvorsations/${user?.id}`
         );
-
         setRecentChats(convos.data);
+
+        // If a recent user is stored, fetch messages for that conversation
+        if (recentUserId) {
+          setChosenUserId(recentUserId);
+
+          const isThereConversationExisting = await axios.get(
+            `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${recentUserId}`
+          );
+
+          if (isThereConversationExisting.data.message) {
+            const getConversationMessages = await axios.get(
+              `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+            );
+            setGetmessages(getConversationMessages.data);
+          }
+        }
+
         scrollToBottom();
       } catch (error) {
-        console.error("Error fetching user details:", error);
+        console.error("Error fetching initial data:", error);
       }
     };
-    fetchUserData();
+
+    fetchInitialData();
   }, [user]);
 
   const handleAddToRecentChats = async (
     username: string,
     chosenUserId: string
   ) => {
-    if (!recentChats.includes(username)) {
-      setRecentChats((prevChats) => [...prevChats, username]);
+    try {
+      if (!recentChats.includes(username)) {
+        setRecentChats((prevChats) => [...prevChats, username]);
+      }
+
+      setChosenUserId(chosenUserId);
+      localStorage.setItem("chosenUserId", chosenUserId); // Persist selected chat
+
+      const isThereConversationExisting = await axios.get(
+        `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
+      );
+
+      if (!isThereConversationExisting.data.message) {
+        setGetmessages([]);
+        return;
+      }
+
+      const getConversationMessages = await axios.get(
+        `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+      );
+      setGetmessages(getConversationMessages.data);
+      setSearchValue("");
+      scrollToBottom();
+    } catch (error) {
+      console.error("Error adding to recent chats:", error);
     }
-    setChosenUserId(chosenUserId);
-
-    const isThereConversationExisting = await axios.get(
-      `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
-    );
-    if (!isThereConversationExisting.data.message) {
-      setGetmessages([]);
-      return;
-    }
-
-    const getConversationMessages = await axios.get(
-      `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
-    );
-
-    setGetmessages(getConversationMessages.data);
-    setSearchValue("");
   };
 
+  // Scroll to bottom whenever messages are updated
+  useEffect(() => {
+    scrollToBottom();
+  }, [getmessages]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   const addMessage = async () => {
     if (inputValue.trim() === "") {
       console.error("Message input is empty.");
@@ -122,11 +160,11 @@ const Chat: React.FC = () => {
     }
   };
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "instant" });
-    }
-  };
+  // const scrollToBottom = () => {
+  //   if (messagesEndRef.current) {
+  //     messagesEndRef.current.scrollIntoView({ behavior: "instant" });
+  //   }
+  // };
 
   // // Handle message input change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,14 +226,16 @@ const Chat: React.FC = () => {
                           <div
                             className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
                             key={index}
-                            onClick={
-                              () => handleAddToRecentChats(el.username, el._id) // Pass userId
-                            }
+                            onClick={() => {
+                              handleAddToRecentChats(el.username, el._id); // Add to recent chats
+                              setSearchValue(""); // Clear searchValue to hide dropdown
+                            }}
                           >
                             {el.username}
                           </div>
                         ))}
                   </div>
+
                   <Search className="absolute top-2 right-2 text-gray-400" />
                 </div>
                 <button className="w-[24px] text-[#325343]">
@@ -206,16 +246,22 @@ const Chat: React.FC = () => {
                 <div className="text-sm font-black py-4 px-2 text-black">
                   Recent Chats
                 </div>
-                <div className="flex flex-col gap-2">
-                  {recentChats.length > 0 ? (
-                    recentChats.map((chat, index) => (
-                      <div
-                        className="p-2 bg-[#325342] text-white   rounded-xl text-md font-bold shadow-sm"
-                        key={index}
-                      >
-                        {chat}
-                      </div>
-                    ))
+                <div className="flex cursor-pointer flex-col gap-2">
+                  {getUserdetail.length > 0 ? (
+                    getUserdetail
+                      .filter((user) => recentChats.includes(user.username))
+                      .map((user, index) => (
+                        <div
+                          className="p-2 bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
+                          key={index}
+                          onClick={
+                            () =>
+                              handleAddToRecentChats(user.username, user._id) // Pass userId
+                          }
+                        >
+                          {user.username}
+                        </div>
+                      ))
                   ) : (
                     <div className="text-gray-500 text-sm">No recent chats</div>
                   )}
@@ -249,17 +295,15 @@ const Chat: React.FC = () => {
                   className="flex flex-col bg-white gap-8 w-[70%] p-4 rounded-lg"
                 >
                   <div className="flex flex-col gap-5">
-                    {/* {Array.isArray(msg?.content) &&
-                      msg?.content.map((el, index) => (
-                        <div key={index} className="flex flex-col gap-2">
-                          <div>{msg.author}</div>
-                          <div>{el}</div>
-                        </div>
-                      ))} */}
-
                     <div key={index} className="flex flex-col gap-2">
-                      <div>{msg?.senderId?.username}</div>
-                      <div>{msg.content}</div>
+                      <img
+                        className="w-6 rounded-full h-6"
+                        src={msg?.senderId?.image || ""}
+                        alt="Sender"
+                      />
+                      <div className="bg-gray-200 rounded-lg p-2 w-fit">
+                        {msg.content}
+                      </div>
                     </div>
                   </div>
                 </div>
