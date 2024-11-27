@@ -25,6 +25,14 @@ export default function RootLayout({
           className={`${inter.className} ${rubik.className} flex flex-col antialiased`}
         >
           {children}
+          {/* <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          > */}
+          {children}
+          {/* </ThemeProvider> */}
         </body>
       </html>
     </ClerkProvider>

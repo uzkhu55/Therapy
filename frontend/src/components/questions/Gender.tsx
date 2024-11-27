@@ -1,14 +1,9 @@
 "use client";
 
+import { StepComponentPropsTypes } from "@/app/userDetail/page";
 import { GoArrowRight } from "react-icons/go";
 
-const Gender = ({
-  step,
-  nextHandler,
-}: {
-  step: number;
-  nextHandler: () => void;
-}) => {
+const Gender = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
@@ -24,10 +19,13 @@ const Gender = ({
           <div className="text-[20px] text-[#325343] font-bold">
             Хүйсээ сонгоно уу?
           </div>
-          <select className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]">
-            <option>Эр</option>
-            <option>Эм</option>
-            <option>Хэлэхийг хүсэхгүй байна</option>
+          <select
+            className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
+            onChange={(event) => formHandler({ gender: event.target.value })}
+          >
+            <option value="Эр">Эр</option>
+            <option value="Эм">Эм</option>
+            <option value="No">Хэлэхийг хүсэхгүй байна</option>
           </select>
 
           <button>

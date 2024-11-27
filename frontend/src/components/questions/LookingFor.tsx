@@ -1,17 +1,14 @@
 "use client";
 
+import { StepComponentPropsTypes } from "@/app/userDetail/page";
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
-import Link from "next/link";
 
 const LookingFor = ({
-  step,
+  nextHandler,
   backHandler,
-}: {
-  step: number;
-  nextHandler: () => void;
-  backHandler: () => void;
-}) => {
+  formHandler,
+}: StepComponentPropsTypes) => {
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
@@ -27,10 +24,15 @@ const LookingFor = ({
           <div className="text-[20px] text-[#325343] font-bold ">
             Ямар чиглэлийн мэдээлэл хэрэгтэй байна вэ?
           </div>
-          <select className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]">
-            <option>Хувь хүн</option>
-            <option>Хосууд</option>
-            <option>Өсвөр насныхан</option>
+          <select
+            className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
+            onChange={(event) =>
+              formHandler({ LookingFor: event.target.value })
+            }
+          >
+            <option value={"Хувь хүн"}>Хувь хүн</option>
+            <option value={"Хосууд"}>Хосууд</option>
+            <option value={"Өсвөр насныхан"}>Өсвөр насныхан</option>
           </select>
           <div className="flex">
             <button>
@@ -39,9 +41,12 @@ const LookingFor = ({
                 className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px] "
               />
             </button>
-            <Link href="/createPost">
-              <GoArrowRight className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px] ml-[300px]" />
-            </Link>
+            <button>
+              <GoArrowRight
+                onClick={nextHandler}
+                className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px] ml-[300px]"
+              />
+            </button>
           </div>
         </div>
       </div>

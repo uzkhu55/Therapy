@@ -3,7 +3,6 @@ import { HomeLogo } from "@/components/homePage/HomeLogo";
 import Expectations from "@/components/questions/Expectations";
 import Age from "@/components/questions/Age";
 import Gender from "@/components/questions/Gender";
-import Theapist from "@/components/questions/Therapist";
 import LookingFor from "@/components/questions/LookingFor";
 import PrevTherapy from "@/components/questions/PrevTherapy";
 import RelStatus from "@/components/questions/RelStatus";
@@ -11,7 +10,6 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Loading } from "@/components/Loading";
 
 export type StepComponentPropsTypes = {
   formData: Record<string, string>;
@@ -21,7 +19,6 @@ export type StepComponentPropsTypes = {
 };
 
 const STEP_COMPONENTS = [
-  Theapist,
   Gender,
   Age,
   RelStatus,
@@ -40,8 +37,6 @@ const UserDetail: React.FC<UserDetailProps> = ({ handleFormSubmit, form }) => {
   const [step, setStep] = useState(0);
   const user = useUser();
   const [adminType, setAdminType] = useState(""); // State to hold the selected admin type
-  const [admin, setAdmin] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Added loading state
 
   const RenderComponent = STEP_COMPONENTS[step];
   const [formData, setFormData] = useState({
@@ -80,14 +75,15 @@ const UserDetail: React.FC<UserDetailProps> = ({ handleFormSubmit, form }) => {
         authId: user?.user?.id, // user ID
       });
 
-      router.push("/");
-      // handleFormSubmit();
+      router.push("/createPost");
+      handleFormSubmit();
     } catch (error) {
-      console.error("Error submitting form", error);
+      console.error("Aldaa garlaa", error);
     }
   };
 
-  const x = async () => {
+  // Function to set admin type in the database
+  const settAdmin = async () => {
     try {
       if (adminType === "") {
         alert("Please select an admin type.");
@@ -96,86 +92,50 @@ const UserDetail: React.FC<UserDetailProps> = ({ handleFormSubmit, form }) => {
 
       await axios.post("http://localhost:8000/user/setadmin", {
         adminType: adminType, // Send the selected admin type to the backend
-        authId: user?.user?.id, // Send the user ID (assuming you want to relate this with the user)
+        userId: user?.user?.id, // Send the user ID (assuming you want to relate this with the user)
       });
+
+      alert("Admin status updated successfully!");
     } catch (error) {
       console.error("Error updating admin status", error);
     }
   };
 
-  const auth = useUser();
-
-  useEffect(() => {
-    const getUserid = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:8000/user/detail");
-
-        console.log(data.form); // Log for debugging
-
-        if (data.form) {
-          setIsLoading(true); // Show loading spinner
-          router.push("/"); // Redirect to homepage
-        } else {
-          setIsLoading(false); // Stop loading if form data is not available
-        }
-      } catch (error) {
-        console.error("Error fetching user data", error);
-        setIsLoading(false); // Stop loading if there's an error
-      }
-    };
-
-    const addUserToDatabase = async () => {
-      if (auth.isLoaded && user) {
-        try {
-          const res = await axios.post("http://localhost:8000/user/signup", {
-            username: auth.user?.username,
-            email: auth.user?.primaryEmailAddress?.emailAddress,
-            authId: auth.user?.id,
-          });
-
-          if (res.data) {
-            window.localStorage.setItem("userDetail", JSON.stringify(res.data));
-            setIsLoading(false);
-          }
-        } catch (error) {
-          console.log("Error adding user:", error);
-          setIsLoading(false);
-        }
-      }
-    };
-
-    addUserToDatabase();
-    getUserid();
-  }, [auth.isLoaded]);
-
-  if (isLoading) {
-    return <Loading />; // Show loading component while fetching user data
-  }
-
   return (
     <div className="flex flex-col items-center bg-[#deebc0] w-full h-screen">
-      <div>
-        <div className="bg-[#325343] w-full h-[70px] flex justify-center">
-          <HomeLogo />
-        </div>
+      {user?.user?.id ? (
+        <div>
+          {/* Admin Type Selection */}
+          <div>
+            <select
+              value={adminType}
+              onChange={(e) => setAdminType(e.target.value)} // Update state on selection change
+            >
+              <option value="">Select Admin Status</option>
+              <option value="admin">Admin</option>
+              <option value="non">Not Admin</option>
+            </select>
+            <button onClick={settAdmin}>Set Admin</button>
+          </div>
 
-        <div className="font-bold text-[40px] mt-[70px] text-[#325343]">
-          Таныг зөв эмчтэй тааруулахад тусална уу
-        </div>
-        <div className="mt-[20px] text-[#325343]">
-          Дараах асуултууд нь таны хувийн сонголтод тулгуурлан илүү хэрэгтэй
-          туслалцаа үзүүлэх зорилготой юм.
-        </div>
-        {/* <div>{user?.user?.id}</div> */}
-        <div className="flex justify-center items-center">
+          <div className="bg-[#325343] w-full h-[70px] flex justify-center">
+            <HomeLogo />
+          </div>
+
+          <div className="font-bold text-[40px] mt-[70px] text-[#325343]">
+            Таныг зөв эмчтэй тааруулахад тусална уу
+          </div>
+          <div className="mt-[20px] text-[#325343]">
+            Дараах асуултууд нь таны хувийн сонголтод тулгуурлан илүү хэрэгтэй
+            туслалцаа үзүүлэх зорилготой юм.
+          </div>
+          <div>{user?.user?.id}</div>
           <RenderComponent
             formHandler={formHandler}
             formData={formData}
             nextHandler={nextHandler}
             backHandler={backHandler}
           />
-        </div>
-        <div className="flex justify-center items-center">
           {step === STEP_COMPONENTS.length - 1 && (
             <button
               className="mt-4 bg-[#325343] text-white py-2 px-4 rounded"
@@ -185,7 +145,9 @@ const UserDetail: React.FC<UserDetailProps> = ({ handleFormSubmit, form }) => {
             </button>
           )}
         </div>
-      </div>
+      ) : (
+        <div>Please log in to continue.</div>
+      )}
     </div>
   );
 };
