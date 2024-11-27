@@ -8,20 +8,20 @@ import { FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className="w-screen relative bottom-0 bg-[#213B4A] flex items-center justify-center">
+    <div className="w-full relative bottom-0 bg-[#213B4A] flex items-center justify-center">
       <div className="flex flex-col w-full items-center justify-center px-4 md:px-6 lg:px-8">
         <div className="my-[25px] w-full max-w-[1120px] flex justify-start">
           <div className="flex flex-wrap text-white gap-5 items-center font-medium text-base font-['Inter'] leading-normal">
-            <Link href="" className="w-full sm:w-auto">
+            <Link href="/about" className="w-full sm:w-auto">
               Бидний тухай
             </Link>
-            <Link href="/terms" className="w-full sm:w-auto">
+            <Link href="/termsOfService" className="w-full sm:w-auto">
               Үйлчилгээний нөхцөл
             </Link>
             <Link href="/privacy" className="w-full sm:w-auto">
               Нууцлалын бодлого
             </Link>
-            <Link href="" className="w-full sm:w-auto">
+            <Link href="/contact" className="w-full sm:w-auto">
               Холбоо барих
             </Link>
           </div>
