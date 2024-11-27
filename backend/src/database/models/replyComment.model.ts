@@ -1,23 +1,21 @@
 import { model, Model, models, Schema } from "mongoose";
 
-export type CommentModelType = {
+export type ReplyCommentModelType = {
   _id: Schema.Types.ObjectId;
   userId: Schema.Types.ObjectId;
-  postId: Schema.Types.ObjectId;
+  commentId: Schema.Types.ObjectId;
   content: string;
-  image: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
-const CommentSchema = new Schema<CommentModelType>({
+const ReplyCommentSchema = new Schema<ReplyCommentModelType>({
   userId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-  postId: { type: Schema.Types.ObjectId, required: true, ref: "posts" },
+  commentId: { type: Schema.Types.ObjectId, required: true, ref: "comment" },
   content: { type: String, required: false },
-  image: { type: String, required: false },
   createdAt: { type: Date, default: Date.now, required: true, immutable: true },
   updatedAt: { type: Date, default: Date.now, required: true },
 });
 
-export const CommentModel: Model<CommentModelType> =
-  models["comment"] || model<CommentModelType>("comment", CommentSchema);
+export const ReplyCommentModel: Model<ReplyCommentModelType> =
+  models["reply"] || model<ReplyCommentModelType>("reply", ReplyCommentSchema);

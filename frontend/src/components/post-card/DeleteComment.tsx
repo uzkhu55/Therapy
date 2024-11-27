@@ -13,41 +13,38 @@ import {
 import axios from "axios";
 import { X } from "lucide-react";
 import { useState } from "react";
-import { PostData } from "./Post";
+import { CommentData } from "./CommentComponent";
+
 import { useUser } from "@clerk/clerk-react";
 import { LoadingComponent } from "../LoadingComponent";
-import { useRouter } from "next/navigation";
 
-type PostModalProps = {
-  post: PostData;
+type CommentProps = {
+  comment: CommentData;
 };
 
-export function DeletePostModal({ post }: PostModalProps) {
+export function DeleteComment({ comment }: CommentProps) {
   const [move, setMove] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
-  const router = useRouter();
 
-  const isCanDeletePost = user?.id;
-  const isUserCreatedPost = post.userId?.authId;
+  const isCanDeleteComment = user?.id;
+  const isCommenter = comment.userId.authId;
 
-  const canDelete = isCanDeletePost === isUserCreatedPost;
+  const canDelete = isCanDeleteComment === isCommenter;
 
   const handleCancel = () => {
     setMove(false);
   };
 
   const handleMove = async () => {
-    const { _id } = post;
+    const { _id } = comment;
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/posts/deletePost/${_id}`);
+      await axios.delete(`http://localhost:8000/posts/deleteComment/${_id}`);
       setLoading(false);
       setMove(false);
-
-      router.push("/createPost");
     } catch (error) {
-      console.log("Error deleting post:", error);
+      console.error("Error deleting comment:", error);
       setLoading(false);
     }
   };
@@ -72,8 +69,8 @@ export function DeletePostModal({ post }: PostModalProps) {
               <DialogTitle>Move to your trash</DialogTitle>
               <DialogDescription>
                 Items in your trash will be automatically deleted after 30 days.
-                You can delete them from your trash earlier by going to activity
-                log in settings.
+                You can delete them from your trash earlier by going to the
+                activity log in settings.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

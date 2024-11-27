@@ -16,12 +16,13 @@ const page = () => {
             username: user.username,
             email: user.primaryEmailAddress?.emailAddress,
             authId: user.id,
+            image: user.imageUrl,
           });
           if (res.config.data) {
             window.localStorage.setItem("userDetail", res.config.data);
           }
         } catch (error) {
-          console.error("Error adding user:", error);
+          console.log("Error adding user:", error);
         }
       }
     };
@@ -31,10 +32,6 @@ const page = () => {
   return (
     <div className="flex items-center w-full">
       <Homepage />
-      {/* {user.isLoaded && <div> hello {user.user?.username}</div>}*/}
-
-      {/* <Link href="chat">Open the chat</Link> */}
-      {/* <Link href="/userDetail">Tap here</Link> */}
     </div>
   );
 };

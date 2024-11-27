@@ -21,9 +21,7 @@ const Notifications = () => {
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button>
-            <Bell size={26} />
-          </button>
+          <Bell size={26} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Notifications</DropdownMenuLabel>

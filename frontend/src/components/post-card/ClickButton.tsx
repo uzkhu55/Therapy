@@ -7,10 +7,18 @@ type PhotoButtonProps = {
   children?: React.ReactNode;
 };
 
-export const ClickButton = ({ src, desc, children }: PhotoButtonProps) => {
+export const ClickButton = ({
+  src,
+  desc,
+  children,
+  clickhandler,
+}: PhotoButtonProps) => {
   return (
-    <button className="flex-1 p-3 flex gap-2 items-center justify-center hover:bg-[#f8f0e5] rounded-md">
-      <img className="w-6 h-6" src={src} alt="zurag" />
+    <button
+      onClick={clickhandler}
+      className="flex-1 p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full  transition-all duration-300 ease-in-out"
+    >
+      <img className="w-5 h-5" src={src} alt="zurag" />
       {desc}
       {children}
     </button>

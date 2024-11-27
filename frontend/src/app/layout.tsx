@@ -11,7 +11,6 @@ import {
 import { localization } from "./langs";
 import { Inter } from "next/font/google";
 import { Rubik } from "next/font/google";
-import { ThemeProvider } from "@/components/Admin/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 const rubik = Rubik({ subsets: ["latin"] });
@@ -32,14 +31,13 @@ export default function RootLayout({
         <body
           className={`${inter.className} ${rubik.className} w-screen min-h-screen flex flex-col items-center justify-center antialiased`}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+
+       
+          {children}
+       
+
+
+
         </body>
       </html>
     </ClerkProvider>

@@ -98,19 +98,6 @@ const MentalTuv = () => {
             );
           })}
         </div>
-
-        <div className="max-w-[1120px] w-full flex flex-col items-start justify-center">
-          <div className="text-2xl font-medium text-[#102d3f] font-['Rubik'] text-left mb-[20px]">
-            Өнөөдөр бүртгүүлээд сэтгэл зүйгээ дэмжих олон янзын сэдвүүдээс
-            сонирхоорой.
-          </div>
-
-          <Link href={"/sign-up"}>
-            <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full max-w-[230px] w-full text-center text-base font-bold font-['Inter'] hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
-              ХЯЛБАР БҮРТГЭЛ
-            </Button>
-          </Link>
-        </div>
       </div>
     </div>
   );
