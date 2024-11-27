@@ -1,17 +1,14 @@
 "use client";
 
+import { StepComponentPropsTypes } from "@/app/userDetail/page";
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
 
 const PrevTherapy = ({
-  step,
   nextHandler,
   backHandler,
-}: {
-  step: number;
-  nextHandler: () => void;
-  backHandler: () => void;
-}) => {
+  formHandler,
+}: StepComponentPropsTypes) => {
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
@@ -27,9 +24,14 @@ const PrevTherapy = ({
           <div className="text-[20px] text-[#325343] font-bold">
             Өмнө нь сэтгэл зүйчтэй холбогдож байсан эсэх?
           </div>
-          <select className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]">
-            <option>Тийм</option>
-            <option>Үгүй</option>
+          <select
+            className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
+            onChange={(event) =>
+              formHandler({ prevTherapy: event.target.value })
+            }
+          >
+            <option value={"Тийм"}>Тийм</option>
+            <option value={"Үгүй"}>Үгүй</option>
           </select>
           <div className="flex">
             <button>

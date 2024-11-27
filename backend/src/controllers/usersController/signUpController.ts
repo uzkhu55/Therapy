@@ -8,13 +8,14 @@ export const signUpController = async (req: any, res: any) => {
 
   const isUserExist = await UserModel.findOne({ authId });
 
-  if (!isUserExist) {
+  if (!isUserExist && authId) {
     const user = await UserModel.create({
       username,
       authId,
       email,
       image,
     });
+    console.log("user created");
     res.status(201).send({ message: "User created successfully", data: user });
     return;
   }

@@ -15,6 +15,7 @@ export type UsersModelType = {
   isSpecialist: boolean;
   createdAt: Date;
   updatedAt: Date;
+  form: boolean;
 };
 
 const UserSchema = new Schema<UsersModelType>({
@@ -29,6 +30,7 @@ const UserSchema = new Schema<UsersModelType>({
   image: { type: String, required: false },
   available: { type: String, required: false },
   isSpecialist: { type: Boolean, default: false },
+  form: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now, required: true, immutable: true },
   updatedAt: { type: Date, default: Date.now, required: true },
 });

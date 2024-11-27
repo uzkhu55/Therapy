@@ -1,17 +1,14 @@
 "use client";
 
+import { StepComponentPropsTypes } from "@/app/userDetail/page";
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
 
 const RelStatus = ({
-  step,
   nextHandler,
   backHandler,
-}: {
-  step: number;
-  nextHandler: () => void;
-  backHandler: () => void;
-}) => {
+  formHandler,
+}: StepComponentPropsTypes) => {
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
@@ -27,13 +24,16 @@ const RelStatus = ({
           <div className="text-[20px] text-[#325343] font-bold ">
             Гэрлэлтийн байдал оруулна уу?
           </div>
-          <select className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]">
-            <option>Ганц бие</option>
-            <option>Үерхдэг</option>
-            <option>Гэрлэсэн</option>
-            <option>Салсан</option>
-            <option>Бэлэвсэн</option>
-            <option>Бусад</option>
+          <select
+            className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
+            onChange={(event) =>
+              formHandler({ relationshipStatus: event.target.value })
+            }
+          >
+            <option value={"Ганц бие"}>Ганц бие</option>
+            <option value={"Үерхдэг"}>Үерхдэг</option>
+            <option value={"Гэрлэсэн"}>Гэрлэсэн</option>
+            <option value={"Бусад"}>Бусад</option>
           </select>
           <div className="flex">
             <button>

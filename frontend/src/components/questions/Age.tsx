@@ -1,17 +1,14 @@
 "use client";
 
+import { StepComponentPropsTypes } from "@/app/userDetail/page";
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
 
 const Age = ({
-  step,
   nextHandler,
   backHandler,
-}: {
-  step: number;
-  nextHandler: () => void;
-  backHandler: () => void;
-}) => {
+  formHandler,
+}: StepComponentPropsTypes) => {
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
@@ -27,7 +24,10 @@ const Age = ({
           <div className="text-[20px] text-[#325343] font-bold">
             Насаа оруулна уу?
           </div>
-          <select className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]">
+          <select
+            className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
+            onChange={(event) => formHandler({ age: event.target.value })}
+          >
             <option>-10</option>
             <option>10-15</option>
             <option>15-20</option>

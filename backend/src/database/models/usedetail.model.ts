@@ -1,107 +1,20 @@
-import { model, Model, models, ObjectId, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-enum Gender {
-  Male = "Male",
-  Female = "Female",
-}
-enum lookingFor {
-  Individual = "Individual",
-  Couples = "Couples",
-  Teen = "Teen",
-}
-enum relSatatus {
-  Single = "Single",
-  InRelationship = "In a Relationship",
-  Married = "Married",
-  Divorced = "Divorced",
-  Other = "Other",
-}
-
-enum identify {
-  Straight = "Straight",
-  Gay = "Gay",
-  Lesbian = "Lesbian",
-  BiorPan = "Bi or Pan",
-  Prefernottosay = "Prefer not to say",
-}
-
-enum expectations {
-  Listens = "Listens",
-  Challengesmybeliefs = "Challenges my beliefs",
-  Guidesmetosetgoals = "Guides me to set goals",
-  Other = "Other",
-  Idontknow = "I don't know",
-}
-
-enum sleepHealth {
-  Good = "Good",
-  Fair = "Fair",
-  Poor = "Poor",
-}
-
-enum phyHealth {
-  Good = "Good",
-  Fair = "Fair",
-  Poor = "Poor",
-}
-
-export type userDetailModelType = {
-  _id: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
-  gender: Gender;
-  age: number;
-  relSatatus: relSatatus;
-  lookingFor: lookingFor;
-  identify: identify;
-  expectations: expectations;
-  previousTheraphy: boolean;
-  phyHealth: phyHealth;
-  sleepHealth: sleepHealth;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-const userdetailSchema = new Schema<userDetailModelType>({
-  userId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-  gender: { type: String, enum: ["Male", "Female"], required: true },
-  lookingFor: {
-    type: String,
-    enum: ["Individual", "Couples", "Teen"],
-    required: true,
-  },
-  age: { type: Number, required: true },
-  relSatatus: {
-    type: String,
-    enum: ["Single", "In a Relationship", "Married", "Divorced", "Other"],
-    required: true,
-  },
-  identify: {
-    type: String,
-    enum: ["Straight", "Gay", "Lesbian", "Bi or Pan", "Prefer not to say"],
-    required: true,
-  },
-  expectations: {
-    type: String,
-    enum: [
-      "Listens",
-      "Challenges my beliefs",
-      "Guides me to set goals",
-      "Other",
-      "I don't know",
-    ],
-    required: true,
-  },
-  previousTheraphy: { type: Boolean, required: true, default: false },
-  sleepHealth: {
-    type: String,
-    enum: ["Good", "Fair", "Poor"],
-    required: true,
-  },
-  phyHealth: { type: String, enum: ["Good", "Fair", "Poor"], required: true },
-  createdAt: { type: Date, default: Date.now, required: true, immutable: true },
-  updatedAt: { type: Date, default: Date.now, required: true },
+const userDetailSchema = new mongoose.Schema({
+  gender: { type: String, required: true },
+  age: { type: String, required: true },
+  relationshipStatus: { type: String, required: true },
+  prevTherapy: { type: String, required: true },
+  lookingFor: { type: String, required: true },
+  expectations: { type: String, required: true },
+  form: { type: Boolean, required: true },
+  authId: { type: String, required: true, unique: true }, // Linking to user by ID
+  // Optionally, if you want to store more user info:
+  // username: { type: String }, // If you want to store the username
+  // email: { type: String }, // If you want to store email
+  // otherUserData: { type: Object }, // If you want to store any additional user data
 });
 
-export const userDetailModel: Model<userDetailModelType> =
-  models["userDetail"] ||
-  model<userDetailModelType>("userDetail", userdetailSchema);
+const userDetailModel = mongoose.model("UserDetail", userDetailSchema);
+
+export { userDetailModel };

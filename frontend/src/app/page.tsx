@@ -1,33 +1,29 @@
 "use client";
+
 import { useUser } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import Homepage from "@/components/homePage/Home";
+import UserDetail from "./userDetail/page"; // Import your UserDetail component
+import { Loading } from "@/components/Loading";
 
-const page = () => {
-  const { user, isLoaded } = useUser();
+// Define the type for the props passed to UserDetail component
+interface UserDetailProps {
+  handleFormSubmit: () => void; // handleFormSubmit should be a function that takes no arguments and returns nothing
+  form: boolean;
+}
 
-  useEffect(() => {
-    const addUserToDatabase = async () => {
-      if (isLoaded && user) {
-        try {
-          const res = await axios.post("http://localhost:8000/user/signup", {
-            username: user.username,
-            email: user.primaryEmailAddress?.emailAddress,
-            authId: user.id,
-            image: user.imageUrl,
-          });
-          if (res.config.data) {
-            window.localStorage.setItem("userDetail", res.config.data);
-          }
-        } catch (error) {
-          console.log("Error adding user:", error);
-        }
-      }
-    };
-    addUserToDatabase();
-  }, [isLoaded, user]);
+const Page = () => {
+  const { isLoaded } = useUser();
+
+  if (!isLoaded) {
+    return (
+      <div className="flex gap-4 items-center justify-center w-full h-screen bg-[#325343] text-white">
+        <p>Loading...</p>
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center w-full">
@@ -36,4 +32,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
