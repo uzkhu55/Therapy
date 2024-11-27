@@ -29,7 +29,7 @@ export default function RootLayout({
     <ClerkProvider localization={localization}>
       <html lang="en">
         <body
-          className={`${inter.className} ${rubik.className} w-screen flex flex-col items-center justify-center antialiased`}
+          className={`${inter.className} ${rubik.className} w-screen min-h-screen flex flex-col items-center justify-center antialiased`}
         >
 
        

@@ -4,10 +4,8 @@ import Header from "./Header";
 import Section1 from "./Section1";
 import Section2 from "./Section2";
 import Footer from "@/components/homePage/Footer";
-import FooterDeed from "@/components/homePage/FooterDeed";
 import Section4 from "@/components/homePage/Section4";
 import Section3 from "@/components/homePage/Section3";
-import MentalTuv from "../mentalTuv/MentalTuv";
 import { Section5 } from "./Section5";
 
 const Homepage = () => {
