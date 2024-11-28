@@ -41,60 +41,52 @@ const Header: React.FC<ComponentProps> = ({
   return (
     <div className="flex justify-center  sticky top-0 items-center w-full z-50 ">
       {isSignedIn ? (
-        <div
-          className="flex justify-center absolute top-0 items-center px-4 md:px-6 lg:px-8  w-full 
-
-        bg-[#325343]
-"
-        >
+        <div className="flex justify-center absolute top-0 h-[80px] items-center px-4 md:px-6 lg:px-8  w-full  bg-[#325343]">
           <div className="absolute top-0 py-5 left-0 w-screen h-[80px] md:h-[80px] lg:h-[80px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-0"></div>
-
           <div className="flex w-full max-w-[1120px] text-black justify-between">
-            <Link className="flex items-center justify-center" href="/">
+            <Link
+              href="/"
+              className={`flex flex-col  md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
+            >
               <LogoLoggedin />
             </Link>
-            <div className="flex w-[250px] justify-evenly">
+            <div className="flex md:w-[500px] w-[140px] justify-evenly">
               <Link
                 href="/chat"
-                className={`flex flex-col top-2 relative w-[80px]  text-white ${bg} h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
                 <MessagesSquare />
                 <div className="text-xs">Чат</div>
-                <div
-                  className={`${under} border border-[#325343] h-2 w-12`}
-                ></div>
               </Link>
               <Link
                 href="/createPost"
-                className={`flex flex-col top-2 relative w-[80px]  text-white ${bg} h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
                 <FilePlus2 />
                 <div className="text-xs">Пост</div>
-                <div
-                  className={`${under1} border border-[#325343] h-2 w-12`}
-                ></div>
               </Link>
               <Link
                 href="/niitlel"
-                className={`flex flex-col top-2 relative w-[80px]  text-white ${bg} h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
                 <Users />
-                <div className="text-xs">Нийтлэл</div>
-                <div
-                  className={`${under2} border border-[#325343] h-2 w-12`}
-                ></div>
+                <div className="text-xs">Форум</div>
               </Link>
             </div>
-            <div className="flex items-center justify-center gap-6">
+            <div className="flex items-center  justify-center gap-6">
               <div
-                className={`flex flex-col top-2 relative w-[80px]  text-white ${bg} h-[80px] items-center gap-2 justify-center`}
+                className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
                 <Bell />
                 <div className="text-xs">Мэдэгдэл</div>
               </div>
-              <SignedIn>
-                <UserButton aria-label="Хэрэглэгчийн мэдээлэл" />
-              </SignedIn>
+              <div
+                className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
+              >
+                <SignedIn>
+                  <UserButton aria-label="Хэрэглэгчийн мэдээлэл" />
+                </SignedIn>
+              </div>
             </div>
           </div>
         </div>

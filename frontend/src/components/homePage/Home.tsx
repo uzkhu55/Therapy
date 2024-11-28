@@ -17,8 +17,47 @@ const Homepage = () => {
       </div>
       <Section1 />
       <Section2 />
+      <div className="w-full  flex bg-[#F3EFE9] flex-col-reverse items-center gap-8  md:flex md:flex-row  md:px-[500px]  pt-[100px] relative z-40">
+        <div className="px-4">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem
+          praesentium deleniti cum debitis recusandae dolorem esse labore facere
+          a molestiae quis voluptatibus itaque sed tempore ab officia, ullam
+          optio blanditiis. Pariatur consectetur id aperiam accusamus nulla
+        </div>
+        <img
+          src="/timeorder.jpg"
+          className="w-[420px] md:w-[400px] md:h-[250px] h-[300px]"
+          alt=""
+        />
+      </div>
       <Section3 />
+      <div className="w-full px-4 flex flex-col-reverse items-center gap-8  md:flex md:flex-row  md:px-[500px]  pt-[100px] relative z-40">
+        <div>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem
+          praesentium deleniti cum debitis recusandae dolorem esse labore facere
+          a molestiae quis voluptatibus itaque sed tempore ab officia, ullam
+          optio blanditiis. Pariatur consectetur id aperiam accusamus nulla
+        </div>
+        <img
+          src="/turchatui.png"
+          className="w-[250px] md:w-[400px] md:h-[250px] h-[200px]"
+          alt=""
+        />
+      </div>
       <Section4 />
+      <div className="w-full px-4 flex flex-col items-center gap-8  md:flex md:flex-row  md:px-[500px] bg-[#F3EFE9] pt-[100px] relative z-40">
+        <img
+          src="/turchatui.png"
+          className="w-[250px] md:w-[400px] md:h-[250px] h-[200px]"
+          alt=""
+        />
+        <div>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem
+          praesentium deleniti cum debitis recusandae dolorem esse labore facere
+          a molestiae quis voluptatibus itaque sed tempore ab officia, ullam
+          optio blanditiis. Pariatur consectetur id aperiam accusamus nulla
+        </div>
+      </div>
       <Section5 />
       <Footer />
     </div>
