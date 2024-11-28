@@ -39,9 +39,13 @@ const Section1 = () => {
                 замналдаа тусламж аваарай.
               </span>
             </div>
-            <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full w-[230px] text-center text-base font-bold leading-9 hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
-              ХЯЛБАР БҮРТГЭЛ
-            </Button>
+            {isSignedIn ? (
+              <div></div>
+            ) : (
+              <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full w-[230px] text-center text-base font-bold leading-9 hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
+                ХЯЛБАР БҮРТГЭЛ
+              </Button>
+            )}
           </div>
         </div>
 
@@ -56,9 +60,13 @@ const Section1 = () => {
                 Мэргэжлийн сэтгэл зүйчтэй нэрээ нууцлан холбогдож, өөрийгөө олох
                 замналдаа тусламж аваарай.
               </div>
-              <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full w-[230px] text-center text-base font-bold leading-9 hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
-                ХЯЛБАР БҮРТГЭЛ
-              </Button>
+              {isSignedIn ? (
+                <div></div>
+              ) : (
+                <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full w-[230px] text-center text-base font-bold leading-9 hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
+                  ХЯЛБАР БҮРТГЭЛ
+                </Button>
+              )}
             </div>
             <img src="/Hero.png" alt="Hero" className="w-[488px] h-[408px]" />
           </div>
@@ -75,9 +83,13 @@ const Section1 = () => {
                 Мэргэжлийн сэтгэл зүйчтэй нэрээ нууцлан холбогдож, өөрийгөө олох
                 замналдаа тусламж аваарай.
               </div>
-              <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full w-[230px] text-center text-base font-bold leading-9 hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
-                ХЯЛБАР БҮРТГЭЛ
-              </Button>
+              {isSignedIn ? (
+                <div></div>
+              ) : (
+                <Button className="bg-[#FECE57] text-[#325343] items-center rounded-full w-[230px] text-center text-base font-bold leading-9 hover:bg-[#F9B927] transition-colors duration-300 ease-in-out">
+                  ХЯЛБАР БҮРТГЭЛ
+                </Button>
+              )}
             </div>
             <img src="/Hero.png" alt="Hero" className="w-[430px] h-[360px]" />
           </div>
