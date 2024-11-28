@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ClickButton } from "./ClickButton";
-import { Settings2 } from "lucide-react";
+import { Settings2, ThumbsUp } from "lucide-react";
 import { UpdatePostModal } from "./UpdatePostModal";
 import { DeletePostModal } from "./DeletePostModal";
 import { CommentComponent } from "./CommentComponent";
@@ -10,6 +10,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
+
+import { AllLikes, LikeModelType } from "./AllLikes";
 
 interface PostProps {
   post: PostData;
@@ -32,6 +35,9 @@ export const Post: React.FC<PostProps> = ({ post }) => {
   const [imagePreview, setImagePreview] = useState<string>("null");
   const [isOpen, setIsOpen] = useState(false);
   const [commentIsOpen, setCommentIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState<LikeModelType[]>([]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -61,7 +67,30 @@ export const Post: React.FC<PostProps> = ({ post }) => {
   const isUserCreatePost = user?.id;
   const isUserCanUpdate = post.userId?.authId;
 
+  const handleLiked = async () => {
+    setLoading(true);
+    setIsLiked((prev) => !prev);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/posts/createLike",
+        {
+          authId: user?.id,
+          _id: post._id,
+        }
+      );
+
+      const updatedLikes = response.data.likes;
+      setLikes(updatedLikes);
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Error handling like:", error);
+      setLoading(false);
+    }
+  };
+
   const canUpdate = isUserCreatePost === isUserCanUpdate;
+
   return (
     <div className="w-[590px] h-auto p-3 rounded-md shadow-md mx-auto  flex flex-col gap-2 bg-[#fdfcf6] ">
       <div className=" flex justify-between items-center">
@@ -93,6 +122,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
       <div className="pl-1 text-gray-700 font-medium text-sm leading-relaxed break-words ">
         {post.content}
       </div>
+
       {post.image && <img className="rounded-md" src={post.image} alt="" />}
       {isOpen && (
         <UpdatePostModal
@@ -106,15 +136,32 @@ export const Post: React.FC<PostProps> = ({ post }) => {
           post={post}
         />
       )}
-      <div className=" text-right pr-1">
+
+      <div className=" flex justify-between text-right pr-1">
+        <div className="pl-2 flex gap-1">
+          <AllLikes
+            postId={post._id}
+            likes={likes}
+            setLikes={setLikes}
+            setIsLiked={setIsLiked}
+          />
+          <ThumbsUp
+            width={20}
+            height={20}
+            fontWeight={1}
+            color="#335141"
+            onClick={handleLiked}
+          />
+        </div>
         <Link href={`/createPost/${post._id}`}>View comments</Link>
       </div>
 
       <div className="flex w-[558px] border-t-[1px] pt-3">
         <ClickButton
           src={"https://cdn-icons-png.flaticon.com/512/126/126473.png"}
-          desc={"Like"}
-          // clickhandler={handleLikeClick}
+          desc={isLiked ? "Liked" : "Like"}
+          clickhandler={handleLiked}
+          className={isLiked ? "text-[#335141] font-medium" : ""}
         />
 
         <ClickButton
