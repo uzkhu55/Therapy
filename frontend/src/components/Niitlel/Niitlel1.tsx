@@ -34,7 +34,7 @@ const Niitlel1 = ({
   tavText,
 }: NiitlelDetailPropsType) => {
   return (
-    <div className="w-[800px]">
+    <div className="w-[800px] mt-[100px]">
       <div className="font-bold text-[40px] mt-[50px] mb-[50px]">{title}</div>
       <img src={img} alt="" className="rounded-3xl" />
       <div className="w-[800px]">

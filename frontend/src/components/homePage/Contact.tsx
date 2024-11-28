@@ -4,7 +4,9 @@ export const ContactPage = () => {
   return (
     <div className="w-full items-center justify-center  ">
       <div className="flex flex-col  items-center  bg-[#325343] bg-[url('/Texture.png')] bg-cover bg-center pb-[200px] pt-[100px]">
-        <div className="font-bold text-[60px] text-white">Холбоо барих</div>
+        <div className="font-bold text-[60px] text-white mt-[50px]">
+          Холбоо барих
+        </div>
         <div className="text-sm  text-white">
           Бид тантай хамтран ажиллахдаа таатай байх болно.
         </div>

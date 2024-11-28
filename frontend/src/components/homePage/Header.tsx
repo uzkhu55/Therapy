@@ -39,7 +39,7 @@ const Header: React.FC<ComponentProps> = ({
   };
 
   return (
-    <div className="flex justify-center  sticky top-0 items-center w-full z-50">
+    <div className="flex justify-center  sticky top-0 items-center w-full z-50 ">
       {isSignedIn ? (
         <div
           className="flex justify-center absolute top-0 items-center px-4 md:px-6 lg:px-8  w-full 
@@ -79,7 +79,7 @@ const Header: React.FC<ComponentProps> = ({
                 className={`flex flex-col top-2 relative w-[80px]  text-white ${bg} h-[80px] items-center gap-2 justify-center`}
               >
                 <Users />
-                <div className="text-xs">Форум</div>
+                <div className="text-xs">Нийтлэл</div>
                 <div
                   className={`${under2} border border-[#325343] h-2 w-12`}
                 ></div>
