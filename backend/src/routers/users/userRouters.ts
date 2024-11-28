@@ -33,7 +33,7 @@ userRouter.route("/user/getClients").get(getClientsController);
 userRouter.route("/user/getSpecialists").get(getSpecialistsController);
 userRouter.route("/folder").post(createFolder);
 
-userRouter.route("/user/detail").get(getUserDetailById);
+userRouter.route("/user/detail/:authId").get(getUserDetailById);
 userRouter.route("/user/detail").post(createUserDetail);
 
 export default userRouter;
