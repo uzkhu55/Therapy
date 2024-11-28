@@ -28,6 +28,7 @@ export type PostData = {
   updatedAt: Date;
 };
 
+const { user } = useUser();
 export const Post: React.FC<PostProps> = ({ post }) => {
   const pathname = usePathname();
 
@@ -63,7 +64,6 @@ export const Post: React.FC<PostProps> = ({ post }) => {
     ? getRelativeTime(new Date(post.createdAt))
     : "N/A";
 
-  const { user } = useUser();
   const isUserCreatePost = user?.id;
   const isUserCanUpdate = post.userId?.authId;
 
