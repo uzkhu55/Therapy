@@ -20,6 +20,7 @@ export const signUpController = async (req: any, res: any) => {
     return;
   }
 
+  await UserModel.findOneAndUpdate({ authId: authId }, { username: username });
   res.status(200).send("Already registered");
   return;
 };
