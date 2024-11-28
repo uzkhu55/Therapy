@@ -19,7 +19,6 @@ export const signUpController = async (req: any, res: any) => {
     res.status(201).send({ message: "User created successfully", data: user });
     return;
   }
-
   await UserModel.findOneAndUpdate({ authId: authId }, { username: username });
   res.status(200).send("Already registered");
   return;
