@@ -79,7 +79,7 @@ const MentalTuv = () => {
               <div key={index} className="w-full">
                 <Link href={`/tuvuud/${id}`}>
                   <div className="shadow-gray-300 shadow-lg w-full rounded-3xl">
-                    <div className="bg-white w-full p-5 rounded-3xl flex justify-between items-center gap-5 text-[#102d3f]">
+                    <div className="bg-white w-full p-5 rounded-3xl flex justify-between items-center gap-5 text-[#102d3f]  hover:bg-[#325343] hover:text-white">
                       <div className="text-sm font-bold flex items-center justify-start w-full">
                         {title}
                       </div>
