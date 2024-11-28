@@ -1,12 +1,9 @@
 import { userDetailModel } from "../../database/models/usedetail.model";
 
 export const getUserDetailById = async (req: any, res: any) => {
-  const { authId } = req.body;
-  console.log(authId, "check");
-
+  const { authId } = req.params;
   try {
-    const user = await userDetailModel.findOne(authId);
-    console.log(user, "checeee");
+    const user = await userDetailModel.findOne({ authId });
 
     if (!user) {
       return res.status(200).json({ message: "No user found" });

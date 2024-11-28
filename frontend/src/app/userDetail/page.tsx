@@ -108,9 +108,9 @@ const UserDetail: React.FC<UserDetailProps> = ({ handleFormSubmit, form }) => {
   useEffect(() => {
     const getUserid = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8000/user/detail");
-
-        console.log(data.form); // Log for debugging
+        const { data } = await axios.get(
+          `http://localhost:8000/user/detail/${user?.user?.id}`
+        );
 
         if (data.form) {
           setIsLoading(true); // Show loading spinner

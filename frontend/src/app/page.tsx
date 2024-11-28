@@ -1,20 +1,33 @@
 "use client";
 
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Homepage from "@/components/homePage/Home";
-import UserDetail from "./userDetail/page"; // Import your UserDetail component
 import { Loading } from "@/components/Loading";
+import { useEffect } from "react";
+import axios from "axios";
 
-// Define the type for the props passed to UserDetail component
 interface UserDetailProps {
-  handleFormSubmit: () => void; // handleFormSubmit should be a function that takes no arguments and returns nothing
+  handleFormSubmit: () => void;
   form: boolean;
 }
 
 const Page = () => {
-  const { isLoaded } = useUser();
+  const { isLoaded, user } = useUser();
+
+  useEffect(() => {
+    const addUserToDatabase = async () => {
+      try {
+        await axios.post("http://localhost:8000/user/signup", {
+          username: user?.username,
+          email: user?.primaryEmailAddress?.emailAddress,
+          authId: user?.id,
+        });
+      } catch (error) {
+        console.log("Error adding user:", error);
+      }
+    };
+    addUserToDatabase();
+  }, [user]);
 
   if (!isLoaded) {
     return (
