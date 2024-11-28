@@ -2,6 +2,7 @@ import Footer from "@/components/homePage/Footer";
 import Niitlel1 from "@/components/Niitlel/Niitlel1";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Header from "@/components/homePage/Header";
 
 const allNiitlel = [
   {
@@ -226,7 +227,8 @@ export default async function Page({
   const findNiitlelById = allNiitlel.find((el) => el.id === id);
 
   return (
-    <>
+    <div className="flex justify-center items-center flex-col">
+      <Header />
       <Niitlel1
         title={findNiitlelById?.title}
         img={findNiitlelById?.img}
@@ -242,22 +244,8 @@ export default async function Page({
         tavTitle={findNiitlelById?.tavTitle}
         tavText={findNiitlelById?.tavText}
       />
-      <div className="h-[1px] w-[800px] bg-[#213B4A]"></div>
-      <div className="text-xl mb-[20px]">
-        Өнөөдөр бүртгүүлээд сэтгэл зүйгээ дэмжих олон янзын сэдвүүдээс
-        сонирхоорой.
-      </div>
-      <Link href={"/sign-up"}>
-        <Button
-          className="bg-[#FECE57] text-[#325343] items-center rounded-full
-    w-[230px] text-center text-base font-bold font-['Inter'] leading-9 
-    hover:bg-[#F9B927] transition-colors duration-300 ease-in-out mb-[40px]"
-        >
-          ХЯЛБАР БҮРТГЭЛ
-        </Button>
-      </Link>
 
       <Footer />
-    </>
+    </div>
   );
 }

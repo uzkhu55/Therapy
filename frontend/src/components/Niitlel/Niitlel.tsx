@@ -71,8 +71,8 @@ export const Niitleluud = [
 const Niitlel = () => {
   return (
     <div>
-      <div className="flex flex-col justify-center items-center w-full pb-[100px]">
-        <div className="w-[860px] mt-[50px]">
+      <div className="flex flex-col justify-center items-center  w-full  mt-[100px]">
+        <div className="w-[860px] mt-[50px] font-bold">
           Нийтлэлүүдийг InnerHeal-ийн олон нийтийн гишүүд болон мэргэжлийн
           багийнхан бичсэн. Бусдаас суралцаж, ойлгож, эсвэл өөрийн туршлагаа
           хуваалцах замаар сэтгэцийн эрүүл мэндийн аялалд дэмжлэг үзүүлээрэй.
@@ -80,7 +80,7 @@ const Niitlel = () => {
         <div className="text-2xl mt-[30px] font-bold w-[1120px] mb-[50px] pl-[120px]">
           Бүх нийтлэл
         </div>
-        <div className="flex flex-wrap w-[1120px] gap-[50px] items-center justify-center">
+        <div className="flex flex-wrap w-[1120px] gap-[50px] items-center justify-center mb-[100px]">
           {Niitleluud.map(({ title, img, id }) => {
             return (
               <div key={id} className="flex">
@@ -107,21 +107,6 @@ const Niitlel = () => {
             );
           })}
         </div>
-        <div className="h-[1px] w-[800px] bg-[#213B4A] mt-[120px]"></div>
-        <div className="text-xl mb-[20px]">
-          Өнөөдөр бүртгүүлээд сэтгэл зүйгээ дэмжих олон янзын сэдвүүдээс
-          сонирхоорой.
-        </div>
-        <Link href={"/sign-up"}>
-          <Button
-            className="bg-[#FECE57] text-[#325343] items-center rounded-full
-    w-[230px] text-center text-base font-bold font-['Inter'] leading-9 
-    hover:bg-[#F9B927] transition-colors duration-300 ease-in-out mb-[40px]"
-          >
-            ХЯЛБАР БҮРТГЭЛ
-          </Button>
-        </Link>
-
         <Footer />
       </div>
     </div>

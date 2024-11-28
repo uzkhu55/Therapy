@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import Footer from "@/components/homePage/Footer";
-import SecondaryHeader from "@/components/homePage/SecondaryHeader";
+import Header from "./Header";
 
 const TermsOfServiceContent = () => {
   return (
     <div className="flex flex-col min-h-screen w-screen items-center justify-between">
-      <SecondaryHeader />
-      <div className="w-full flex flex-col items-center justify-start px-4 md:px-6 lg:px-8">
+      <Header />
+      <div className="w-full flex flex-col items-center justify-start px-4 md:px-6 lg:px-8 mt-[100px]">
         <div className="max-w-[1120px] flex flex-col gap-4 mt-[30px] mb-[40px]">
           <div className="text-[#102d3f] text-2xl font-bold font-['Inter']">
             Үйлчилгээний нөхцөл

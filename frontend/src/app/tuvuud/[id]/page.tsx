@@ -168,8 +168,8 @@ export default async function Page({
   const findMentalTuvById = BuhTuv.find((el) => el.id === id);
 
   return (
-    <>
-      {/* <Header /> */}
+    <div className="flex flex-col justify-center items-center">
+      <Header />
       <MentalTuv1
         title={findMentalTuvById?.title}
         img={findMentalTuvById?.img}
@@ -197,6 +197,6 @@ export default async function Page({
       </Link>
 
       <Footer />
-    </>
+    </div>
   );
 }
