@@ -2,7 +2,9 @@ import axios from "axios";
 
 const getPresignedURL = async () => {
   try {
-    const { data } = await axios.get("http://localhost:8000/cloudflare");
+    const { data } = await axios.get(
+      "https://if-project8.onrender.com/cloudflare"
+    );
     return data as { uploadUrl: string; accessUrls: string };
   } catch (error) {
     console.log("Error fetching presigned URL:", error);
