@@ -1,8 +1,9 @@
 import FolderModel from "../../database/models/folder";
 import { MessageModel } from "../../database/models/message.model";
 import { UserModel } from "../../database/models/user.model";
+import { Request, Response } from "express";
 
-export const addMessage = async (req: any, res: any) => {
+export const addMessage = async (req: Request, res: Response) => {
   const { inputValue, author, chosenUserId } = req.body;
 
   try {

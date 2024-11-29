@@ -33,15 +33,19 @@ io.on("connection", (socket) => {
 
   socket.on("send-chat-message", async (message: Record<any, any>) => {
     const newMessage = new MessageModel({
-      author: message.user.authId,
-      content: [message.inputValue],
+      senderId: message.user.authId,
+      content: message.inputValue,
       timeStamp: new Date(),
       isRead: false,
     });
-    await newMessage.save();
+
+    const result = await newMessage.save();
+
     io.emit("chat-message", {
+      isRead: true,
       content: message.inputValue,
-      author: message.user.authId,
+      senderId: message.user.authId,
+      timeStamp: result.timeStamp,
     });
   });
 
