@@ -16,7 +16,10 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "https://therapy-9tzv.vercel.app/",
+    origin: [
+      process.env.FRONTEND_URL || "https://therapy-9tzv.vercel.app/", // First allowed origin
+      "https://therapy-9tzv-qgepqvgts-uzkhu56s-projects.vercel.app", // Add the specific frontend URL
+    ],
     methods: ["GET", "POST"],
   },
 });
