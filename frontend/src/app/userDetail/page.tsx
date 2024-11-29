@@ -74,7 +74,7 @@ const UserDetail: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:8000/user/detail", {
+      await axios.post("https://if-project8.onrender.com/user/detail", {
         formData: { ...formData },
         form,
         authId: user?.user?.id, // user ID
@@ -94,7 +94,7 @@ const UserDetail: React.FC = () => {
         return;
       }
 
-      await axios.post("http://localhost:8000/user/setadmin", {
+      await axios.post("https://if-project8.onrender.com/user/setadmin", {
         adminType: adminType, // Send the selected admin type to the backend
         authId: user?.user?.id, // Send the user ID (assuming you want to relate this with the user)
       });
@@ -109,7 +109,7 @@ const UserDetail: React.FC = () => {
     const getUserid = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/user/detail/${user?.user?.id}`
+          `https://if-project8.onrender.com/user/detail/${user?.user?.id}`
         );
 
         if (data.form) {
@@ -127,11 +127,14 @@ const UserDetail: React.FC = () => {
     const addUserToDatabase = async () => {
       if (auth.isLoaded && user) {
         try {
-          const res = await axios.post("http://localhost:8000/user/signup", {
-            username: auth.user?.username,
-            email: auth.user?.primaryEmailAddress?.emailAddress,
-            authId: auth.user?.id,
-          });
+          const res = await axios.post(
+            "https://if-project8.onrender.com/user/signup",
+            {
+              username: auth.user?.username,
+              email: auth.user?.primaryEmailAddress?.emailAddress,
+              authId: auth.user?.id,
+            }
+          );
 
           if (res.data) {
             window.localStorage.setItem("userDetail", JSON.stringify(res.data));

@@ -16,7 +16,7 @@ const Page = () => {
     const getUserid = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/user/detail/${user?.id}`
+          `https://if-project8.onrender.com/user/detail/${user?.id}`
         );
         console.log(data);
 
@@ -40,7 +40,7 @@ const Page = () => {
   useEffect(() => {
     const addUserToDatabase = async () => {
       try {
-        await axios.post("http://localhost:8000/user/signup", {
+        await axios.post("https://if-project8.onrender.com/user/signup", {
           username: user?.username,
           email: user?.primaryEmailAddress?.emailAddress,
           authId: user?.id,
