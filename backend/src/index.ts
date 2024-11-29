@@ -16,7 +16,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Replace with your frontend URL in production
+    origin: "https://therapy-9tzv.vercel.app/", // Replace with your frontend URL in production
     methods: ["GET", "POST"],
   },
 });
@@ -67,6 +67,6 @@ app.use("/", userRouter);
 app.use("/", postRouter);
 app.use("/", cloudflareRouter);
 
-server.listen(process.env.PORT || 8000, () => {
-  console.log("Server running on port 8000");
-});
+// server.listen(process.env.PORT || 8000, () => {
+//   console.log("Server running on port 8000");
+// });
