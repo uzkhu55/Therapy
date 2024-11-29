@@ -4,7 +4,7 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec 'node --max-old-space-size=2048' src/index.ts",
+    "start": "nodemon --exec 'node --max-old-space-size=2048 -r ts-node/register' src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,6 +35,6 @@
     "@types/node": "^22.9.0",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   }
 }
