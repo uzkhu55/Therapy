@@ -43,6 +43,7 @@ const socket: Socket = io("http://localhost:8000");
 const Chat: React.FC = () => {
   const [getmessages, setGetmessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const [sentMEssage, setSentMessage] = useState<boolean>(false);
   const [chosenUserId, setChosenUserId] = useState<string>(""); // Track the selected user
   const [room, setRoom] = useState<string>("chat-room");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -152,9 +153,16 @@ const Chat: React.FC = () => {
       });
 
       // Emit message through Socket.IO
-      // socket.emit("send-chat-message", { inputValue, user: { user?.id } });
+      socket.emit("send-chat-message", {
+        inputValue,
+        user: { authId: user?.id },
+      });
 
       setInputValue("");
+      setSentMessage(true);
+      setTimeout(() => {
+        setSentMessage(false);
+      }, 100);
     } catch (error) {
       console.error("Error adding message:", error);
     }
@@ -177,26 +185,17 @@ const Chat: React.FC = () => {
   // }, [getmessages]);
 
   // // Socket event listeners for chat messages
-  // useEffect(() => {
-  //   socket.emit("join-room", room, message.firstName);
+  useEffect(() => {
+    socket.emit("join-room", room);
 
-  //   socket.on("chat-message", (newMessage: Message) => {
-  //     setGetmessages((prevMessages) =>
-  //       prevMessages.map((el) =>
-  //         el.author === newMessage.author
-  //           ? {
-  //               ...el,
-  //               content: [...el.content, newMessage.content as string],
-  //             }
-  //           : el
-  //       )
-  //     );
-  //   });
+    socket.on("chat-message", (newMessage: Message) => {
+      setGetmessages((prevMessages) => [...prevMessages, newMessage]);
+    });
 
-  //   return () => {
-  //     socket.off("chat-message");
-  //   };
-  // }, []);
+    return () => {
+      socket.off("chat-message");
+    };
+  }, [sentMEssage]);
 
   return (
     <div className="h-screen w-screen gap-12 flex flex-col bg-white">
@@ -296,11 +295,6 @@ const Chat: React.FC = () => {
                 >
                   <div className="flex flex-col gap-5">
                     <div key={index} className="flex flex-col gap-2">
-                      <img
-                        className="w-6 rounded-full h-6"
-                        src={msg?.senderId?.image || ""}
-                        alt="Sender"
-                      />
                       <div className="bg-gray-200 rounded-lg p-2 w-fit">
                         {msg.content}
                       </div>

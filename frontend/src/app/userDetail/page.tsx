@@ -35,13 +35,13 @@ interface UserDetailProps {
   form: boolean;
 }
 
-const UserDetail: React.FC<UserDetailProps> = ({ handleFormSubmit, form }) => {
+const UserDetail: React.FC = () => {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const user = useUser();
-  const [adminType, setAdminType] = useState(""); // State to hold the selected admin type
-  const [admin, setAdmin] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Added loading state
+  const [form, setForm] = useState(false); // Move `form` here
+  const [adminType, setAdminType] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const RenderComponent = STEP_COMPONENTS[step];
   const [formData, setFormData] = useState({

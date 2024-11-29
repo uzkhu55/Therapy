@@ -19,7 +19,7 @@ export type MessageModelType = {
 };
 
 const MessageSchema = new Schema<MessageModelType>({
-  senderId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
+  senderId: { type: String, required: true, ref: "Users" },
   conversationId: {
     type: Schema.Types.ObjectId,
     required: false,
