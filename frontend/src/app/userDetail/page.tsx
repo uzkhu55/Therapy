@@ -137,7 +137,6 @@ const UserDetail: React.FC = () => {
           );
 
           if (res.data) {
-            window.localStorage.setItem("userDetail", JSON.stringify(res.data));
             setIsLoading(false);
           }
         } catch (error) {
