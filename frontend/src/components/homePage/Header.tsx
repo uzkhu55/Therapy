@@ -13,6 +13,14 @@ import {
 } from "@clerk/nextjs";
 import { Bell, FilePlus2, MessagesSquare, Users } from "lucide-react";
 import { LogoLoggedin } from "@/components/homePage/Homelogologgedin";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ComponentProps {
   bg?: string;
@@ -37,7 +45,23 @@ const Header: React.FC<ComponentProps> = ({
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
-
+  const DotIcon = () => {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        className="lucide lucide-user-pen"
+      >
+        <path d="M11.5 15H7a4 4 0 0 0-4 4v2" />
+        <path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+        <circle cx="10" cy="7" r="4" />
+      </svg>
+    );
+  };
   return (
     <div className="flex justify-center  sticky top-0 items-center w-full z-50 ">
       {isSignedIn ? (
@@ -66,14 +90,35 @@ const Header: React.FC<ComponentProps> = ({
                 <div className="text-xs">Пост</div>
               </Link>
               <Link
-                href="/niitlel"
+                href="/therapist"
                 className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
                 <Users />
-                <div className="text-xs">Форум</div>
+                <div className="text-xs">Мэргэжилтэн</div>
               </Link>
             </div>
             <div className="flex items-center  justify-center gap-6">
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className={`flex flex-col top-2 md:top-2 relative w-[40px] outline-none md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
+                >
+                  <div className="text-2xl">
+                    {isMenuOpen ? <FaTimes /> : <FaBars />}
+                  </div>
+                  <div className="text-xs">Menu</div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <Link href="/about">
+                    <DropdownMenuItem> Бидний тухай</DropdownMenuItem>
+                  </Link>
+                  <Link href="niitlel">
+                    <DropdownMenuItem>Форум</DropdownMenuItem>
+                  </Link>
+                  <Link href="contact">
+                    <DropdownMenuItem> Холбоо барих</DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <div
                 className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
@@ -84,7 +129,15 @@ const Header: React.FC<ComponentProps> = ({
                 className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
                 <SignedIn>
-                  <UserButton aria-label="Хэрэглэгчийн мэдээлэл" />
+                  <UserButton aria-label="Хэрэглэгчийн мэдээлэл">
+                    <UserButton.MenuItems>
+                      <UserButton.Link
+                        label="Хувийн мэдээлэл"
+                        labelIcon={<DotIcon />}
+                        href="/detailById"
+                      />
+                    </UserButton.MenuItems>
+                  </UserButton>
                 </SignedIn>
               </div>
             </div>
@@ -121,7 +174,7 @@ const Header: React.FC<ComponentProps> = ({
               </li>
               <li className="py-4">
                 <a
-                  href="/specialist"
+                  href="/therapist"
                   className="text-white text-base font-['inter'] font-semibold"
                 >
                   Мэргэжилтэн

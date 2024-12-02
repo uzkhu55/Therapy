@@ -7,15 +7,15 @@ const Gender = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 border-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
       </div>
-      <div className="h-[400px] w-[600px] bg-white rounded-3xl mt-[50px] p-[40px]">
-        <div>
+      <div className="h-[300px] w-[600px] bg-white rounded-3xl mt-[150px] p-[40px]">
+        <div className="flex flex-col justify-center items-center">
           <div className="text-[20px] text-[#325343] font-bold">
             Хүйсээ сонгоно уу?
           </div>
@@ -25,13 +25,12 @@ const Gender = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
           >
             <option value="Эр">Эр</option>
             <option value="Эм">Эм</option>
-            <option value="No">Хэлэхийг хүсэхгүй байна</option>
+            <option value="Бусад">Бусад</option>
           </select>
-
           <button>
             <GoArrowRight
               onClick={nextHandler}
-              className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px] ml-[400px]"
+              className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px]"
             />
           </button>
         </div>

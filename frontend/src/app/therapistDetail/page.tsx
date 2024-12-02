@@ -1,18 +1,13 @@
 "use client";
 
 import { HomeLogo } from "@/components/homePage/HomeLogo";
-import Expectations from "@/components/questions/Expectations";
-import Age from "@/components/questions/Age";
-import Gender from "@/components/questions/Gender";
-import Theapist from "@/components/questions/Therapist";
-import LookingFor from "@/components/questions/LookingFor";
-import PrevTherapy from "@/components/questions/PrevTherapy";
-import RelStatus from "@/components/questions/RelStatus";
+
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Loading } from "@/components/Loading";
+import TheraExpectations from "@/components/theraQuestions/TheraExp";
 
 export type StepComponentPropsTypes = {
   formData: Record<string, string>;
@@ -21,26 +16,13 @@ export type StepComponentPropsTypes = {
   formHandler: (_form: Record<string, string>) => void;
 };
 
-const STEP_COMPONENTS = [
-  Theapist,
-  Gender,
-  Age,
-  RelStatus,
-  PrevTherapy,
-  LookingFor,
-  Expectations,
-];
+const STEP_COMPONENTS = [TheraExpectations];
 
-const UserDetail: React.FC = () => {
+const TheraDetail: React.FC = () => {
   const router = useRouter();
   const { isLoaded, user } = useUser();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
-    gender: "Эр",
-    age: "-10",
-    relationshipStatus: "Ганц бие",
-    prevTherapy: "Тийм",
-    lookingFor: "Хувь хүн",
     expectations: "Ярилцах",
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -67,50 +49,11 @@ const UserDetail: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const getUserDetails = async () => {
-      setIsLoading(true);
-
-      try {
-        const [detailResponse, theraDetailResponse] = await Promise.all([
-          axios.get(`http://localhost:8000/user/detail/${user?.id}`),
-          axios.get(`http://localhost:8000/user/theradetail/${user?.id}`),
-        ]);
-
-        const detailData = detailResponse.data;
-        const theraDetailData = theraDetailResponse.data;
-
-        console.log("Detail Data:", detailData);
-        console.log("Thera Detail Data:", theraDetailData);
-
-        if (detailData.form || theraDetailData.form) {
-          router.push("/");
-          return;
-        }
-
-        if (!detailData.form || !theraDetailData.form) {
-          // router.push("/");
-        }
-        // if (detailData.form && theraDetailData.form) {
-        //   router.push("/userDetail");
-        //   return;
-        // }
-      } catch (error) {
-        console.error("Error fetching user data", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (user?.id) {
-      getUserDetails();
-    }
-  }, [user?.id, router]);
-
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:8000/user/detail", {
+
+      await axios.post("http://localhost:8000/user/theradetail", {
         formData,
         authId: user?.id,
       });
@@ -121,14 +64,42 @@ const UserDetail: React.FC = () => {
     } finally {
     }
   };
+  useEffect(() => {
+    const initializeUser = async () => {
+      try {
+        if (!user) return;
 
-  // if (isChecking || isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
-  //       <Loading />
-  //     </div>
-  //   );
-  // }
+        setIsChecking(true);
+
+        const { data } = await axios.get(
+          `http://localhost:8000/user/theradetail/${user.id}`
+        );
+        console.log({ data });
+
+        if (data.form) {
+          router.push("/");
+        } else {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error initializing user:", error);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    if (isLoaded) {
+      initializeUser();
+    }
+  }, [isLoaded, user, router]);
+
+  if (isChecking || isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="flex bg-[#325343] flex-col items-center  w-full h-screen">
@@ -136,6 +107,7 @@ const UserDetail: React.FC = () => {
         <div className="w-full h-[70px] flex justify-center">
           <HomeLogo />
         </div>
+
         {step !== 0 && (
           <>
             <div className="font-bold text-[40px] mt-[70px] text-white">
@@ -168,4 +140,4 @@ const UserDetail: React.FC = () => {
   );
 };
 
-export default UserDetail;
+export default TheraDetail;

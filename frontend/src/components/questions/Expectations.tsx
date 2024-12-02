@@ -10,15 +10,15 @@ const Expectations = ({
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
       </div>
-      <div className="h-[400px] w-[600px] bg-white rounded-3xl mt-[50px] p-[40px]">
-        <div>
+      <div className="h-[300px] w-[600px] bg-white rounded-3xl mt-[150px] p-[40px]">
+        <div className="flex flex-col justify-center items-center">
           <div className="text-[20px] text-[#325343] font-bold ">
             Ямар чиглэлийн тусламж хэрэгтэй байна вэ?
           </div>

@@ -2,17 +2,18 @@
 
 import { StepComponentPropsTypes } from "@/app/userDetail/page";
 import { GoArrowRight } from "react-icons/go";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Therapist = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
+  const [selectedValue, setSelectedValue] = useState<string>("");
+  const router = useRouter();
 
-    // Handle redirection or next handler based on the selected option
+  const handleSelectClick = () => {
     if (selectedValue === "Эр") {
       // Redirect to localhost:3000
-      window.location.href = "http://localhost:3000/niitlel";
+      router.push("/therapistDetail");
     } else if (selectedValue === "Эм") {
-      // Call nextHandler for "Non" option
       formHandler({ gender: selectedValue });
       nextHandler();
     }
@@ -20,23 +21,36 @@ const Therapist = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
 
   return (
     <div>
-      <div className=" h-[400px] w-[600px] bg-white rounded-3xl mt-[50px] p-[40px]">
-        <div>
-          <div className="text-[20px] text-[#325343] font-bold">
+      <div className="h-full w-[600px] bg-white rounded-3xl mt-[300px] p-[40px]">
+        <div className="flex flex-col h-full items-center">
+          <div className="text-[20px] items-center text-[#325343] font-bold">
             Та аль нь вэ?
           </div>
-          <select
-            className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
-            onChange={handleChange}
+
+          <div className="flex flex-col items-center mt-[20px]">
+            <button
+              onClick={() => setSelectedValue("Эр")}
+              className={`w-[500px] h-[80px] mb-[10px] rounded-xl ${
+                selectedValue === "Эр" ? "border-[#ffcc00]" : "border-[#deebc0]"
+              } border-[3px] p-[10px] text-center text-[#325343] font-bold`}
+            >
+              Сэтгэл зүйч
+            </button>
+
+            <button
+              onClick={() => setSelectedValue("Эм")}
+              className={`w-[500px] h-[80px] mb-[10px] rounded-xl ${
+                selectedValue === "Эм" ? "border-[#00ff00]" : "border-[#deebc0]"
+              } border-[3px] p-[10px] text-center text-[#325343] font-bold`}
+            >
+              Үйлчлүүлэгч
+            </button>
+          </div>
+          <button
+            onClick={handleSelectClick}
+            className="h-[50px] w-[150px] mt-[20px] rounded-3xl bg-[#deebc0] text-[#325343] font-bold"
           >
-            <option value="">Сонгоно уу</option>
-            <option value="Эр">Сэтгэл зүйч</option>
-
-            <option value="Эм">Үйлчлүүлэгч</option>
-          </select>
-
-          <button>
-            <GoArrowRight className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px] ml-[400px]" />
+            Сонгох
           </button>
         </div>
       </div>

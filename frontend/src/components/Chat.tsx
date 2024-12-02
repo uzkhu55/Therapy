@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
-import { Search, CirclePlus } from "lucide-react";
+import { Search, CirclePlus, Settings, Link2, SmilePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -15,6 +15,10 @@ import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import Header from "./homePage/Header";
 import { Ellipsis } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Loading } from "./Loading";
+import { Button } from "./ui/button";
+import { useSearchParams } from "next/navigation"; // Import useSearchParams
 
 interface ComponentProps {
   bg: string;
@@ -25,7 +29,7 @@ interface ComponentProps {
 
 interface Detail {
   username: string;
-  _id: string; // Add _id to capture user ID
+  _id: string;
 }
 
 interface Message {
@@ -37,8 +41,15 @@ interface Message {
   attachments?: string[];
   __v: number;
 }
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  imageUrl: string;
+  // add any other fields you expect from the user object
+}
 
-const socket: Socket = io("https://if-project8.onrender.com");
+const socket: Socket = io("http://localhost:8000");
 
 const Chat: React.FC = () => {
   const [getmessages, setGetmessages] = useState<Message[]>([]);
@@ -48,27 +59,52 @@ const Chat: React.FC = () => {
   const [room, setRoom] = useState<string>("chat-room");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [searchValue, setSearchValue] = useState("");
-  const { user } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser() as {
+    user: User | null;
+    isSignedIn: boolean;
+    isLoaded: boolean;
+  };
+  const router = useRouter();
+  const searchParams = useSearchParams(); // Use useSearchParams to access query parameters
+
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [attachments, setAttachments] = useState<File[]>([]); // State to store attachments
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
   const [recentChats, setRecentChats] = useState<string[]>([]);
 
-  // console.log(recentChats);
-
+  const inputRef = useRef<HTMLInputElement>(null); // To focus on the input automatically
   useEffect(() => {
+    // Ensure that you are on the /chat page when the component mounts
+    router.push("/chat");
+  }, []);
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push("/sign-in");
+    }
+  }, [isLoaded, isSignedIn, router]);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus(); // Focus the input field when the component loads or when the user changes
+    }
+  }, [chosenUserId]);
+  useEffect(() => {
+    setLoading(true); // Set loading to true when fetching starts
+
     const fetchInitialData = async () => {
       try {
         const recentUserId = localStorage.getItem("chosenUserId");
 
         // Fetch user details
         const response = await axios.get(
-          "https://if-project8.onrender.com/user/userdetail"
+          "http://localhost:8000/user/userdetail"
         );
         setGetUserdetail(response.data);
 
         // Fetch conversations for the current user
         const convos = await axios.get(
-          `https://if-project8.onrender.com/user/myConvorsations/${user?.id}`
+          `http://localhost:8000/user/myConvorsations/${user?.id}`
         );
         setRecentChats(convos.data);
 
@@ -77,20 +113,43 @@ const Chat: React.FC = () => {
           setChosenUserId(recentUserId);
 
           const isThereConversationExisting = await axios.get(
-            `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${recentUserId}`
+            `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${recentUserId}`
           );
 
           if (isThereConversationExisting.data.message) {
             const getConversationMessages = await axios.get(
-              `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+              `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
             );
             setGetmessages(getConversationMessages.data);
+          }
+        }
+        const usernameFromQuery = searchParams.get("username"); // Use searchParams to get the query parameter
+        if (usernameFromQuery) {
+          const userDetail = response.data.find(
+            (user: { username: string }) => user.username === usernameFromQuery
+          );
+          if (userDetail) {
+            setChosenUserId(userDetail._id);
+            localStorage.setItem("chosenUserId", userDetail._id); // Persist selected chat
+
+            const isThereConversationExisting = await axios.get(
+              `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${userDetail._id}`
+            );
+
+            if (isThereConversationExisting.data.message) {
+              const getConversationMessages = await axios.get(
+                `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+              );
+              setGetmessages(getConversationMessages.data);
+            }
           }
         }
 
         scrollToBottom();
       } catch (error) {
         console.error("Error fetching initial data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after all fetching is done
       }
     };
 
@@ -103,14 +162,14 @@ const Chat: React.FC = () => {
   ) => {
     try {
       if (!recentChats.includes(username)) {
-        setRecentChats((prevChats) => [...prevChats, username]);
+        setRecentChats((prevChats) => [username, ...prevChats]); // Add to top
       }
 
       setChosenUserId(chosenUserId);
       localStorage.setItem("chosenUserId", chosenUserId); // Persist selected chat
 
       const isThereConversationExisting = await axios.get(
-        `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
+        `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
       );
 
       if (!isThereConversationExisting.data.message) {
@@ -119,7 +178,7 @@ const Chat: React.FC = () => {
       }
 
       const getConversationMessages = await axios.get(
-        `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+        `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
       );
       setGetmessages(getConversationMessages.data);
       setSearchValue("");
@@ -129,7 +188,6 @@ const Chat: React.FC = () => {
     }
   };
 
-  // Scroll to bottom whenever messages are updated
   useEffect(() => {
     scrollToBottom();
   }, [getmessages]);
@@ -139,52 +197,107 @@ const Chat: React.FC = () => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const uploadAttachments = async (files: File[]) => {
+    const uploadedUrls: string[] = [];
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("file", file); // Key must be "file", matching the backend
+
+      try {
+        console.log("Uploading file:", file.name);
+
+        const response = await axios.post(
+          "http://localhost:8000/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("File uploaded successfully:", response.data);
+        uploadedUrls.push(response.data.url); // Assuming the backend returns a file URL
+      } catch (error: any) {
+        console.error(
+          "Error uploading file:",
+          file.name,
+          error.response || error.message
+        );
+        throw new Error(`Error uploading file: ${file.name}`);
+      }
+    }
+
+    return uploadedUrls; // Return the list of URLs
+  };
+
   const addMessage = async () => {
-    if (inputValue.trim() === "") {
-      console.error("Message input is empty.");
+    if (inputValue.trim() === "" && attachments.length === 0) {
+      console.error("Message input is empty and no attachments are selected.");
       return;
     }
 
     try {
-      await axios.post("https://if-project8.onrender.com/user/addmessage", {
-        author: user?.id,
-        chosenUserId,
-        inputValue,
-      });
+      const uploadedAttachments = await uploadAttachments(attachments);
 
-      // Emit message through Socket.IO
+      console.log("Uploaded attachments:", uploadedAttachments);
+
+      const response = await axios.post(
+        "http://localhost:8000/user/addmessage",
+        {
+          author: user?.id,
+          chosenUserId,
+          inputValue,
+          attachments: uploadedAttachments, // Attachments to send
+        }
+      );
+
+      console.log("Message successfully added:", response.data);
+
       socket.emit("send-chat-message", {
         inputValue,
         user: { authId: user?.id },
+        attachments: uploadedAttachments, // Attachments to send through socket
       });
 
       setInputValue("");
+      setAttachments([]);
       setSentMessage(true);
+
       setTimeout(() => {
         setSentMessage(false);
       }, 100);
-    } catch (error) {
-      console.error("Error adding message:", error);
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Error adding message:", error.response.data);
+      } else {
+        console.error("Error adding message:", error.message);
+      }
     }
   };
 
-  // const scrollToBottom = () => {
-  //   if (messagesEndRef.current) {
-  //     messagesEndRef.current.scrollIntoView({ behavior: "instant" });
-  //   }
-  // };
-
-  // // Handle message input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
-  // // Scroll to bottom when messages change
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [getmessages]);
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
 
-  // // Socket event listeners for chat messages
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      setAttachments((prev) => [...prev, ...Array.from(files)]);
+    }
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
+
+  // Socket event listeners for chat messages
   useEffect(() => {
     socket.emit("join-room", room);
 
@@ -197,15 +310,42 @@ const Chat: React.FC = () => {
     };
   }, [sentMEssage]);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus(); // Focus on the input field when the component loads
+    }
+  }, []);
+
+  if (!isLoaded || !isSignedIn || loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
+        <Loading />
+      </div>
+    );
+  }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+      addMessage();
+      setInputValue(""); // Clear input after sending
+    }
+  };
   return (
-    <div className="h-screen w-screen gap-12 flex flex-col bg-white">
+    <div className="h-screen w-screen gap-12 lg:h-[663px] flex flex-col bg-white">
       <Header />
-      <div className="flex absolute w-screen top-80px bg-white">
-        <div className="flex relative h-[978px] rounded-lg top-[81px] w-screen">
-          <div className="flex w-1/4 h-[100%] rounded-l-lg bg-[#f3f3f3] text-black">
+      <div className="flex absolute h-screen lg:h-[663px] w-screen top-80px bg-white">
+        <div className="flex relative w-full h-[978px] lg:h-[663px] rounded-lg top-[81px]">
+          <div
+            className={`${
+              isSidebarVisible
+                ? "translate-x-0 w-1/4  "
+                : "-translate-x-full w-24 "
+            } transform transition-all duration-300 ease-in-out flex h-full rounded-l-lg bg-[#f3f3f3] text-black overflow-hidden`}
+          >
             <div className="flex w-[100%] flex-col">
-              <div className="flex w-[97%] bg-white rounded-2xl p-4 m-[10px] items-center justify-evenly">
-                <div className="font-bold text-xl text-[#325343]">Chat</div>
+              <div className="flex w-[97%] bg-white rounded-2xl p-5 m-[10px] items-center justify-evenly">
+                <div className="font-bold text-xl pl-8 text-[#325343]">
+                  Chat
+                </div>
                 <div className="w-[220px] relative">
                   <Input
                     className="focus-visible:outline-none rounded-2xl"
@@ -213,6 +353,7 @@ const Chat: React.FC = () => {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                   />
+                  {/* Search suggestions */}
                   <div className="absolute flex flex-col gap-2 top-14 bg-white rounded-xl shadow-md z-10 w-full">
                     {searchValue &&
                       getUserdetail
@@ -234,31 +375,34 @@ const Chat: React.FC = () => {
                           </div>
                         ))}
                   </div>
-
                   <Search className="absolute top-2 right-2 text-gray-400" />
                 </div>
-                <button className="w-[24px] text-[#325343]">
-                  <CirclePlus />
-                </button>
               </div>
-              <div className="bg-white w-[97%] h-full mb-4 p-4 ml-[10px] rounded-2xl px-4">
-                <div className="text-sm font-black py-4 px-2 text-black">
+
+              {/* Recent Chats */}
+              <div
+                className="bg-white h-full mb-4 p-4 ml-[10px] rounded-2xl px-4"
+                style={{ overflow: "visible" }}
+              >
+                <div className="text-sm font-black z-100 pb-4 px-2 text-black">
                   Recent Chats
                 </div>
                 <div className="flex cursor-pointer flex-col gap-2">
                   {getUserdetail.length > 0 ? (
                     getUserdetail
-                      .filter((user) => recentChats.includes(user.username))
-                      .map((user, index) => (
-                        <div
-                          className="p-2 bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
-                          key={index}
-                          onClick={
-                            () =>
-                              handleAddToRecentChats(user.username, user._id) // Pass userId
-                          }
-                        >
-                          {user.username}
+                      .filter((el) => recentChats.includes(el.username))
+                      .map((el, index) => (
+                        <div key={index} className="flex pl-12 items-center">
+                          <div
+                            className="p-2 bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
+                            onClick={() =>
+                              handleAddToRecentChats(el.username, el._id)
+                            }
+                          >
+                            <div className="text-sm font-serif">
+                              {el.username}
+                            </div>{" "}
+                          </div>
                         </div>
                       ))
                   ) : (
@@ -268,10 +412,36 @@ const Chat: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="w-3/4 bg-[#f3f3f3] flex flex-col rounded-r-lg">
+
+          {/* Main chat section */}
+          <div
+            className={`${
+              isSidebarVisible ? "w-3/4" : " w-full"
+            } bg-[#f3f3f3] flex flex-col rounded-r-lg transition-all duration-300 ease-in-out`}
+          >
+            <div className=" rounded-lg absolute p-1 top-[152px] left-7">
+              <img
+                src={user?.imageUrl || "/default-avatar.png"}
+                alt="User Profile"
+                className=" w-8 h-8 top-[164px] left-7 z-50  rounded-full"
+              />
+            </div>
+            <div className=" py-2 rounded-lg absolute top-[28px] left-6">
+              <button
+                onClick={toggleSidebar}
+                className=" top z-50 p-2 bg-[#325342] text-xs flex flex-col text-white rounded-full shadow-md"
+              >
+                {isSidebarVisible ? "Hide" : "Show"}
+              </button>
+            </div>
+            {/* User info header */}
             <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
-              <div className="flex gap-4">
-                <div>{user?.username}</div>
+              <div className="flex items-center  gap-4">
+                <img
+                  src={user?.imageUrl || "/default-avatar.png"}
+                  alt="User Profile"
+                  className="rounded-full w-8 h-8"
+                />
                 <div className="text-green-400">Online</div>
               </div>
               <DropdownMenu>
@@ -288,33 +458,92 @@ const Chat: React.FC = () => {
               </DropdownMenu>
             </div>
             <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white relative gap-4 overflow-auto h-[800px]">
-              {getmessages?.map((msg, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col bg-white gap-8 w-[70%] p-4 rounded-lg"
-                >
-                  <div className="flex flex-col gap-5">
-                    <div key={index} className="flex flex-col gap-2">
-                      <div className="bg-gray-200 rounded-lg p-2 w-fit">
-                        {msg.content}
+              {getmessages?.map((msg, index) => {
+                // Convert the timestamp to Mongolian time zone
+                const timestamp = new Date(msg.timeStamp);
+                const formattedTime = timestamp.toLocaleString("en-US", {
+                  timeZone: "Asia/Ulaanbaatar", // Mongolian time zone
+                  hour12: false, // Optional, set to false to use 24-hour format
+                  hour: "numeric",
+                  minute: "numeric",
+                });
+
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-col bg-white gap-2 w-[98%] p-4 items-end rounded-lg"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex flex-col bg-blue-600 text-white w-fit rounded-lg p-1 px-2 gap-5">
+                        <div className="font-medium text-base">
+                          {msg.content}
+                        </div>
                       </div>
+                      <img
+                        src={user?.imageUrl || "/default-avatar.png"}
+                        alt="User Profile"
+                        className="rounded-full w-8 h-8"
+                      />
                     </div>
+                    <div className="w-4 text-sm pr-8 h-4">{formattedTime}</div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               <div ref={messagesEndRef}></div>
             </div>
-
+            {/* Message input */}
             <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
+              <div className="flex gap-4">
+                <Button variant="secondary" size="icon" className="shrink-0">
+                  <SmilePlus className="w-5 h-5" />
+                </Button>
+
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="shrink-0 relative"
+                >
+                  <input
+                    type="file"
+                    id="file-input"
+                    onChange={handleFileSelect} // Handle file selection
+                    multiple // Allow multiple file selection
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  <Link2 className="w-5 h-5" /> {/* File button icon */}
+                </Button>
+              </div>
+
+              {/* Display selected file previews */}
+              {attachments.length > 0 && (
+                <div className="flex flex-wrap gap-2 ml-2">
+                  {attachments.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 p-2 bg-gray-200 rounded-lg"
+                    >
+                      <span>{file.name}</span>
+                      <button
+                        onClick={() => removeAttachment(index)} // Remove file
+                        className="text-red-500"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
               <input
                 type="text"
-                className="flex-1 outline-none p-2 border border-gray-300 rounded-xl"
-                onChange={handleChange}
+                ref={inputRef}
+                className="flex-1 pl-2 bg-transparent border-none focus:outline-none text-sm"
                 value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="Type a message..."
               />
               <button
-                onClick={addMessage}
+                onClick={addMessage} // Implement message sending logic
                 className="px-4 py-2 bg-[#325342] text-white rounded-lg"
               >
                 Send

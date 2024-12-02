@@ -16,6 +16,7 @@ const Homepage = () => {
         <div className="absolute top-0 left-0 w-screen h-[903px] md:h-[683px] lg:h-[862px] bg-[url('/Texture.png')] bg-cover bg-center pointer-events-none z-0"></div>
       </div>
       <Section1 />
+
       <Section2 />
       <div className="w-full  flex bg-[#F3EFE9] flex-col-reverse items-center gap-8  md:flex md:flex-row  md:px-[500px]  pt-[100px] relative z-40">
         <div className="px-4">

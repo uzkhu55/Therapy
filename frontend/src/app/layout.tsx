@@ -4,6 +4,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { localization } from "./langs";
 import { Inter } from "next/font/google";
 import { Rubik } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 const rubik = Rubik({ subsets: ["latin"] });
@@ -24,6 +26,17 @@ export default function RootLayout({
         <body
           className={`${inter.className} ${rubik.className} flex flex-col antialiased`}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           {children}
         </body>
       </html>
