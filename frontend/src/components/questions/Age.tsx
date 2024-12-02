@@ -12,39 +12,33 @@ const Age = ({
   return (
     <div>
       <div className="flex mt-[30px] gap-5 justify-center">
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
-        <div className="w-[50px] h-[10px] bg-[#325343] rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 rounded-2xl"></div>
+        <div className="w-[50px] h-[10px] bg-[#325343] border-2 border-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
         <div className="w-[50px] h-[10px] bg-white rounded-2xl"></div>
       </div>
-      <div className="h-[400px] w-[600px] bg-white rounded-3xl mt-[50px] p-[40px]">
-        <div>
+      <div className="h-[300px]  w-[600px] bg-white rounded-3xl mt-[150px] p-[40px]">
+        <div className="flex flex-col justify-center items-center">
           <div className="text-[20px] text-[#325343] font-bold">
             Насаа оруулна уу?
           </div>
           <select
             className="h-[50px] w-[500px] mt-[20px] border-[#deebc0] border-[3px] rounded-xl pl-[30px]"
             onChange={(event) => formHandler({ age: event.target.value })}
+            defaultValue=""
           >
-            <option>-10</option>
-            <option>10-15</option>
-            <option>15-20</option>
-            <option>20-25</option>
-            <option>25-30</option>
-            <option>30-35</option>
-            <option>35-40</option>
-            <option>40-45</option>
-            <option>50-55</option>
-            <option>60-65</option>
-            <option>65-70</option>
-            <option>70-75</option>
-            <option>75-80</option>
-            <option>80-85</option>
-            <option>85-90</option>
-            <option>+90</option>
+            <option value="" disabled>
+              Нас Сонгох
+            </option>
+            {Array.from({ length: 100 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
+
           <div className="flex">
             <button>
               <GoArrowLeft

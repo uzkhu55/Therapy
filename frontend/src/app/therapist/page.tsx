@@ -1,9 +1,9 @@
-import Appointment from "@/components/Appointment";
+import Therapist from "@/components/Therapist";
 
 const page = () => {
   return (
     <div>
-      <Appointment />
+      <Therapist />
     </div>
   );
 };

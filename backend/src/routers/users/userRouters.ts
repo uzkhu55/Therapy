@@ -13,11 +13,15 @@ import { getUserDetailById } from "../../controllers/usersController/getUserDeta
 import { createUserDetail } from "../../controllers/usersController/createUserDetail";
 import { setAdmin } from "../../controllers/usersController/setAdmin";
 import { neguser } from "../../controllers/usersController/neguser";
+import { upload, uploadFile } from "../../controllers/messageController/file";
+import { createTheraDetail } from "../../controllers/usersController/createTheraDetail";
+import { getTheraDetailById } from "../../controllers/usersController/getTheraDetailById";
 
 const userRouter = Router();
 
 userRouter.route("/user/signup").post(signUpController);
 userRouter.route("/user/setadmin").post(setAdmin);
+userRouter.route("/upload").post(upload.single("file"), uploadFile); // .single("file") for a single file upload
 
 userRouter.route("/user/userdetail").get(getUserdetailController);
 userRouter.route("/user/neguser").get(neguser);
@@ -33,7 +37,9 @@ userRouter.route("/user/getClients").get(getClientsController);
 userRouter.route("/user/getSpecialists").get(getSpecialistsController);
 userRouter.route("/folder").post(createFolder);
 
+userRouter.route("/user/theradetail/:authId").get(getTheraDetailById);
 userRouter.route("/user/detail/:authId").get(getUserDetailById);
 userRouter.route("/user/detail").post(createUserDetail);
+userRouter.route("/user/theradetail").post(createTheraDetail);
 
 export default userRouter;

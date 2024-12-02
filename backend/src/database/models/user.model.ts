@@ -29,7 +29,7 @@ const UserSchema = new Schema<UsersModelType>({
   address: { type: String, required: false },
   image: { type: String, required: false },
   available: { type: String, required: false },
-  isSpecialist: { type: Boolean, default: false },
+  isSpecialist: { type: Boolean, default: false, ref: "TheraDetail" },
   form: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now, required: true, immutable: true },
   updatedAt: { type: Date, default: Date.now, required: true },
