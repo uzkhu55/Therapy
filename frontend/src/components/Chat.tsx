@@ -18,7 +18,7 @@ import { Ellipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Loading } from "./Loading";
 import { Button } from "./ui/button";
-import { useSearchParams } from "next/navigation"; // Import useSearchParams
+import { useSearchParams } from "next/navigation";
 
 interface ComponentProps {
   bg: string;
@@ -46,7 +46,6 @@ interface User {
   username: string;
   email: string;
   imageUrl: string;
-  // add any other fields you expect from the user object
 }
 
 const socket: Socket = io("http://localhost:8000");
@@ -55,7 +54,7 @@ const Chat: React.FC = () => {
   const [getmessages, setGetmessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [sentMEssage, setSentMessage] = useState<boolean>(false);
-  const [chosenUserId, setChosenUserId] = useState<string>(""); // Track the selected user
+  const [chosenUserId, setChosenUserId] = useState<string>("");
   const [room, setRoom] = useState<string>("chat-room");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [searchValue, setSearchValue] = useState("");
@@ -65,18 +64,17 @@ const Chat: React.FC = () => {
     isLoaded: boolean;
   };
   const router = useRouter();
-  const searchParams = useSearchParams(); // Use useSearchParams to access query parameters
+  const searchParams = useSearchParams();
 
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [attachments, setAttachments] = useState<File[]>([]); // State to store attachments
+  const [loading, setLoading] = useState(true);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
   const [recentChats, setRecentChats] = useState<string[]>([]);
 
-  const inputRef = useRef<HTMLInputElement>(null); // To focus on the input automatically
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    // Ensure that you are on the /chat page when the component mounts
     router.push("/chat");
   }, []);
   useEffect(() => {
@@ -86,29 +84,26 @@ const Chat: React.FC = () => {
   }, [isLoaded, isSignedIn, router]);
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus(); // Focus the input field when the component loads or when the user changes
+      inputRef.current.focus();
     }
   }, [chosenUserId]);
   useEffect(() => {
-    setLoading(true); // Set loading to true when fetching starts
+    setLoading(true);
 
     const fetchInitialData = async () => {
       try {
         const recentUserId = localStorage.getItem("chosenUserId");
 
-        // Fetch user details
         const response = await axios.get(
           "http://localhost:8000/user/userdetail"
         );
         setGetUserdetail(response.data);
 
-        // Fetch conversations for the current user
         const convos = await axios.get(
           `http://localhost:8000/user/myConvorsations/${user?.id}`
         );
         setRecentChats(convos.data);
 
-        // If a recent user is stored, fetch messages for that conversation
         if (recentUserId) {
           setChosenUserId(recentUserId);
 
@@ -123,14 +118,14 @@ const Chat: React.FC = () => {
             setGetmessages(getConversationMessages.data);
           }
         }
-        const usernameFromQuery = searchParams.get("username"); // Use searchParams to get the query parameter
+        const usernameFromQuery = searchParams.get("username");
         if (usernameFromQuery) {
           const userDetail = response.data.find(
             (user: { username: string }) => user.username === usernameFromQuery
           );
           if (userDetail) {
             setChosenUserId(userDetail._id);
-            localStorage.setItem("chosenUserId", userDetail._id); // Persist selected chat
+            localStorage.setItem("chosenUserId", userDetail._id);
 
             const isThereConversationExisting = await axios.get(
               `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${userDetail._id}`
@@ -149,7 +144,7 @@ const Chat: React.FC = () => {
       } catch (error) {
         console.error("Error fetching initial data:", error);
       } finally {
-        setLoading(false); // Set loading to false after all fetching is done
+        setLoading(false);
       }
     };
 
@@ -162,11 +157,11 @@ const Chat: React.FC = () => {
   ) => {
     try {
       if (!recentChats.includes(username)) {
-        setRecentChats((prevChats) => [username, ...prevChats]); // Add to top
+        setRecentChats((prevChats) => [username, ...prevChats]);
       }
 
       setChosenUserId(chosenUserId);
-      localStorage.setItem("chosenUserId", chosenUserId); // Persist selected chat
+      localStorage.setItem("chosenUserId", chosenUserId);
 
       const isThereConversationExisting = await axios.get(
         `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
@@ -203,7 +198,7 @@ const Chat: React.FC = () => {
 
     for (const file of files) {
       const formData = new FormData();
-      formData.append("file", file); // Key must be "file", matching the backend
+      formData.append("file", file);
 
       try {
         console.log("Uploading file:", file.name);
@@ -219,7 +214,7 @@ const Chat: React.FC = () => {
         );
 
         console.log("File uploaded successfully:", response.data);
-        uploadedUrls.push(response.data.url); // Assuming the backend returns a file URL
+        uploadedUrls.push(response.data.url);
       } catch (error: any) {
         console.error(
           "Error uploading file:",
@@ -230,7 +225,7 @@ const Chat: React.FC = () => {
       }
     }
 
-    return uploadedUrls; // Return the list of URLs
+    return uploadedUrls;
   };
 
   const addMessage = async () => {
@@ -250,7 +245,7 @@ const Chat: React.FC = () => {
           author: user?.id,
           chosenUserId,
           inputValue,
-          attachments: uploadedAttachments, // Attachments to send
+          attachments: uploadedAttachments,
         }
       );
 
@@ -259,7 +254,7 @@ const Chat: React.FC = () => {
       socket.emit("send-chat-message", {
         inputValue,
         user: { authId: user?.id },
-        attachments: uploadedAttachments, // Attachments to send through socket
+        attachments: uploadedAttachments,
       });
 
       setInputValue("");
@@ -312,7 +307,7 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus(); // Focus on the input field when the component loads
+      inputRef.current.focus();
     }
   }, []);
 
@@ -326,14 +321,14 @@ const Chat: React.FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
       addMessage();
-      setInputValue(""); // Clear input after sending
+      setInputValue("");
     }
   };
   return (
-    <div className="h-screen w-screen gap-12 lg:h-[663px] flex flex-col bg-white">
+    <div className="h-screen w-screen gap-12  flex flex-col bg-white">
       <Header />
-      <div className="flex absolute h-screen lg:h-[663px] w-screen top-80px bg-white">
-        <div className="flex relative w-full h-[978px] lg:h-[663px] rounded-lg top-[81px]">
+      <div className="flex absolute h-screen  w-screen top-80px bg-white">
+        <div className="flex relative w-full h-[978px]  rounded-lg top-[81px]">
           <div
             className={`${
               isSidebarVisible
@@ -353,7 +348,7 @@ const Chat: React.FC = () => {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                   />
-                  {/* Search suggestions */}
+
                   <div className="absolute flex flex-col gap-2 top-14 bg-white rounded-xl shadow-md z-10 w-full">
                     {searchValue &&
                       getUserdetail
@@ -367,8 +362,8 @@ const Chat: React.FC = () => {
                             className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
                             key={index}
                             onClick={() => {
-                              handleAddToRecentChats(el.username, el._id); // Add to recent chats
-                              setSearchValue(""); // Clear searchValue to hide dropdown
+                              handleAddToRecentChats(el.username, el._id);
+                              setSearchValue("");
                             }}
                           >
                             {el.username}
@@ -378,8 +373,6 @@ const Chat: React.FC = () => {
                   <Search className="absolute top-2 right-2 text-gray-400" />
                 </div>
               </div>
-
-              {/* Recent Chats */}
               <div
                 className="bg-white h-full mb-4 p-4 ml-[10px] rounded-2xl px-4"
                 style={{ overflow: "visible" }}
@@ -412,8 +405,6 @@ const Chat: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Main chat section */}
           <div
             className={`${
               isSidebarVisible ? "w-3/4" : " w-full"
@@ -434,7 +425,6 @@ const Chat: React.FC = () => {
                 {isSidebarVisible ? "Hide" : "Show"}
               </button>
             </div>
-            {/* User info header */}
             <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
               <div className="flex items-center  gap-4">
                 <img
@@ -459,11 +449,10 @@ const Chat: React.FC = () => {
             </div>
             <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white relative gap-4 overflow-auto h-[800px]">
               {getmessages?.map((msg, index) => {
-                // Convert the timestamp to Mongolian time zone
                 const timestamp = new Date(msg.timeStamp);
                 const formattedTime = timestamp.toLocaleString("en-US", {
-                  timeZone: "Asia/Ulaanbaatar", // Mongolian time zone
-                  hour12: false, // Optional, set to false to use 24-hour format
+                  timeZone: "Asia/Ulaanbaatar",
+                  hour12: false,
                   hour: "numeric",
                   minute: "numeric",
                 });
@@ -491,7 +480,7 @@ const Chat: React.FC = () => {
               })}
               <div ref={messagesEndRef}></div>
             </div>
-            {/* Message input */}
+
             <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
               <div className="flex gap-4">
                 <Button variant="secondary" size="icon" className="shrink-0">
@@ -506,15 +495,13 @@ const Chat: React.FC = () => {
                   <input
                     type="file"
                     id="file-input"
-                    onChange={handleFileSelect} // Handle file selection
-                    multiple // Allow multiple file selection
+                    onChange={handleFileSelect}
+                    multiple
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
-                  <Link2 className="w-5 h-5" /> {/* File button icon */}
+                  <Link2 className="w-5 h-5" />
                 </Button>
               </div>
-
-              {/* Display selected file previews */}
               {attachments.length > 0 && (
                 <div className="flex flex-wrap gap-2 ml-2">
                   {attachments.map((file, index) => (
@@ -524,7 +511,7 @@ const Chat: React.FC = () => {
                     >
                       <span>{file.name}</span>
                       <button
-                        onClick={() => removeAttachment(index)} // Remove file
+                        onClick={() => removeAttachment(index)}
                         className="text-red-500"
                       >
                         ✖
@@ -543,7 +530,7 @@ const Chat: React.FC = () => {
                 placeholder="Type a message..."
               />
               <button
-                onClick={addMessage} // Implement message sending logic
+                onClick={addMessage}
                 className="px-4 py-2 bg-[#325342] text-white rounded-lg"
               >
                 Send

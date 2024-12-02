@@ -33,7 +33,7 @@ const STEP_COMPONENTS = [
 
 const UserDetail: React.FC = () => {
   const router = useRouter();
-  const { isLoaded, user } = useUser();
+  const { user } = useUser();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     gender: "Эр",
@@ -44,7 +44,6 @@ const UserDetail: React.FC = () => {
     expectations: "Ярилцах",
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [isChecking, setIsChecking] = useState(true);
 
   const RenderComponent = STEP_COMPONENTS[step];
 
@@ -68,9 +67,12 @@ const UserDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    const getUserDetails = async () => {
-      setIsLoading(true);
+    if (!user?.id) {
+      router.push("/");
+      return;
+    }
 
+    const getUserDetails = async () => {
       try {
         const [detailResponse, theraDetailResponse] = await Promise.all([
           axios.get(`http://localhost:8000/user/detail/${user?.id}`),
@@ -95,17 +97,17 @@ const UserDetail: React.FC = () => {
         //   router.push("/userDetail");
         //   return;
         // }
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching user data", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (user?.id) {
-      getUserDetails();
-    }
-  }, [user?.id, router]);
+    getUserDetails();
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -122,13 +124,13 @@ const UserDetail: React.FC = () => {
     }
   };
 
-  // if (isChecking || isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
-  //       <Loading />
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="flex bg-[#325343] flex-col items-center  w-full h-screen">

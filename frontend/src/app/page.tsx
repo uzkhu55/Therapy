@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const Page = () => {
-  const { isLoaded, user } = useUser();
+  const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFirstLogin, setIsFirstLogin] = useState<boolean>(true);
   const router = useRouter();
@@ -50,27 +50,19 @@ const Page = () => {
     } else {
       setIsLoading(false);
     }
-  }, [user?.id, router]);
+  }, []);
 
   useEffect(() => {
     const addUserToDatabase = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/user/userdetail"
-        );
-        if (response.data.exists) {
-          console.log("User already exists");
-          setIsFirstLogin(false);
-          return;
-        }
-
-        await axios.post("http://localhost:8000/user/signup", {
+        const { data } = await axios.post("http://localhost:8000/user/signup", {
           username: user?.username,
           email: user?.primaryEmailAddress?.emailAddress,
           authId: user?.id,
         });
-
-        toast.success("Logged in successfully!");
+        if (data != "Already registered") {
+          toast.success("Logged in successfully!");
+        }
       } catch (error) {
         console.log("Error adding user:", error);
       }
