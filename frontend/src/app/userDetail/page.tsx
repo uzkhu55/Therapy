@@ -75,8 +75,10 @@ const UserDetail: React.FC = () => {
     const getUserDetails = async () => {
       try {
         const [detailResponse, theraDetailResponse] = await Promise.all([
-          axios.get(`http://localhost:8000/user/detail/${user?.id}`),
-          axios.get(`http://localhost:8000/user/theradetail/${user?.id}`),
+          axios.get(`https://if-project8.onrender.com/user/detail/${user?.id}`),
+          axios.get(
+            `https://if-project8.onrender.com/user/theradetail/${user?.id}`
+          ),
         ]);
 
         const detailData = detailResponse.data;
@@ -112,7 +114,7 @@ const UserDetail: React.FC = () => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:8000/user/detail", {
+      await axios.post("https://if-project8.onrender.com/user/detail", {
         formData,
         authId: user?.id,
       });

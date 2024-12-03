@@ -53,7 +53,7 @@ const TheraDetail: React.FC = () => {
     try {
       setIsLoading(true);
 
-      await axios.post("http://localhost:8000/user/theradetail", {
+      await axios.post("https://if-project8.onrender.com/user/theradetail", {
         formData,
         authId: user?.id,
       });
@@ -72,7 +72,7 @@ const TheraDetail: React.FC = () => {
         setIsChecking(true);
 
         const { data } = await axios.get(
-          `http://localhost:8000/user/theradetail/${user.id}`
+          `https://if-project8.onrender.com/user/theradetail/${user.id}`
         );
         console.log({ data });
 

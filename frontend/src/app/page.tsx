@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const Page = () => {
+  console.log("hho");
+
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFirstLogin, setIsFirstLogin] = useState<boolean>(true);
@@ -25,8 +27,10 @@ const Page = () => {
 
       try {
         const [detailResponse, theraDetailResponse] = await Promise.all([
-          axios.get(`http://localhost:8000/user/detail/${user?.id}`),
-          axios.get(`http://localhost:8000/user/theradetail/${user?.id}`),
+          axios.get(`https://if-project8.onrender.com/user/detail/${user?.id}`),
+          axios.get(
+            `https://if-project8.onrender.com/user/theradetail/${user?.id}`
+          ),
         ]);
 
         const detailData = detailResponse.data;
@@ -53,19 +57,22 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
+    console.log("Error adding user:");
+
     const addUserToDatabase = async () => {
       try {
-        const { data } = await axios.post("http://localhost:8000/user/signup", {
-          username: user?.username,
-          email: user?.primaryEmailAddress?.emailAddress,
-          authId: user?.id,
-        });
+        const { data } = await axios.post(
+          "https://if-project8.onrender.com/user/signup",
+          {
+            username: user?.username,
+            email: user?.primaryEmailAddress?.emailAddress,
+            authId: user?.id,
+          }
+        );
         if (data != "Already registered") {
           toast.success("Logged in successfully!");
         }
-      } catch (error) {
-        console.log("Error adding user:", error);
-      }
+      } catch (error) {}
     };
 
     if (user && isFirstLogin) {

@@ -7,8 +7,15 @@ import Footer from "@/components/homePage/Footer";
 import Section4 from "@/components/homePage/Section4";
 import Section3 from "@/components/homePage/Section3";
 import { Section5 } from "./Section5";
+import { useEffect } from "react";
 
 const Homepage = () => {
+  console.log("hhe");
+
+  useEffect(() => {
+    console.log("a");
+  }, []);
+
   return (
     <div className="relative h-full bg-white w-screen ">
       <Header />
