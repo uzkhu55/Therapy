@@ -30,7 +30,7 @@ const Clients = () => {
     const getClients = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8000/user/getClients"
+          "https://if-project8.onrender.com/user/getClients"
         );
         setClients(data);
       } catch (error) {
