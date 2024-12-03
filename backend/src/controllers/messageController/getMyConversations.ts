@@ -16,16 +16,24 @@ export const getMyConversations = async (req: any, res: any) => {
       },
     ],
   });
-
   const names = await Promise.all(
     conversations.map(async (el) => {
-      if (mongoUser?._id != el.userOne) {
-        const user = await UserModel.findById({ _id: el.userOne });
-        return user?.username;
+      if (mongoUser?._id.toString() == el.userOne.toString()) {
+        const user = await UserModel.findById({ _id: el.userTwo });
+
+        return {
+          username: user?.username,
+          convId: el._id,
+        };
       }
 
-      const user = await UserModel.findById({ _id: el.userTwo });
-      return user?.username;
+      if (mongoUser?._id.toString() == el.userTwo.toString()) {
+        const user = await UserModel.findById({ _id: el.userOne });
+        return {
+          username: user?.username,
+          convId: el._id,
+        };
+      }
     })
   );
 

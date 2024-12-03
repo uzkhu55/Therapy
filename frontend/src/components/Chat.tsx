@@ -38,7 +38,7 @@ interface User {
   email: string;
   imageUrl: string;
 }
-
+// https://if-project8.onrender.com
 const socket: Socket = io("https://if-project8.onrender.com");
 
 const Chat: React.FC = () => {
@@ -65,9 +65,6 @@ const Chat: React.FC = () => {
   const [recentChats, setRecentChats] = useState<string[]>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    router.push("/chat");
-  }, []);
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -86,7 +83,7 @@ const Chat: React.FC = () => {
 
     const fetchInitialData = async () => {
       try {
-        const recentUserId = localStorage.getItem("chosenUserId");
+        const usernameFromQuery = searchParams.get("username");
 
         const response = await axios.get(
           "https://if-project8.onrender.com/user/userdetail"
@@ -97,41 +94,34 @@ const Chat: React.FC = () => {
         const convos = await axios.get(
           `https://if-project8.onrender.com/user/myConvorsations/${user?.id}`
         );
-        setRecentChats(convos.data);
 
-        if (recentUserId) {
-          setChosenUserId(recentUserId);
+        const users = convos.data.map((el: any) => el.username);
+        setRecentChats([...users, usernameFromQuery]);
 
-          const isThereConversationExisting = await axios.get(
-            `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${recentUserId}`
-          );
-
-          if (isThereConversationExisting.data.message) {
-            const getConversationMessages = await axios.get(
-              `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
-            );
-            setGetmessages(getConversationMessages.data);
-          }
-        }
-
-        const usernameFromQuery = searchParams.get("username");
         if (usernameFromQuery) {
           const userDetail = response.data.find(
             (user: { username: string }) => user.username === usernameFromQuery
           );
+
           if (userDetail) {
             setChosenUserId(userDetail._id);
-            localStorage.setItem("chosenUserId", userDetail._id);
 
-            const isThereConversationExisting = await axios.get(
-              `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${userDetail._id}`
+            const exactUser = convos?.data?.find(
+              (el: any) => el.username === userDetail.username
             );
 
-            if (isThereConversationExisting.data.message) {
+            if (exactUser) {
+              const { data } = await axios.get(
+                `https://if-project8.onrender.com/getUsersConversation?convId=${exactUser.convId}`
+              );
+
               const getConversationMessages = await axios.get(
-                `https://if-https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+                `https://if-project8.onrender.com/user/getmessage/${data.conversations._id}`
               );
               setGetmessages(getConversationMessages.data);
+              scrollToBottom();
+            } else {
+              setGetmessages([]);
             }
           }
         }
@@ -145,35 +135,33 @@ const Chat: React.FC = () => {
     };
 
     fetchInitialData();
-  }, [user]);
+  }, [user, searchParams]);
 
-  const handleAddToRecentChats = async (
-    username: string,
-    chosenUserId: string
-  ) => {
+  const handleAddToRecentChats = async (username: string) => {
     try {
       if (!recentChats.includes(username)) {
         setRecentChats((prevChats) => [username, ...prevChats]);
       }
+      router.replace(`/chat?username=${username}`);
 
-      setChosenUserId(chosenUserId);
-      localStorage.setItem("chosenUserId", chosenUserId);
+      // setChosenUserId(chosenUserId);
+      // localStorage.setItem("chosenUserId", chosenUserId);
 
-      const isThereConversationExisting = await axios.get(
-        `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
-      );
+      // const isThereConversationExisting = await axios.get(
+      //   `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
+      // );
 
-      if (!isThereConversationExisting.data.message) {
-        setGetmessages([]);
-        return;
-      }
+      // if (!isThereConversationExisting.data.message) {
+      //   setGetmessages([]);
+      //   return;
+      // }
 
-      const getConversationMessages = await axios.get(
-        `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
-      );
-      setGetmessages(getConversationMessages.data);
+      // const getConversationMessages = await axios.get(
+      //   `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+      // );
+      // setGetmessages(getConversationMessages.data);
       setSearchValue("");
-      scrollToBottom();
+      // scrollToBottom();
     } catch (error) {
       console.error("Error adding to recent chats:", error);
     }
@@ -223,14 +211,11 @@ const Chat: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        "https://if-project8.onrender.com/user/addmessage",
-        {
-          author: user?.id,
-          chosenUserId,
-          inputValue,
-        }
-      );
+      await axios.post("https://if-project8.onrender.com/user/addmessage", {
+        author: user?.id,
+        chosenUserId,
+        inputValue,
+      });
       socket.emit("send-chat-message", {
         inputValue,
         user: { authId: user?.id },
@@ -340,7 +325,7 @@ const Chat: React.FC = () => {
                             className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
                             key={index}
                             onClick={() => {
-                              handleAddToRecentChats(el.username, el._id);
+                              handleAddToRecentChats(el.username);
                               setSearchValue("");
                             }}
                           >
@@ -366,9 +351,7 @@ const Chat: React.FC = () => {
                         <div key={index} className="flex pl-12 items-center">
                           <div
                             className="p-2 bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
-                            onClick={() =>
-                              handleAddToRecentChats(el.username, el._id)
-                            }
+                            onClick={() => handleAddToRecentChats(el.username)}
                           >
                             <div className="text-sm font-serif">
                               {el.username}
@@ -427,8 +410,6 @@ const Chat: React.FC = () => {
             </div>
             <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white gap-4 overflow-auto h-[800px]">
               {getmessages?.map((msg, index) => {
-                console.log(msg, "msgmsgmsgmsgmsg");
-
                 const timestamp = new Date(msg.timeStamp);
                 const formattedTime = timestamp.toLocaleString("en-US", {
                   timeZone: "Asia/Ulaanbaatar",
@@ -448,13 +429,16 @@ const Chat: React.FC = () => {
                     <div className={`font-medium text-base flex flex-col`}>
                       <div className="flex gap-2">
                         <img
-                          src={user?.imageUrl || "/default-avatar.png"}
+                          src={
+                            msg.senderId != user?.id
+                              ? "/default-avatar.png"
+                              : user?.imageUrl
+                          }
                           alt="User Profile"
                           className="rounded-full w-8 h-8"
                         />
 
                         {msg?.content}
-                        {msg?.senderId?.authId}
                       </div>
 
                       <div className="w-4 text-sm pr-8 h-4">
