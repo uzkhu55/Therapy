@@ -31,7 +31,7 @@ const Specialist = () => {
     const getSpecialist = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8000/user/getSpecialists"
+          "https://if-project8.onrender.com/user/getSpecialists"
         );
         setSpecialist(data);
       } catch (error) {
