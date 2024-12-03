@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
-import { Search, CirclePlus, Settings, Link2, SmilePlus } from "lucide-react";
+import { Search, Link2, SmilePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -133,7 +133,7 @@ const Chat: React.FC = () => {
 
             if (isThereConversationExisting.data.message) {
               const getConversationMessages = await axios.get(
-                `https://if-https://if-project8.onrender.comm/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+                `https://if-https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
               );
               setGetmessages(getConversationMessages.data);
             }
@@ -227,17 +227,12 @@ const Chat: React.FC = () => {
     }
 
     try {
-      const uploadedAttachments = await uploadAttachments(attachments);
-
-      console.log("Uploaded attachments:", uploadedAttachments);
-
       const response = await axios.post(
         "https://if-project8.onrender.com/user/addmessage",
         {
           author: user?.id,
           chosenUserId,
           inputValue,
-          attachments: uploadedAttachments,
         }
       );
 
@@ -246,7 +241,6 @@ const Chat: React.FC = () => {
       socket.emit("send-chat-message", {
         inputValue,
         user: { authId: user?.id },
-        attachments: uploadedAttachments,
       });
 
       setInputValue("");
@@ -439,8 +433,10 @@ const Chat: React.FC = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white relative gap-4 overflow-auto h-[800px]">
+            <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white gap-4 overflow-auto h-[800px]">
               {getmessages?.map((msg, index) => {
+                console.log(msg, "msgmsgmsgmsgmsg");
+
                 const timestamp = new Date(msg.timeStamp);
                 const formattedTime = timestamp.toLocaleString("en-US", {
                   timeZone: "Asia/Ulaanbaatar",
@@ -450,33 +446,28 @@ const Chat: React.FC = () => {
                 });
                 return (
                   <div
-                    key={index}
-                    className={`flex flex-col bg-white gap-2 w-[98%] ${
-                      msg.senderId.authId === user?.id
-                        ? "justify-end text-white flex"
-                        : "bg-black items-end"
-                    }
-                    } p-4 rounded-lg`}
+                    className={`flex w-full ${
+                      msg?.senderId?.authId === user?.id
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
                   >
-                    <div className="flex  gap-2">
-                      <div
-                        className={`flex flex-col rounded-lg p-1 px-2 gap-5 ${
-                          msg.senderId.authId === user?.id
-                            ? "bg-black justify-start text-white flex"
-                            : "bg-blue-600 text-white"
-                        }`}
-                      >
-                        <div className="font-medium text-base">
-                          {msg.content}
-                        </div>
+                    <div className={`font-medium text-base flex flex-col`}>
+                      <div className="flex gap-2">
+                        <img
+                          src={user?.imageUrl || "/default-avatar.png"}
+                          alt="User Profile"
+                          className="rounded-full w-8 h-8"
+                        />
+
+                        {msg?.content}
+                        {msg?.senderId?.authId}
                       </div>
-                      <img
-                        src={user?.imageUrl || "/default-avatar.png"}
-                        alt="User Profile"
-                        className="rounded-full w-8 h-8"
-                      />
+
+                      <div className="w-4 text-sm pr-8 h-4">
+                        {formattedTime}
+                      </div>
                     </div>
-                    <div className="w-4 text-sm pr-8 h-4">{formattedTime}</div>
                   </div>
                 );
               })}
