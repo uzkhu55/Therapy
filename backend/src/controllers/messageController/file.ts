@@ -40,7 +40,7 @@ const uploadFile = (req: Request, res: Response): void => {
     return;
   }
 
-  const fileUrl = `http://localhost:8000/uploads/${req.file.filename}`;
+  const fileUrl = `https://if-project8.onrender.com/uploads/${req.file.filename}`;
   console.log("File uploaded:", req.file);
 
   res.json({ url: fileUrl });
