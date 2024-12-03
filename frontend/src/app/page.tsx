@@ -84,9 +84,6 @@ const Page = () => {
       } catch (error) {
         console.log("Error adding user:", error);
       }
-
-      } catch (error) {}
-
     };
 
     if (user && isFirstLogin) {
