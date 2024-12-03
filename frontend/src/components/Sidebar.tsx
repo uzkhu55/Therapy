@@ -43,7 +43,7 @@ export default function Component({
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/user/userdetail"
+          "https://if-project8.onrender.com/user/userdetail"
         );
         console.log(response.data);
 
@@ -82,7 +82,7 @@ export default function Component({
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/folder", // Update with your API endpoint
+        "https://if-project8.onrender.com/folder", // Update with your API endpoint
         { authId, chosenUserId }
       );
       console.log("Folder created successfully:", response.data);

@@ -1,9 +1,12 @@
 import Chat from "@/components/Chat";
+import { Suspense } from "react";
 
 const page = () => {
   return (
     <div>
-      <Chat />
+      <Suspense>
+        <Chat />
+      </Suspense>
     </div>
   );
 };

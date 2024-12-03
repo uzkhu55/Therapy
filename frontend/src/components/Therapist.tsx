@@ -45,13 +45,12 @@ const Therapist = () => {
   const { user } = useUser();
   const [selectedSpecialist, setSelectedSpecialist] =
     useState<Specialist | null>(null);
-  console.log(selectedSpecialist);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/user/getSpecialists"
+          "https://if-project8.onrender.com/user/getSpecialists"
         );
         console.log(res.data);
         setData(res.data);

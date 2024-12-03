@@ -7,7 +7,7 @@ export const signUpController = async (req: any, res: any) => {
 
   const isUserExist = await UserModel.findOne({ authId });
 
-  if (!isUserExist && authId) {
+  if (!isUserExist) {
     const user = await UserModel.create({
       username,
       authId,

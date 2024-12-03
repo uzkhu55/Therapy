@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 import io from "socket.io-client";
 
 // Ensure the URL matches your backend
-const socket = io("http://localhost:8000");
+const socket = io("https://if-project8.onrender.com");
 
 const PaymentQRCode: React.FC = () => {
   const [showDoneModal, setShowDoneModal] = useState(false);
