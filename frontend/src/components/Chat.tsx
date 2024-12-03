@@ -200,8 +200,6 @@ const Chat: React.FC = () => {
       formData.append("file", file);
 
       try {
-        console.log("Uploading file:", file.name);
-
         const response = await axios.post(
           "http://localhost:8000/upload",
           formData,
@@ -212,14 +210,8 @@ const Chat: React.FC = () => {
           }
         );
 
-        console.log("File uploaded successfully:", response.data);
         uploadedUrls.push(response.data.url);
       } catch (error: any) {
-        console.error(
-          "Error uploading file:",
-          file.name,
-          error.response || error.message
-        );
         throw new Error(`Error uploading file: ${file.name}`);
       }
     }
