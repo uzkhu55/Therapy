@@ -18,14 +18,6 @@ import { useRouter } from "next/navigation";
 import { Loading } from "./Loading";
 import { Button } from "./ui/button";
 import { useSearchParams } from "next/navigation";
-
-interface ComponentProps {
-  bg: string;
-  text: string;
-  textchat: string;
-  bgchat: string;
-}
-
 interface Detail {
   username: string;
   _id: string;
@@ -76,16 +68,19 @@ const Chat: React.FC = () => {
   useEffect(() => {
     router.push("/chat");
   }, []);
+
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push("/sign-in");
     }
   }, [isLoaded, isSignedIn, router]);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   }, [chosenUserId]);
+
   useEffect(() => {
     setLoading(true);
 
@@ -96,6 +91,7 @@ const Chat: React.FC = () => {
         const response = await axios.get(
           "https://if-project8.onrender.com/user/userdetail"
         );
+
         setGetUserdetail(response.data);
 
         const convos = await axios.get(
@@ -115,9 +111,9 @@ const Chat: React.FC = () => {
               `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
             );
             setGetmessages(getConversationMessages.data);
-            console.log(getConversationMessages.data);
           }
         }
+
         const usernameFromQuery = searchParams.get("username");
         if (usernameFromQuery) {
           const userDetail = response.data.find(
@@ -193,32 +189,32 @@ const Chat: React.FC = () => {
     }
   };
 
-  const uploadAttachments = async (files: File[]) => {
-    const uploadedUrls: string[] = [];
+  // const uploadAttachments = async (files: File[]) => {
+  //   const uploadedUrls: string[] = [];
 
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append("file", file);
+  //   for (const file of files) {
+  //     const formData = new FormData();
+  //     formData.append("file", file);
 
-      try {
-        const response = await axios.post(
-          "https://if-project8.onrender.com/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+  //     try {
+  //       const response = await axios.post(
+  //         "https://if-project8.onrender.com/upload",
+  //         formData,
+  //         {
+  //           headers: {
+  //             "Content-Type": "multipart/form-data",
+  //           },
+  //         }
+  //       );
 
-        uploadedUrls.push(response.data.url);
-      } catch (error: any) {
-        throw new Error(`Error uploading file: ${file.name}`);
-      }
-    }
+  //       uploadedUrls.push(response.data.url);
+  //     } catch (error: any) {
+  //       throw new Error(`Error uploading file: ${file.name}`);
+  //     }
+  //   }
 
-    return uploadedUrls;
-  };
+  //   return uploadedUrls;
+  // };
 
   const addMessage = async () => {
     if (inputValue.trim() === "" && attachments.length === 0) {
@@ -235,9 +231,6 @@ const Chat: React.FC = () => {
           inputValue,
         }
       );
-
-      console.log("Message successfully added:", response.data);
-
       socket.emit("send-chat-message", {
         inputValue,
         user: { authId: user?.id },
@@ -278,7 +271,6 @@ const Chat: React.FC = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
-  // Socket event listeners for chat messages
   useEffect(() => {
     socket.emit("join-room", room);
 
@@ -380,7 +372,7 @@ const Chat: React.FC = () => {
                           >
                             <div className="text-sm font-serif">
                               {el.username}
-                            </div>{" "}
+                            </div>
                           </div>
                         </div>
                       ))
@@ -446,6 +438,7 @@ const Chat: React.FC = () => {
                 });
                 return (
                   <div
+                    key={index}
                     className={`flex w-full ${
                       msg?.senderId?.authId === user?.id
                         ? "justify-end"
