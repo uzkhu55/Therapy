@@ -23,6 +23,7 @@ import {
   handleEmojiSelect,
 } from "@/lib/Utils/piker-emoji-function";
 import { LoadingComponent } from "../LoadingComponent";
+import { toast } from "react-toastify";
 
 type CommentProps = {
   commentIsOpen: boolean;
@@ -78,6 +79,7 @@ export const CommentComponent: React.FC<CommentProps> = ({
         });
         setLoading(false);
         setCommentIsOpen(false);
+        toast.success("Амжилттай!");
       } catch (error) {
         console.log("Error posting comment:", error);
         setLoading(false);
@@ -120,7 +122,7 @@ export const CommentComponent: React.FC<CommentProps> = ({
         <div className="w-full space-x-2 bg-white rounded-md shadow-md">
           <Input
             type="text"
-            placeholder={`Comment as ${user?.username}`}
+            placeholder={`${user?.username} та сэтгэгдэл үлдээх үү?`}
             className="border-none"
             disabled={loading}
             value={input}

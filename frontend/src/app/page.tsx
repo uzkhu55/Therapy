@@ -72,7 +72,21 @@ const Page = () => {
         if (data != "Already registered") {
           toast.success("Logged in successfully!");
         }
+
+        await axios.post("http://localhost:8000/user/signup", {
+          username: user?.username,
+          email: user?.primaryEmailAddress?.emailAddress,
+          authId: user?.id,
+          image: user?.imageUrl,
+        });
+
+        toast.success("Logged in successfully!");
+      } catch (error) {
+        console.log("Error adding user:", error);
+      }
+
       } catch (error) {}
+
     };
 
     if (user && isFirstLogin) {

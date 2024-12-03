@@ -9,6 +9,7 @@ import data from "@emoji-mart/data";
 import { IconButton } from "./IconButton";
 import { LoadingComponent } from "../LoadingComponent";
 import { CommentData } from "./CommentComponent";
+import { toast } from "react-toastify";
 
 type CommentProps = {
   commentIsOpen: boolean;
@@ -35,16 +36,13 @@ export const ReplyCommentComponent: React.FC<CommentProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const { user } = useUser();
 
-  // Handle emoji picker toggle
   const onClickEmoji = () => setShowPicker(!showPicker);
 
-  // Handle emoji selection
   const onEmojiSelect = (value: { native: string }) => {
-    setInput(input + value.native); // Add selected emoji to input
-    setShowPicker(false); // Close emoji picker after selection
+    setInput(input + value.native);
+    setShowPicker(false);
   };
 
-  // Handle comment submission
   const handleSubmit = async () => {
     if (input.trim()) {
       setLoading(true);
@@ -56,6 +54,7 @@ export const ReplyCommentComponent: React.FC<CommentProps> = ({
         });
         setLoading(false);
         setCommentIsOpen(false);
+        toast.success("Амжилттай!");
       } catch (error) {
         console.log("Error posting comment:", error);
         setLoading(false);
@@ -73,7 +72,7 @@ export const ReplyCommentComponent: React.FC<CommentProps> = ({
     <div
       className={`${
         commentIsOpen ? "flex" : "hidden"
-      } w-[560px] h-auto p-3 rounded-md mx-auto bg-[#fdfcf6] flex gap-3`}
+      } w-[500px] h-auto p-3 rounded-md mx-auto bg-[#fdfcf6] flex gap-3`}
     >
       <div className="mt-1">
         <img
@@ -86,7 +85,7 @@ export const ReplyCommentComponent: React.FC<CommentProps> = ({
         <div className="w-full space-x-2 bg-white rounded-md shadow-md">
           <Input
             type="text"
-            placeholder={`Comment as ${user?.username}`}
+            placeholder={`Сэтгэгдэлд хариулах уу? ${user?.username}`}
             className="border-none"
             disabled={loading}
             value={input}

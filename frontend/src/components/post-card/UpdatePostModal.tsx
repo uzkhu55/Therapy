@@ -27,6 +27,7 @@ import {
 } from "@/lib/Utils/piker-emoji-function";
 import { useUser } from "@clerk/clerk-react";
 import { LoadingComponent } from "../LoadingComponent";
+import { toast } from "react-toastify";
 
 type PostModalProps = {
   isOpen: boolean;
@@ -72,6 +73,7 @@ export function UpdatePostModal({
         });
         setLoading(false);
         setIsOpen(false);
+        toast.success("Амжилттай засагдлаа!");
       } catch (error) {
         console.log("Error updating post:", error);
         setLoading(false);
@@ -96,7 +98,7 @@ export function UpdatePostModal({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create post</DialogTitle>
+          <DialogTitle>Засварлах</DialogTitle>
 
           <div>
             <div className="flex gap-2 mt-2">
@@ -125,7 +127,7 @@ export function UpdatePostModal({
             className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full"
           >
             <ImageIcon size={22} strokeWidth={1.2} />
-            Image
+            Зураг
             <input
               type="file"
               className="opacity-0 absolute w-[50%]"
@@ -138,7 +140,7 @@ export function UpdatePostModal({
             src={
               "https://cdn.icon-icons.com/icons2/3288/PNG/512/happy_emo_emoticon_emoji_icon_208299.png"
             }
-            desc={"Emoji"}
+            desc={"Эможи"}
             clickhandler={onClickEmoji}
           >
             {showPicker && (
@@ -175,7 +177,7 @@ export function UpdatePostModal({
             className="w-[378px]  bg-[#335141]"
             type="submit"
           >
-            Edit Post
+            Засаж дууссан
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -17,6 +17,7 @@ import { PostData } from "./Post";
 import { useUser } from "@clerk/clerk-react";
 import { LoadingComponent } from "../LoadingComponent";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type PostModalProps = {
   post: PostData;
@@ -44,7 +45,7 @@ export function DeletePostModal({ post }: PostModalProps) {
       await axios.delete(`http://localhost:8000/posts/deletePost/${_id}`);
       setLoading(false);
       setMove(false);
-
+      toast.success("Амжилттай устлаа!");
       router.push("/createPost");
     } catch (error) {
       console.log("Error deleting post:", error);
@@ -69,19 +70,17 @@ export function DeletePostModal({ post }: PostModalProps) {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Move to your trash</DialogTitle>
+              <DialogTitle>Устгах</DialogTitle>
               <DialogDescription>
-                Items in your trash will be automatically deleted after 30 days.
-                You can delete them from your trash earlier by going to activity
-                log in settings.
+                Та энэхүү постыг утгахдаа итгэлтэй байна уу?
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <Button className="bg-[#335141]" onClick={handleCancel}>
-                Cancel
+                Үгүй
               </Button>
               <Button className="bg-[#335141]" onClick={handleMove}>
-                Move
+                Тийм
               </Button>
             </DialogFooter>
           </DialogContent>
