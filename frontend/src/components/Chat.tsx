@@ -115,6 +115,7 @@ const Chat: React.FC = () => {
               `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
             );
             setGetmessages(getConversationMessages.data);
+            console.log(getConversationMessages.data);
           }
         }
         const usernameFromQuery = searchParams.get("username");
@@ -447,14 +448,24 @@ const Chat: React.FC = () => {
                   hour: "numeric",
                   minute: "numeric",
                 });
-
                 return (
                   <div
                     key={index}
-                    className="flex flex-col bg-white gap-2 w-[98%] p-4 items-end rounded-lg"
+                    className={`flex flex-col bg-white gap-2 w-[98%] ${
+                      msg.senderId.authId === user?.id
+                        ? "justify-end text-white flex"
+                        : "bg-black items-end"
+                    }
+                    } p-4 rounded-lg`}
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="flex flex-col bg-blue-600 text-white w-fit rounded-lg p-1 px-2 gap-5">
+                    <div className="flex  gap-2">
+                      <div
+                        className={`flex flex-col rounded-lg p-1 px-2 gap-5 ${
+                          msg.senderId.authId === user?.id
+                            ? "bg-black justify-start text-white flex"
+                            : "bg-blue-600 text-white"
+                        }`}
+                      >
                         <div className="font-medium text-base">
                           {msg.content}
                         </div>
