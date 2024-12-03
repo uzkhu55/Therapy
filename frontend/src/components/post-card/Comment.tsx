@@ -61,11 +61,10 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
       <div className="flex flex-col gap-3 ">
         <div className="flex justify-between ">
           <div className="flex gap-3">
-            <button>like</button>
-            <button onClick={handleReplyClick}>reply</button>
+            <button onClick={handleReplyClick}>Сэтгэгдэлд хариулах</button>
           </div>
           <button onClick={handleViewRepliesClick}>
-            {!viewReplies ? "view replies" : "hide replies"}
+            {!viewReplies ? "Хариултуудыг харах" : "Хариултуудыг нуух"}
           </button>
         </div>
         {commentIsOpen && (

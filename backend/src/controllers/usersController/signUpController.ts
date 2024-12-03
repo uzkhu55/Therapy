@@ -1,5 +1,4 @@
 import { UserModel } from "../../database/models/user.model";
-
 import env from "dotenv";
 env.config();
 
@@ -20,7 +19,12 @@ export const signUpController = async (req: any, res: any) => {
     return;
   }
 
-  await UserModel.findOneAndUpdate({ authId: authId }, { username: username });
-  res.status(200).send("Already registered");
+  await UserModel.findOneAndUpdate(
+    { authId: authId },
+    { username, image },
+    { new: true }
+  );
+
+  res.status(200).send("Profile updated successfully");
   return;
 };

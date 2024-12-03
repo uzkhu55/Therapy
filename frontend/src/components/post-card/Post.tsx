@@ -64,6 +64,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
     : "N/A";
 
   const { user } = useUser();
+  console.log(user);
 
   const isUserCreatePost = user?.id;
   const isUserCanUpdate = post.userId?.authId;
@@ -154,13 +155,13 @@ export const Post: React.FC<PostProps> = ({ post }) => {
             onClick={handleLiked}
           />
         </div>
-        <Link href={`/createPost/${post._id}`}>View comments</Link>
+        <Link href={`/createPost/${post._id}`}> Сэтгэгдэл харах</Link>
       </div>
 
       <div className="flex w-[558px] border-t-[1px] pt-3">
         <ClickButton
           src={"https://cdn-icons-png.flaticon.com/512/126/126473.png"}
-          desc={isLiked ? "Liked" : "Like"}
+          desc={"Таалагдлаа"}
           clickhandler={handleLiked}
           className={isLiked ? "text-[#335141] font-medium" : ""}
         />
@@ -169,7 +170,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
           src={
             "https://static-00.iconduck.com/assets.00/comment-icon-1024x964-julk98bl.png"
           }
-          desc={"Comment"}
+          desc={"Сэтгэгдэл"}
           clickhandler={handleCommentOpen}
         />
       </div>

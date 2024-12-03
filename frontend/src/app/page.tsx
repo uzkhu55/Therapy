@@ -68,6 +68,7 @@ const Page = () => {
           username: user?.username,
           email: user?.primaryEmailAddress?.emailAddress,
           authId: user?.id,
+          image: user?.imageUrl,
         });
 
         toast.success("Logged in successfully!");

@@ -28,6 +28,7 @@ import {
   handleEmojiSelect,
 } from "@/lib/Utils/piker-emoji-function";
 import { LoadingComponent } from "../LoadingComponent";
+import { toast } from "react-toastify";
 
 type PostModalProps = {
   isOpen: boolean;
@@ -72,6 +73,7 @@ export function PostModal({
         });
         setIsOpen(false);
         setLoading(false);
+        toast.success("Амжилттай нийтлэгдлээ!");
       } catch (error) {
         console.log(error);
         setLoading(false);
@@ -97,7 +99,7 @@ export function PostModal({
           className="w-[375px] rounded-full border-none bg-[#f2eee9] hover:bg-[#e9e2db] "
           variant="outline"
         >
-          {`What's on your mind, ${user?.username}?`}
+          {`Өнөөдөр хэр байна, ${user?.username}?`}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[425px]">
@@ -121,7 +123,7 @@ export function PostModal({
             disabled={loading}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={`What's on your mind, ${user?.username}?`}
+            placeholder={`Өнөөдөр хэр байна,, ${user?.username}?`}
           />
         </div>
         <div className="flex w-[376px] border-t-[1px] pt-1 relative">
@@ -130,7 +132,7 @@ export function PostModal({
             className="flex-1 relative p-3 flex gap-2 items-center justify-center hover:bg-[#f2eee9] rounded-full  transition-all duration-300 ease-in-out"
           >
             <ImageIcon size={22} strokeWidth={1.2} />
-            Image
+            Зураг
             <input
               type="file"
               className="opacity-0 absolute w-[50%]  "
@@ -143,7 +145,7 @@ export function PostModal({
             src={
               "https://cdn.icon-icons.com/icons2/3288/PNG/512/happy_emo_emoticon_emoji_icon_208299.png"
             }
-            desc={"Emoji"}
+            desc={"Эможи"}
             clickhandler={onClickEmoji}
           >
             {showPicker && (
@@ -180,7 +182,7 @@ export function PostModal({
             className="w-[378px] bg-[#335141]"
             type="submit"
           >
-            Post
+            Нийтлэх
           </Button>
         </DialogFooter>
       </DialogContent>
