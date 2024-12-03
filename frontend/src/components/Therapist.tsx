@@ -45,7 +45,6 @@ const Therapist = () => {
   const { user } = useUser();
   const [selectedSpecialist, setSelectedSpecialist] =
     useState<Specialist | null>(null);
-  console.log(selectedSpecialist);
 
   useEffect(() => {
     const fetchData = async () => {
