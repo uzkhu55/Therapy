@@ -47,7 +47,7 @@ interface User {
   imageUrl: string;
 }
 
-const socket: Socket = io("http://localhost:8000");
+const socket: Socket = io("https://if-project8.onrender.com");
 
 const Chat: React.FC = () => {
   const [getmessages, setGetmessages] = useState<Message[]>([]);
@@ -94,12 +94,12 @@ const Chat: React.FC = () => {
         const recentUserId = localStorage.getItem("chosenUserId");
 
         const response = await axios.get(
-          "http://localhost:8000/user/userdetail"
+          "https://if-project8.onrender.com/user/userdetail"
         );
         setGetUserdetail(response.data);
 
         const convos = await axios.get(
-          `http://localhost:8000/user/myConvorsations/${user?.id}`
+          `https://if-project8.onrender.com/user/myConvorsations/${user?.id}`
         );
         setRecentChats(convos.data);
 
@@ -107,12 +107,12 @@ const Chat: React.FC = () => {
           setChosenUserId(recentUserId);
 
           const isThereConversationExisting = await axios.get(
-            `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${recentUserId}`
+            `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${recentUserId}`
           );
 
           if (isThereConversationExisting.data.message) {
             const getConversationMessages = await axios.get(
-              `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+              `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
             );
             setGetmessages(getConversationMessages.data);
           }
@@ -127,12 +127,12 @@ const Chat: React.FC = () => {
             localStorage.setItem("chosenUserId", userDetail._id);
 
             const isThereConversationExisting = await axios.get(
-              `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${userDetail._id}`
+              `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${userDetail._id}`
             );
 
             if (isThereConversationExisting.data.message) {
               const getConversationMessages = await axios.get(
-                `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+                `https://if-https://if-project8.onrender.comm/user/getmessage/${isThereConversationExisting.data.conversations._id}`
               );
               setGetmessages(getConversationMessages.data);
             }
@@ -163,7 +163,7 @@ const Chat: React.FC = () => {
       localStorage.setItem("chosenUserId", chosenUserId);
 
       const isThereConversationExisting = await axios.get(
-        `http://localhost:8000/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
+        `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
       );
 
       if (!isThereConversationExisting.data.message) {
@@ -172,7 +172,7 @@ const Chat: React.FC = () => {
       }
 
       const getConversationMessages = await axios.get(
-        `http://localhost:8000/user/getmessage/${isThereConversationExisting.data.conversations._id}`
+        `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
       );
       setGetmessages(getConversationMessages.data);
       setSearchValue("");
@@ -201,7 +201,7 @@ const Chat: React.FC = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:8000/upload",
+          "https://if-project8.onrender.com/upload",
           formData,
           {
             headers: {
@@ -231,7 +231,7 @@ const Chat: React.FC = () => {
       console.log("Uploaded attachments:", uploadedAttachments);
 
       const response = await axios.post(
-        "http://localhost:8000/user/addmessage",
+        "https://if-project8.onrender.com/user/addmessage",
         {
           author: user?.id,
           chosenUserId,
