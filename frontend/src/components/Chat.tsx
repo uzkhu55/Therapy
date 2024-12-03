@@ -38,7 +38,7 @@ interface User {
   email: string;
   imageUrl: string;
 }
-
+// https://if-project8.onrender.com
 const socket: Socket = io("https://if-project8.onrender.com");
 
 const Chat: React.FC = () => {
@@ -92,7 +92,7 @@ const Chat: React.FC = () => {
         setGetUserdetail(response.data);
 
         const convos = await axios.get(
-          `http://localhost:8000/user/myConvorsations/${user?.id}`
+          `https://if-project8.onrender.com/user/myConvorsations/${user?.id}`
         );
 
         const users = convos.data.map((el: any) => el.username);
@@ -112,7 +112,7 @@ const Chat: React.FC = () => {
 
             if (exactUser) {
               const { data } = await axios.get(
-                `http://localhost:8000/getUsersConversation?convId=${exactUser.convId}`
+                `https://if-project8.onrender.com/getUsersConversation?convId=${exactUser.convId}`
               );
 
               const getConversationMessages = await axios.get(
