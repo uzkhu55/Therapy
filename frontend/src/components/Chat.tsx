@@ -41,6 +41,15 @@ interface User {
 // https://if-project8.onrender.com
 const socket: Socket = io("https://if-project8.onrender.com");
 
+const avatar = [
+  { img: "/avatar1.png" },
+  { img: "/avatar2.png" },
+  { img: "/avatar3.png" },
+  { img: "/avatar4.png" },
+  { img: "/avatar5.png" },
+  { img: "/default-avatar.png" },
+];
+
 const Chat: React.FC = () => {
   const [getmessages, setGetmessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
@@ -54,6 +63,8 @@ const Chat: React.FC = () => {
     isSignedIn: boolean;
     isLoaded: boolean;
   };
+  console.log(user);
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -348,12 +359,21 @@ const Chat: React.FC = () => {
                     getUserdetail
                       .filter((el) => recentChats.includes(el.username))
                       .map((el, index) => (
-                        <div key={index} className="flex pl-12 items-center">
+                        <div key={index} className="flex  items-center">
                           <div
-                            className="p-2 bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
+                            className="p-2 w-[400px] bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
                             onClick={() => handleAddToRecentChats(el.username)}
                           >
                             <div className="text-sm font-serif">
+                              {avatar.map((el, index) => (
+                                <div key={index}>
+                                  <img
+                                    src={el.img}
+                                    className="w-6 h-6"
+                                    alt={`avatar-${index}`}
+                                  />
+                                </div>
+                              ))}
                               {el.username}
                             </div>
                           </div>
@@ -371,13 +391,6 @@ const Chat: React.FC = () => {
               isSidebarVisible ? "w-3/4" : " w-full"
             } bg-[#f3f3f3] flex flex-col rounded-r-lg transition-all duration-300 ease-in-out`}
           >
-            <div className=" rounded-lg absolute p-1 top-[152px] left-7">
-              <img
-                src={user?.imageUrl || "/default-avatar.png"}
-                alt="User Profile"
-                className=" w-8 h-8 top-[164px] left-7 z-50  rounded-full"
-              />
-            </div>
             <div className=" py-2 rounded-lg absolute top-[28px] left-6">
               <button
                 onClick={toggleSidebar}
@@ -426,24 +439,57 @@ const Chat: React.FC = () => {
                         : "justify-start"
                     }`}
                   >
-                    <div className={`font-medium text-base flex flex-col`}>
-                      <div className="flex gap-2">
-                        <img
-                          src={
-                            msg.senderId != user?.id
-                              ? "/default-avatar.png"
-                              : user?.imageUrl
-                          }
-                          alt="User Profile"
-                          className="rounded-full w-8 h-8"
-                        />
+                    <div
+                      className={`font-medium text-base flex gap-2 flex-col`}
+                    >
+                      <div className="flex flex-col gap-2">
+                        {msg?.senderId?.authId !== user?.id ? (
+                          // If the message sender is not the user
+                          <div className="flex pl-4 pt-4 items-center gap-2">
+                            <img
+                              src={
+                                msg?.senderId?.authId !== user?.id
+                                  ? "/default-avatar.png"
+                                  : user?.imageUrl
+                              }
+                              alt="User Profile"
+                              className="rounded-full w-8 h-8"
+                            />
+                            <div className="flex bg-gray-200 p-2 rounded-xl justify-end">
+                              {msg?.content}
+                            </div>
+                          </div>
+                        ) : (
+                          // If the message sender is the user
+                          <div className="flex pt-4 pr-4 items-center gap-2">
+                            <div className="flex bg-blue-600 p-2 rounded-xl text-white justify-start">
+                              {msg?.content}
+                            </div>
+                            <img
+                              src={
+                                msg?.senderId?.authId !== user?.id
+                                  ? "/default-avatar.png"
+                                  : user?.imageUrl
+                              }
+                              alt="User Profile"
+                              className="rounded-full w-8 h-8"
+                            />
+                          </div>
+                        )}
 
-                        {msg?.content}
+                        {/* Format time based on sender */}
+                        <div
+                          className={`w-full text-sm ${
+                            msg?.senderId?.authId !== user?.id
+                              ? "text-left pl-4"
+                              : "text-right pr-4"
+                          } font-thin`}
+                        >
+                          {formattedTime}
+                        </div>
                       </div>
 
-                      <div className="w-4 text-sm pr-8 h-4">
-                        {formattedTime}
-                      </div>
+                      <div className="w-4 h-4"></div>
                     </div>
                   </div>
                 );

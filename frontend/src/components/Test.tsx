@@ -1,88 +1,176 @@
 // "use client";
 // import React, { useState, useEffect } from "react";
-// import QRCode from "qrcode";
+// import { ClickButton } from "./ClickButton";
+// import { Settings2, ThumbsUp } from "lucide-react";
+// import { UpdatePostModal } from "./UpdatePostModal";
+// import { DeletePostModal } from "./DeletePostModal";
+// import { CommentComponent } from "./CommentComponent";
+// import { AllComments } from "./AllComments";
+// import { usePathname } from "next/navigation";
+// import Link from "next/link";
+// import { formatDistanceToNow } from "date-fns";
+// import { useUser } from "@clerk/clerk-react";
+// import axios from "axios";
+// import { AllLikes, LikeModelType } from "./AllLikes";
 
-// const PaymentQRCode: React.FC = () => {
-//   const [showDoneModal, setShowDoneModal] = useState(false); // State for the "Done" modal
+// interface PostProps {
+//   post: PostData;
+// }
 
+// export type PostData = {
+//   _id: string;
+//   userId: { image?: string; username?: string; authId?: string };
+//   image: string;
+//   comments: { image: string; username: string; authId?: string };
+//   content: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+// };
+
+// export const Post: React.FC<PostProps> = ({ post }) => {
+//   const pathname = usePathname();
+//   const { user } = useUser();
+
+//   const [image, setImage] = useState<File | null>(null);
+//   const [imagePreview, setImagePreview] = useState<string>("null");
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [commentIsOpen, setCommentIsOpen] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [isLiked, setIsLiked] = useState(false);
+//   const [likes, setLikes] = useState<LikeModelType[]>([]);
+
+//   // Fetch likes when the component mounts
 //   useEffect(() => {
-//     // Generate QR Code on mount
-//     const generateQRCode = async () => {
-//       const url = "https://yourapp.com/payment"; // Your actual URL here
+//     const fetchLikes = async () => {
 //       try {
-//         const qrCodeUrl = await QRCode.toDataURL(url);
-//         const qrCodeImg = document.getElementById("qrCode") as HTMLImageElement;
-//         qrCodeImg.src = qrCodeUrl;
-//       } catch (err) {
-//         console.error("Error generating QR code:", err);
+//         const response = await axios.get(`http://localhost:8000/posts/getLikes/${post._id}`);
+//         setLikes(response.data.likes);
+//       } catch (error) {
+//         console.log("Error fetching likes:", error);
 //       }
 //     };
 
-//     generateQRCode();
+//     fetchLikes();
+//   }, [post._id]);
 
-//     // Function to detect when the page is fully loaded
-//     const onLoadEvent = () => {
-//       console.log("Page loaded, showing Done modal");
-//       setShowDoneModal(true);
-//     };
-
-//     // Check if the page has already loaded
-//     if (document.readyState === "complete") {
-//       onLoadEvent();
-//     } else {
-//       // Otherwise, wait for the load event
-//       window.addEventListener("load", onLoadEvent);
+//   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     if (event.target.files && event.target.files[0]) {
+//       const file = event.target.files[0];
+//       setImage(file);
+//       const imageprev = URL.createObjectURL(file);
+//       setImagePreview(imageprev);
 //     }
-
-//     // Clean up event listener on unmount
-//     return () => {
-//       window.removeEventListener("load", onLoadEvent);
-//     };
-//   }, []);
-
-//   // Detect URL change (for real-time modal triggering)
-//   useEffect(() => {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const qrCodeScanned = urlParams.get("scanned"); // Or any condition that indicates the QR scan completion
-
-//     if (qrCodeScanned) {
-//       setShowDoneModal(true); // Show modal when the QR code is scanned and processed
-//     }
-//   }, [window.location.href]); // This hook runs when the URL changes
-
-//   const closeModal = () => {
-//     setShowDoneModal(false); // Close the "Done" modal
 //   };
 
-//   return (
-//     <div className="flex flex-col items-center justify-center py-10">
-//       <h3 className="text-xl font-semibold mb-4">
-//         Scan the QR Code to make a payment
-//       </h3>
-//       <img
-//         id="qrCode"
-//         alt="Payment QR Code"
-//         className="w-64 h-64 border border-gray-300 rounded-md shadow-lg"
-//       />
+//   const handleOpen = () => setIsOpen(true);
+//   const handleCommentOpen = () => setCommentIsOpen(true);
 
-//       {showDoneModal && (
-//         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-//           <div className="bg-white p-6 rounded-lg w-80 text-center shadow-xl">
-//             <h2 className="text-2xl font-bold text-blue-600 mb-4">Done</h2>
-//             <p className="text-lg text-gray-700 mb-4">
-//               The QR code has been successfully scanned and processed.
-//             </p>
-//             <button
-//               onClick={closeModal}
-//               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-//             >
-//               Close
-//             </button>
+//   function getRelativeTime(date: Date): string {
+//     return formatDistanceToNow(date, { addSuffix: true });
+//   }
+
+//   const relativeTime = post.createdAt ? getRelativeTime(new Date(post.createdAt)) : "N/A";
+
+//   const isUserCreatePost = user?.id;
+//   const isUserCanUpdate = post.userId?.authId;
+
+//   const handleLiked = async () => {
+//     setLoading(true);
+//     setIsLiked((prev) => !prev);
+//     try {
+//       const response = await axios.post("http://localhost:8000/posts/createLike", {
+//         authId: user?.id,
+//         _id: post._id,
+//       });
+
+//       const updatedLikes = response.data.likes;
+//       setLikes(updatedLikes);
+//     } catch (error) {
+//       console.log("Error handling like:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const canUpdate = isUserCreatePost === isUserCanUpdate;
+
+//   return (
+//     <div className="w-[590px] h-auto p-3 rounded-md shadow-md mx-auto flex flex-col gap-2 bg-[#fdfcf6]">
+//       <div className="flex justify-between items-center">
+//         <div className="flex gap-3 mt-1">
+//           <img className="w-10 h-10 rounded-full" src={post.userId?.image} alt="profile" />
+//           <div>
+//             <p className="text-sm font-bold flex items-center">{post.userId?.username}</p>
+//             <p className="text-sm">{relativeTime}</p>
 //           </div>
 //         </div>
+//         <div className="flex">
+//           {canUpdate && (
+//             <Settings2 width={30} height={30} className="hover:bg-[#f2eee9] rounded-full p-1" onClick={handleOpen} />
+//           )}
+//           <DeletePostModal post={post} />
+//         </div>
+//       </div>
+//       <div className="pl-1 text-gray-700 font-medium text-sm leading-relaxed break-words">{post.content}</div>
+
+//       {post.image && <img className="rounded-md" src={post.image} alt="" />}
+//       {isOpen && (
+//         <UpdatePostModal
+//           isOpen={isOpen}
+//           setIsOpen={setIsOpen}
+//           image={image}
+//           setImage={setImage}
+//           setImagePreview={setImagePreview}
+//           handleFileChange={handleFileChange}
+//           imagePreview={imagePreview}
+//           post={post}
+//         />
 //       )}
+
+//       <div className="flex justify-between text-right pr-1">
+//         <div className="pl-2 flex gap-1">
+//           <AllLikes postId={post._id} likes={likes} setLikes={setLikes} setIsLiked={setIsLiked} />
+//           <ThumbsUp
+//             width={20}
+//             height={20}
+//             fontWeight={1}
+//             color="#335141"
+//             onClick={handleLiked}
+//             disabled={loading}
+//           />
+//         </div>
+//         <Link href={`/createPost/${post._id}`}>Сэтгэгдэл харах</Link>
+//       </div>
+
+//       <div className="flex w-[558px] border-t-[1px] pt-3">
+//         <ClickButton
+//           src="https://cdn-icons-png.flaticon.com/512/126/126473.png"
+//           desc="Таалагдлаа"
+//           clickhandler={handleLiked}
+//           className={isLiked ? "text-[#335141] font-medium" : ""}
+//         />
+//         <ClickButton
+//           src="https://static-00.iconduck.com/assets.00/comment-icon-1024x964-julk98bl.png"
+//           desc="Сэтгэгдэл"
+//           clickhandler={handleCommentOpen}
+//         />
+//       </div>
+
+//       <div className="w-[100%] relative">
+//         {commentIsOpen && (
+//           <CommentComponent
+//             commentIsOpen={commentIsOpen}
+//             setCommentIsOpen={setCommentIsOpen}
+//             image={image}
+//             setImage={setImage}
+//             setImagePreview={setImagePreview}
+//             handleFileChange={handleFileChange}
+//             imagePreview={imagePreview}
+//             post={post}
+//           />
+//         )}
+//         {pathname !== "/createPost" && <AllComments postId={post._id} />}
+//       </div>
 //     </div>
 //   );
 // };
-
-// export default PaymentQRCode;

@@ -33,6 +33,7 @@ interface TheraDetail {
 }
 
 export interface Specialist {
+  email: string;
   authId: string;
   username: string;
   theraDetail: TheraDetail | null;
@@ -45,6 +46,8 @@ const Therapist = () => {
   const { user } = useUser();
   const [selectedSpecialist, setSelectedSpecialist] =
     useState<Specialist | null>(null);
+
+  const [test, setTest] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,7 +108,6 @@ const Therapist = () => {
                         Тайлбар
                       </Button>
                     </DialogTrigger>
-
                     <DialogContent className="max-w-[1900px] h-[900px]">
                       <DialogHeader>
                         <VisuallyHidden>
@@ -113,6 +115,7 @@ const Therapist = () => {
                         </VisuallyHidden>
                       </DialogHeader>
                       <TherapistDescription
+                        specialist={specialist}
                         selectedSpecialist={selectedSpecialist}
                       />
                     </DialogContent>
@@ -121,8 +124,11 @@ const Therapist = () => {
                 <TableCell className="text-center font-medium">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button className="text-black bg-white border-2 border-black hover:bg-black hover:text-white">
-                        Дэлгэрэнгүй
+                      <Button
+                        onClick={() => setTest(specialist)}
+                        className="text-black bg-white border-2 border-black hover:bg-black hover:text-white"
+                      >
+                        Цаг захиалга
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -131,20 +137,16 @@ const Therapist = () => {
                           <DialogTitle>Сэтгэл зүйчийн дэлгэрэнгүй</DialogTitle>
                         </VisuallyHidden>
                       </DialogHeader>
-                      <div>
-                        <div>
+                      <div className="flex  flex-col items-center">
+                        <div className="flex items-center mb-12  gap-12 flex-col">
                           <img
                             src={user?.imageUrl || "/default-avatar.png"}
                             alt="User Profile"
                             className="rounded-full w-16 h-16"
                           />
-                          <div>{specialist.username}</div>
-                          <div>
-                            {specialist.theraDetail?.description ||
-                              "No description available."}
-                          </div>
+                          <div className="font-bold">{specialist.username}</div>
                         </div>
-                        <NewCalendar />
+                        <NewCalendar specialist={specialist} />
                       </div>
                     </DialogContent>
                   </Dialog>
