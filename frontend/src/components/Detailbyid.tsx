@@ -12,7 +12,7 @@ interface TheraDetail {
 }
 
 interface DetailData {
-  someProperty: string; // Adjust the type according to the actual data structure
+  someProperty: string;
 }
 
 const Detailbyid = () => {
