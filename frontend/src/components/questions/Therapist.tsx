@@ -1,20 +1,23 @@
 "use client";
 
 import { StepComponentPropsTypes } from "@/app/userDetail/page";
-import { GoArrowRight } from "react-icons/go";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
 
-const Therapist = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
+const Therapist = ({ nextHandler }: StepComponentPropsTypes) => {
+  const { user } = useUser();
   const [selectedValue, setSelectedValue] = useState<string>("");
   const router = useRouter();
 
-  const handleSelectClick = () => {
-    if (selectedValue === "Эр") {
-      // Redirect to localhost:3000
-      router.push("/therapistDetail");
-    } else if (selectedValue === "Эм") {
-      formHandler({ gender: selectedValue });
+  const handleSelectClick = async () => {
+    if (selectedValue === "Сэтгэл зүйч") {
+      await axios.post(`http://localhost:8000/user/isthera`, {
+        authId: user?.id,
+      }),
+        router.push("/therapistDetail");
+    } else {
       nextHandler();
     }
   };
@@ -29,18 +32,22 @@ const Therapist = ({ nextHandler, formHandler }: StepComponentPropsTypes) => {
 
           <div className="flex flex-col items-center mt-[20px]">
             <button
-              onClick={() => setSelectedValue("Эр")}
+              onClick={() => setSelectedValue("Сэтгэл зүйч")}
               className={`w-[500px] h-[80px] mb-[10px] rounded-xl ${
-                selectedValue === "Эр" ? "border-[#ffcc00]" : "border-[#deebc0]"
+                selectedValue === "Сэтгэл зүйч"
+                  ? "border-[#ffcc00]"
+                  : "border-[#deebc0]"
               } border-[3px] p-[10px] text-center text-[#325343] font-bold`}
             >
               Сэтгэл зүйч
             </button>
 
             <button
-              onClick={() => setSelectedValue("Эм")}
+              onClick={() => setSelectedValue("Үйлчлүүлэгч")}
               className={`w-[500px] h-[80px] mb-[10px] rounded-xl ${
-                selectedValue === "Эм" ? "border-[#00ff00]" : "border-[#deebc0]"
+                selectedValue === "Үйлчлүүлэгч"
+                  ? "border-[#00ff00]"
+                  : "border-[#deebc0]"
               } border-[3px] p-[10px] text-center text-[#325343] font-bold`}
             >
               Үйлчлүүлэгч

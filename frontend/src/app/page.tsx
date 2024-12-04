@@ -9,22 +9,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const Page = () => {
-  console.log("hho");
-
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFirstLogin, setIsFirstLogin] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
     const getUserDetails = async () => {
       setIsLoading(true);
-
-      if (!user?.id) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
         const [detailResponse, theraDetailResponse] = await Promise.all([
           axios.get(`https://if-project8.onrender.com/user/detail/${user?.id}`),
@@ -36,29 +27,22 @@ const Page = () => {
         const detailData = detailResponse.data;
         const theraDetailData = theraDetailResponse.data;
 
-        console.log("Detail Data:", detailData);
-        console.log("Thera Detail Data:", theraDetailData);
-
         if (!detailData.form && !theraDetailData.form) {
           router.push("/userDetail");
         }
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data", error);
+        setIsLoading(false);
       } finally {
         setIsLoading(false);
       }
     };
-
-    if (user?.id) {
-      getUserDetails();
-    } else {
-      setIsLoading(false);
-    }
+    getUserDetails();
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    console.log("Error adding user:");
-
     const addUserToDatabase = async () => {
       try {
         const { data } = await axios.post(
@@ -86,10 +70,10 @@ const Page = () => {
       }
     };
 
-    if (user && isFirstLogin) {
+    if (user) {
       addUserToDatabase();
     }
-  }, [user, isFirstLogin]);
+  }, [user]);
 
   if (isLoading) {
     return (

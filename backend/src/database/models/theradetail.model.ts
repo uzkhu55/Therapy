@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const theraDetailSchema = new mongoose.Schema({
+  name: { type: String, required: false },
   gender: { type: String, required: false },
   age: { type: String, required: false },
-  relationshipStatus: { type: String, required: false },
-  prevTherapy: { type: String, required: false },
-  lookingFor: { type: String, required: false },
+  year: { type: String, required: false },
+  zuvluguu: { type: String, required: false },
   expectations: { type: String, required: true },
   form: { type: Boolean, required: true },
   authId: { type: String, required: true, unique: true }, // Linking to user by ID
