@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "./homePage/Header";
 
-// Define the types for the data
 interface TheraDetail {
-  authId: string; // Define authId as a string
-  expectations: string; // Adjust other fields as needed
+  authId: string;
+  expectations: string;
 }
 
 interface DetailData {
-  someProperty: string; // Adjust the type according to the actual data structure
+  someProperty: string;
 }
 
 const Detailbyid = () => {

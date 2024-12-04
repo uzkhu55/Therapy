@@ -1,10 +1,7 @@
-import Footer from "@/components/homePage/Footer";
-import Header from "@/components/homePage/Header";
 import { AllNews } from "@/components/post-card/AllNews";
 import { AllPosts } from "@/components/post-card/AllPosts";
 import { CreatePost } from "@/components/post-card/CreatePost";
 import Sidebar from "@/components/post-card/SideBar";
-import { DotIcon } from "lucide-react";
 
 import React from "react";
 
