@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "./homePage/Header";
 
+// Define the types for the data
 interface TheraDetail {
-  authId: string;
-  expectations: string;
+  authId: string; // Define authId as a string
+  expectations: string; // Adjust other fields as needed
 }
 
 interface DetailData {
