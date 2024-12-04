@@ -16,8 +16,12 @@ import { neguser } from "../../controllers/usersController/neguser";
 import { upload, uploadFile } from "../../controllers/messageController/file";
 import { createTheraDetail } from "../../controllers/usersController/createTheraDetail";
 import { getTheraDetailById } from "../../controllers/usersController/getTheraDetailById";
+import { createAppointment } from "../../controllers/usersController/timeappointment";
+import { sendMailer } from "../../controllers/emailsender";
 
 const userRouter = Router();
+
+userRouter.route("/user/mail").post(sendMailer);
 
 userRouter.route("/user/signup").post(signUpController);
 userRouter.route("/user/setadmin").post(setAdmin);
@@ -27,6 +31,7 @@ userRouter.route("/user/userdetail").get(getUserdetailController);
 userRouter.route("/user/neguser").get(neguser);
 
 userRouter.route("/user/addmessage").post(addMessage);
+userRouter.route("/user/appointment").post(createAppointment);
 
 userRouter.route("/user/myConvorsations/:myId").get(getMyConversations);
 

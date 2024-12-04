@@ -119,12 +119,7 @@ const Header: React.FC<ComponentProps> = ({
                   </Link>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <div
-                className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
-              >
-                <Bell />
-                <div className="text-xs">Мэдэгдэл</div>
-              </div>
+
               <div
                 className={`flex flex-col top-2 md:top-2 relative w-[40px] md:w-[80px] md:h-[80px] text-white ${bg} h-[40px] items-center gap-2 justify-center`}
               >
