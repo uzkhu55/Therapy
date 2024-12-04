@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import Header from "./homePage/Header";
@@ -18,6 +19,8 @@ import { useRouter } from "next/navigation";
 import { Loading } from "./Loading";
 import { Button } from "./ui/button";
 import { useSearchParams } from "next/navigation";
+import TypingIndicator from "./TypingIndicator";
+
 interface Detail {
   username: string;
   _id: string;
@@ -55,6 +58,8 @@ const Chat: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [sentMEssage, setSentMessage] = useState<boolean>(false);
   const [chosenUserId, setChosenUserId] = useState<string>("");
+  const [isTyping, setIsTyping] = useState(false);
+
   const [room, setRoom] = useState<string>("chat-room");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [searchValue, setSearchValue] = useState("");
@@ -154,25 +159,7 @@ const Chat: React.FC = () => {
         setRecentChats((prevChats) => [username, ...prevChats]);
       }
       router.replace(`/chat?username=${username}`);
-
-      // setChosenUserId(chosenUserId);
-      // localStorage.setItem("chosenUserId", chosenUserId);
-
-      // const isThereConversationExisting = await axios.get(
-      //   `https://if-project8.onrender.com/getUsersConversation?userOne=${user?.id}&userTwo=${chosenUserId}`
-      // );
-
-      // if (!isThereConversationExisting.data.message) {
-      //   setGetmessages([]);
-      //   return;
-      // }
-
-      // const getConversationMessages = await axios.get(
-      //   `https://if-project8.onrender.com/user/getmessage/${isThereConversationExisting.data.conversations._id}`
-      // );
-      // setGetmessages(getConversationMessages.data);
       setSearchValue("");
-      // scrollToBottom();
     } catch (error) {
       console.error("Error adding to recent chats:", error);
     }
@@ -187,33 +174,6 @@ const Chat: React.FC = () => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  // const uploadAttachments = async (files: File[]) => {
-  //   const uploadedUrls: string[] = [];
-
-  //   for (const file of files) {
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-
-  //     try {
-  //       const response = await axios.post(
-  //         "https://if-project8.onrender.com/upload",
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       );
-
-  //       uploadedUrls.push(response.data.url);
-  //     } catch (error: any) {
-  //       throw new Error(`Error uploading file: ${file.name}`);
-  //     }
-  //   }
-
-  //   return uploadedUrls;
-  // };
 
   const addMessage = async () => {
     if (inputValue.trim() === "" && attachments.length === 0) {
@@ -268,16 +228,31 @@ const Chat: React.FC = () => {
   };
 
   useEffect(() => {
+    // Join the room when the component mounts
     socket.emit("join-room", room);
 
+    // Handle incoming chat messages
     socket.on("chat-message", (newMessage: Message) => {
       setGetmessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
+    // Show typing indicator when "user-typing" event is received
+    socket.on("user-typing", () => {
+      setIsTyping(true);
+    });
+
+    // Hide typing indicator when "user-stop-typing" event is received
+    socket.on("user-stop-typing", () => {
+      setIsTyping(false);
+    });
+
+    // Cleanup listeners on unmount
     return () => {
       socket.off("chat-message");
+      socket.off("user-typing");
+      socket.off("user-stop-typing");
     };
-  }, [sentMEssage]);
+  }, [room]); // Only runs when the room changes
 
   useEffect(() => {
     if (inputRef.current) {
@@ -299,18 +274,18 @@ const Chat: React.FC = () => {
     }
   };
   return (
-    <div className="h-screen w-screen gap-12  flex flex-col bg-white">
+    <div className="h-screen w-screen gap-12 flex flex-col bg-white">
       <Header />
-      <div className="flex absolute h-screen  w-screen top-80px bg-white">
-        <div className="flex relative w-full h-[978px]  rounded-lg top-[81px]">
+      <div className="flex absolute h-full w-full bg-white">
+        <div className="flex relative w-full lg:h-[89%] md:h-[90%] h-[90%] rounded-lg top-[81px]">
           <div
             className={`${
               isSidebarVisible
-                ? "translate-x-0 w-1/4  "
-                : "-translate-x-full w-24 "
+                ? "translate-x-0 w-1/4"
+                : "-translate-x-full w-24"
             } transform transition-all duration-300 ease-in-out flex h-full rounded-l-lg bg-[#f3f3f3] text-black overflow-hidden`}
           >
-            <div className="flex w-[100%] flex-col">
+            <div className="flex w-full flex-col">
               <div className="flex w-[97%] bg-white rounded-2xl p-5 m-[10px] items-center justify-evenly">
                 <div className="font-bold text-xl pl-8 text-[#325343]">
                   Chat
@@ -322,14 +297,13 @@ const Chat: React.FC = () => {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                   />
-
-                  <div className="absolute flex flex-col gap-2 top-14 bg-white rounded-xl shadow-md z-10 w-full">
+                  <div className="absolute flex flex-col gap-2 top-14 rounded-xl z-10 w-full">
                     {searchValue &&
                       getUserdetail
                         .filter((user) =>
                           user.username
-                            .toLocaleLowerCase()
-                            .includes(searchValue.toLocaleLowerCase())
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
                         )
                         .map((el, index) => (
                           <div
@@ -359,21 +333,20 @@ const Chat: React.FC = () => {
                     getUserdetail
                       .filter((el) => recentChats.includes(el.username))
                       .map((el, index) => (
-                        <div key={index} className="flex  items-center">
+                        <div key={index} className="flex items-center gap-2">
                           <div
-                            className="p-2 w-[400px] bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
+                            className="p-2 flex items-center gap-4 w-[400px] bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
                             onClick={() => handleAddToRecentChats(el.username)}
                           >
+                            <img
+                              src={
+                                avatar[index % avatar.length]?.img ||
+                                "/default-avatar.png"
+                              }
+                              alt={`Avatar of ${el.username}`}
+                              className="w-10 h-10 rounded-full"
+                            />
                             <div className="text-sm font-serif">
-                              {avatar.map((el, index) => (
-                                <div key={index}>
-                                  <img
-                                    src={el.img}
-                                    className="w-6 h-6"
-                                    alt={`avatar-${index}`}
-                                  />
-                                </div>
-                              ))}
                               {el.username}
                             </div>
                           </div>
@@ -388,19 +361,19 @@ const Chat: React.FC = () => {
           </div>
           <div
             className={`${
-              isSidebarVisible ? "w-3/4" : " w-full"
+              isSidebarVisible ? "w-3/4" : "w-full"
             } bg-[#f3f3f3] flex flex-col rounded-r-lg transition-all duration-300 ease-in-out`}
           >
-            <div className=" py-2 rounded-lg absolute top-[28px] left-6">
+            <div className="py-2 rounded-lg absolute top-[25px] left-6">
               <button
                 onClick={toggleSidebar}
-                className=" top z-50 p-2 bg-[#325342] text-xs flex flex-col text-white rounded-full shadow-md"
+                className="z-50 p-2 bg-[#325342] text-xs flex flex-col text-white rounded-full shadow-md"
               >
                 {isSidebarVisible ? "Hide" : "Show"}
               </button>
             </div>
             <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
-              <div className="flex items-center  gap-4">
+              <div className="flex items-center gap-4">
                 <img
                   src={user?.imageUrl || "/default-avatar.png"}
                   alt="User Profile"
@@ -477,7 +450,6 @@ const Chat: React.FC = () => {
                           </div>
                         )}
 
-                        {/* Format time based on sender */}
                         <div
                           className={`w-full text-sm ${
                             msg?.senderId?.authId !== user?.id
@@ -494,15 +466,25 @@ const Chat: React.FC = () => {
                   </div>
                 );
               })}
+              {isTyping && (
+                <div className="flex w-full justify-start">
+                  <div className="flex pl-4 pt-4 items-center gap-2">
+                    <img
+                      src="/default-avatar.png"
+                      alt="User Profile"
+                      className="rounded-full w-8 h-8"
+                    />
+                    <TypingIndicator />
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef}></div>
             </div>
-
             <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
               <div className="flex gap-4">
                 <Button variant="secondary" size="icon" className="shrink-0">
                   <SmilePlus className="w-5 h-5" />
                 </Button>
-
                 <Button
                   variant="secondary"
                   size="icon"
@@ -518,24 +500,6 @@ const Chat: React.FC = () => {
                   <Link2 className="w-5 h-5" />
                 </Button>
               </div>
-              {attachments.length > 0 && (
-                <div className="flex flex-wrap gap-2 ml-2">
-                  {attachments.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 p-2 bg-gray-200 rounded-lg"
-                    >
-                      <span>{file.name}</span>
-                      <button
-                        onClick={() => removeAttachment(index)}
-                        className="text-red-500"
-                      >
-                        ✖
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
               <input
                 type="text"
                 ref={inputRef}

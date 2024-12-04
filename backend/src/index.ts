@@ -33,14 +33,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-chat-message", async (message: Record<any, any>) => {
-    // const newMessage = new MessageModel({
-    //   senderId: message.user.authId,
-    //   content: message.inputValue,
-    //   timeStamp: new Date(),
-    //   isRead: false,
-    // });
-
-    // const result = await newMessage.save();
     const timeStamp = new Date();
 
     io.emit("chat-message", {
@@ -49,6 +41,17 @@ io.on("connection", (socket) => {
       senderId: { authId: message.user.authId },
       timeStamp: timeStamp,
     });
+  });
+  socket.on("typing", ({ room }: { room: string }) => {
+    if (room) {
+      socket.to(room).emit("user-typing", users[socket.id]?.name); // Sends the typing signal to all users in the room except the sender
+    }
+  });
+
+  socket.on("stop-typing", ({ room }: { room: string }) => {
+    if (room) {
+      socket.to(room).emit("user-stop-typing", users[socket.id]?.name); // Sends the stop-typing signal
+    }
   });
 
   // Handle user disconnection

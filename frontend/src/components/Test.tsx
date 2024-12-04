@@ -1,176 +1,78 @@
-// "use client";
-// import React, { useState, useEffect } from "react";
-// import { ClickButton } from "./ClickButton";
-// import { Settings2, ThumbsUp } from "lucide-react";
-// import { UpdatePostModal } from "./UpdatePostModal";
-// import { DeletePostModal } from "./DeletePostModal";
-// import { CommentComponent } from "./CommentComponent";
-// import { AllComments } from "./AllComments";
-// import { usePathname } from "next/navigation";
-// import Link from "next/link";
-// import { formatDistanceToNow } from "date-fns";
-// import { useUser } from "@clerk/clerk-react";
-// import axios from "axios";
-// import { AllLikes, LikeModelType } from "./AllLikes";
+// import express, { Request, Response } from "express";
+// import http from "http";
+// import { Server } from "socket.io";
+// import cors from "cors";
+// import { connectDataBase } from "./database/config";
+// import { MessageModel } from "./database/models/message.model";
+// import userRouter from "./routers/users/userRouters";
+// import postRouter from "./routers/postRouter/postsRouter";
+// import cloudflareRouter from "./routers/cloudflareRouter";
 
-// interface PostProps {
-//   post: PostData;
-// }
+// require("dotenv").config();
 
-// export type PostData = {
-//   _id: string;
-//   userId: { image?: string; username?: string; authId?: string };
-//   image: string;
-//   comments: { image: string; username: string; authId?: string };
-//   content: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
+// connectDataBase();
+// const app = express();
+// app.use(express.json());
 
-// export const Post: React.FC<PostProps> = ({ post }) => {
-//   const pathname = usePathname();
-//   const { user } = useUser();
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: true, // Allow all origins
+//     methods: ["GET", "POST"],
+//   },
+// });
 
-//   const [image, setImage] = useState<File | null>(null);
-//   const [imagePreview, setImagePreview] = useState<string>("null");
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [commentIsOpen, setCommentIsOpen] = useState(false);
-//   const [loading, setLoading] = useState(false);
-//   const [isLiked, setIsLiked] = useState(false);
-//   const [likes, setLikes] = useState<LikeModelType[]>([]);
+// const users: { [key: string]: { name: string; room: string } } = {};
+// io.on("connection", (socket) => {
+//   socket.on("join-room", (room: string, name: string) => {
+//     users[socket.id] = { name, room };
 
-//   // Fetch likes when the component mounts
-//   useEffect(() => {
-//     const fetchLikes = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:8000/posts/getLikes/${post._id}`);
-//         setLikes(response.data.likes);
-//       } catch (error) {
-//         console.log("Error fetching likes:", error);
-//       }
-//     };
+//     socket.join(room);
 
-//     fetchLikes();
-//   }, [post._id]);
+//     socket.to(room).emit("user-connected", name);
+//   });
 
-//   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     if (event.target.files && event.target.files[0]) {
-//       const file = event.target.files[0];
-//       setImage(file);
-//       const imageprev = URL.createObjectURL(file);
-//       setImagePreview(imageprev);
+//   socket.on("send-chat-message", async (message: Record<any, any>) => {
+//     const timeStamp = new Date();
+
+//     io.emit("chat-message", {
+//       isRead: true,
+//       content: message.inputValue,
+//       senderId: { authId: message.user.authId },
+//       timeStamp: timeStamp,
+//     });
+//   });
+
+//   // Add typing event handlers
+//   socket.on("typing", ({ room }) => {
+//     socket.to(room).emit("user-typing", users[socket.id]?.name);
+//   });
+
+//   socket.on("stop-typing", ({ room }) => {
+//     socket.to(room).emit("user-stop-typing", users[socket.id]?.name);
+//   });
+
+//   // Handle user disconnection
+//   socket.on("disconnect", () => {
+//     const userName = users[socket.id]?.name || "Anonymous";
+//     const room = users[socket.id]?.room;
+
+//     if (room) {
+//       socket.to(room).emit("user-disconnected", userName);
 //     }
-//   };
 
-//   const handleOpen = () => setIsOpen(true);
-//   const handleCommentOpen = () => setCommentIsOpen(true);
+//     delete users[socket.id];
+//   });
+// });
 
-//   function getRelativeTime(date: Date): string {
-//     return formatDistanceToNow(date, { addSuffix: true });
-//   }
+// app.use(cors());
+// app.use("/", userRouter);
+// app.use("/", postRouter);
+// app.use("/", cloudflareRouter);
 
-//   const relativeTime = post.createdAt ? getRelativeTime(new Date(post.createdAt)) : "N/A";
+// server.listen(process.env.PORT || 8000, () => {
+//   console.log("Server running on port 8000");
+// });
 
-//   const isUserCreatePost = user?.id;
-//   const isUserCanUpdate = post.userId?.authId;
-
-//   const handleLiked = async () => {
-//     setLoading(true);
-//     setIsLiked((prev) => !prev);
-//     try {
-//       const response = await axios.post("http://localhost:8000/posts/createLike", {
-//         authId: user?.id,
-//         _id: post._id,
-//       });
-
-//       const updatedLikes = response.data.likes;
-//       setLikes(updatedLikes);
-//     } catch (error) {
-//       console.log("Error handling like:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const canUpdate = isUserCreatePost === isUserCanUpdate;
-
-//   return (
-//     <div className="w-[590px] h-auto p-3 rounded-md shadow-md mx-auto flex flex-col gap-2 bg-[#fdfcf6]">
-//       <div className="flex justify-between items-center">
-//         <div className="flex gap-3 mt-1">
-//           <img className="w-10 h-10 rounded-full" src={post.userId?.image} alt="profile" />
-//           <div>
-//             <p className="text-sm font-bold flex items-center">{post.userId?.username}</p>
-//             <p className="text-sm">{relativeTime}</p>
-//           </div>
-//         </div>
-//         <div className="flex">
-//           {canUpdate && (
-//             <Settings2 width={30} height={30} className="hover:bg-[#f2eee9] rounded-full p-1" onClick={handleOpen} />
-//           )}
-//           <DeletePostModal post={post} />
-//         </div>
-//       </div>
-//       <div className="pl-1 text-gray-700 font-medium text-sm leading-relaxed break-words">{post.content}</div>
-
-//       {post.image && <img className="rounded-md" src={post.image} alt="" />}
-//       {isOpen && (
-//         <UpdatePostModal
-//           isOpen={isOpen}
-//           setIsOpen={setIsOpen}
-//           image={image}
-//           setImage={setImage}
-//           setImagePreview={setImagePreview}
-//           handleFileChange={handleFileChange}
-//           imagePreview={imagePreview}
-//           post={post}
-//         />
-//       )}
-
-//       <div className="flex justify-between text-right pr-1">
-//         <div className="pl-2 flex gap-1">
-//           <AllLikes postId={post._id} likes={likes} setLikes={setLikes} setIsLiked={setIsLiked} />
-//           <ThumbsUp
-//             width={20}
-//             height={20}
-//             fontWeight={1}
-//             color="#335141"
-//             onClick={handleLiked}
-//             disabled={loading}
-//           />
-//         </div>
-//         <Link href={`/createPost/${post._id}`}>Сэтгэгдэл харах</Link>
-//       </div>
-
-//       <div className="flex w-[558px] border-t-[1px] pt-3">
-//         <ClickButton
-//           src="https://cdn-icons-png.flaticon.com/512/126/126473.png"
-//           desc="Таалагдлаа"
-//           clickhandler={handleLiked}
-//           className={isLiked ? "text-[#335141] font-medium" : ""}
-//         />
-//         <ClickButton
-//           src="https://static-00.iconduck.com/assets.00/comment-icon-1024x964-julk98bl.png"
-//           desc="Сэтгэгдэл"
-//           clickhandler={handleCommentOpen}
-//         />
-//       </div>
-
-//       <div className="w-[100%] relative">
-//         {commentIsOpen && (
-//           <CommentComponent
-//             commentIsOpen={commentIsOpen}
-//             setCommentIsOpen={setCommentIsOpen}
-//             image={image}
-//             setImage={setImage}
-//             setImagePreview={setImagePreview}
-//             handleFileChange={handleFileChange}
-//             imagePreview={imagePreview}
-//             post={post}
-//           />
-//         )}
-//         {pathname !== "/createPost" && <AllComments postId={post._id} />}
-//       </div>
-//     </div>
-//   );
-// };
+// // Log to confirm the typing events are set up
+// console.log("Server is set up with typing event handlers");
