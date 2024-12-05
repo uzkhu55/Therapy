@@ -8,11 +8,11 @@ import React from "react";
 const page = async () => {
   return (
     <div>
-      <div className="flex justify-between bg-[#f2eee9] w-full min-h-screen">
+      <div className="flex justify-between bg-[#f2eee9] w-full  min-h-screen ">
         <div>
           <Sidebar />
         </div>
-        <div className="flex flex-col gap-4 mx-auto overflow-y-auto h-screen">
+        <div className="flex flex-col gap-4 mx-auto overflow-y-auto h-screen ">
           <CreatePost />
           <AllPosts />
         </div>
