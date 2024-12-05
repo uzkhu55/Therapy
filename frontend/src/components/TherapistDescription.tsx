@@ -33,6 +33,7 @@ const systolicData = [
 ];
 interface TherapistDescriptionProps {
   selectedSpecialist?: Specialist | null;
+  specialist: { authId: string; email: string; username: string };
 }
 interface ChatButtonProps {
   selectedSpecialist: { username: string; userId: string };
@@ -40,6 +41,7 @@ interface ChatButtonProps {
 
 const TherapistDescription: React.FC<TherapistDescriptionProps> = ({
   selectedSpecialist,
+  specialist,
 }) => {
   const { user } = useUser();
   const [isDescriptionOpen, setDescriptionOpen] = useState(false);
@@ -79,27 +81,27 @@ const TherapistDescription: React.FC<TherapistDescriptionProps> = ({
         <Link href={`/chat?username=${selectedSpecialist?.username}`}>
           <Button>Чатаар холбогдох</Button>
         </Link>
-        <Dialog open={isDetailsOpen} onOpenChange={setDetailsOpen}>
+        {/* <Dialog open={isDetailsOpen} onOpenChange={setDetailsOpen}>
           <DialogTrigger asChild>
             <Button onClick={openDetailsModal}>Цаг захиалах</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Сэтгэл зүйчийн дэлгэрэнгүй</DialogTitle>
+              <DialogTitle></DialogTitle>
             </DialogHeader>
-            <div>
-              <div>
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center">
                 <img
                   src={user?.imageUrl || "/default-avatar.png"}
                   alt="User Profile"
                   className="rounded-full w-16 h-16"
                 />
                 <div>{user?.username}</div>
-                <NewCalendar />
+                <NewCalendar specialist={specialist} />
               </div>
             </div>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
       <main className="p-6">
         <div className="flex  gap-6">

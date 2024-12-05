@@ -6,7 +6,7 @@ import { Section2svg } from "./Section2svg";
 const Section2 = () => {
   return (
     <div className="flex flex-col bg-white px-4 md:px-6 lg:px-8 relative">
-      <div className="max-w-[1120px] mx-auto mb-[220px] mt-[30px] z-50">
+      <div className="max-w-[1120px] mx-auto mb-[220px] mt-[30px] z-40">
         <div className="w-full text-[#102d3f] text-[28px] sm:text-[32px] md:text-[38px] lg:text-[42px] font-medium font-['Rubik'] mb-[64px] break-words text-start sm:text-left">
           Таны хэрэгцээнд нийцсэн олон төрлийн{" "}
           <br className="hidden md:block" />

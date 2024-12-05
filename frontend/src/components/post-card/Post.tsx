@@ -64,7 +64,6 @@ export const Post: React.FC<PostProps> = ({ post }) => {
     : "N/A";
 
   const { user } = useUser();
-  console.log(user);
 
   const isUserCreatePost = user?.id;
   const isUserCanUpdate = post.userId?.authId;

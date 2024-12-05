@@ -1,32 +1,21 @@
-import { Schema, Model, models, model, ObjectId } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
-enum status {
-  pending = "PENDING",
-  confirmed = "CONFIRMED",
-  cancelled = "CANCELED",
-}
-export type AppointmentModelType = {
-  _id: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
-  specialistId: Schema.Types.ObjectId;
-  date: Date;
-  status: status;
+interface Appointment extends Document {
+  date: string;
+  time: string;
+  idOne: string;
+  idTwo: string;
   createdAt: Date;
-  updatedAt: Date;
-};
+}
 
-const AppointmentSchema = new Schema<AppointmentModelType>({
-  userId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-  specialistId: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-  status: {
-    type: String,
-    enum: ["CONFIRMED", "PENDING", "CANCELED"],
-    required: true,
-  },
-  createdAt: { type: Date, default: Date.now, required: true, immutable: true },
-  updatedAt: { type: Date, default: Date.now, required: true },
+const appointmentSchema = new Schema<Appointment>({
+  idOne: { type: String, required: true },
+  idTwo: { type: String, required: true },
+  date: { type: String, required: true },
+  time: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export const UserModel: Model<AppointmentModelType> =
-  models["Appointment"] ||
-  model<AppointmentModelType>("Appointment", AppointmentSchema);
+const AppointmentModel = model<Appointment>("Appointment", appointmentSchema);
+
+export default AppointmentModel;
