@@ -16,6 +16,9 @@ import { neguser } from "../../controllers/usersController/neguser";
 import { upload, uploadFile } from "../../controllers/messageController/file";
 import { createTheraDetail } from "../../controllers/usersController/createTheraDetail";
 import { getTheraDetailById } from "../../controllers/usersController/getTheraDetailById";
+import { isThrepapist } from "../../controllers/usersController/isTherapist";
+import { createAppointment } from "../../controllers/usersController/timeappointment";
+import { sendMailer } from "../../controllers/emailsender";
 
 const userRouter = Router();
 
