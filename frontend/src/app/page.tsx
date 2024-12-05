@@ -48,15 +48,13 @@ const Page = () => {
   useEffect(() => {
     const addUserToDatabase = async () => {
       try {
-        const { data } = await axios.post(
-          "https://if-project8.onrender.com/user/signup",
-          {
-            username: user?.username,
-            email: user?.primaryEmailAddress?.emailAddress,
-            authId: user?.id,
-          }
-        );
-        if (data != "Already registered") {
+        const { data } = await axios.post("http://localhost:8000/user/signup", {
+          username: user?.username,
+          email: user?.primaryEmailAddress?.emailAddress,
+          authId: user?.id,
+        });
+
+        if (data != "Profile updated successfully") {
           toast.success("Logged in successfully!");
         }
 
@@ -66,8 +64,6 @@ const Page = () => {
           authId: user?.id,
           image: user?.imageUrl,
         });
-
-        toast.success("Logged in successfully!");
       } catch (error) {
         console.log("Error adding user:", error);
       }

@@ -29,7 +29,7 @@ userRouter.route("/user/setadmin").post(setAdmin);
 userRouter.route("/upload").post(upload.single("file"), uploadFile); // .single("file") for a single file upload
 
 userRouter.route("/user/userdetail").get(getUserdetailController);
-userRouter.route("/user/neguser").get(neguser);
+userRouter.route("/user/neguser/:authId").get(neguser);
 
 userRouter.route("/user/addmessage").post(addMessage);
 userRouter.route("/user/appointment").post(createAppointment);

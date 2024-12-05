@@ -4,14 +4,15 @@ import { Bell, CircleUserRound } from "lucide-react";
 import Logo from "./Logo";
 import Account from "./Account";
 import Notifications from "./Notificatoin";
+import Link from "next/link";
 
 const AdminHeader = () => {
   return (
     <div className="flex w-full flex-col gap-3  ">
       <div className="flex top-5 left-40 flex-row items-center justify-between ">
-        <div className="flex">
+        <Link href="/" className="flex">
           <Logo />
-        </div>
+        </Link>
         <div className="flex flex-row gap-5">
           <button>
             <Notifications />

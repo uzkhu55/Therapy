@@ -16,7 +16,7 @@ type ClientData = {
   authId: string;
   createdAt: string;
   email: string;
-  image: string[];
+  image: string;
   isSpecialist: false;
   updatedAt: string;
   username: string;
@@ -69,7 +69,7 @@ const Clients = () => {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <img
-                      src={client.image?.[0]}
+                      src={client.image}
                       alt="profile"
                       className="w-8 h-8 rounded-full"
                     />

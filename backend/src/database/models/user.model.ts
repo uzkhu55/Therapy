@@ -4,6 +4,7 @@ export type UsersModelType = {
   _id: Schema.Types.ObjectId;
   username: string;
   authId: string;
+  isAdmin: boolean;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -22,6 +23,7 @@ const UserSchema = new Schema<UsersModelType>({
   username: { type: String, required: true },
   firstName: { type: String, required: false },
   authId: { type: String, required: true },
+  isAdmin: { type: Boolean, required: false },
   lastName: { type: String, required: false },
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: false },

@@ -59,11 +59,6 @@ const Specialist = () => {
                 <TableCell className="font-medium">{i + 1}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <img
-                      src={specialist.image[0]}
-                      alt="profile"
-                      className="w-8 h-8 rounded-full"
-                    />
                     <p> {specialist.email}</p>
                   </div>
                 </TableCell>

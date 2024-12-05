@@ -1,78 +1,74 @@
-// import express, { Request, Response } from "express";
-// import http from "http";
-// import { Server } from "socket.io";
-// import cors from "cors";
-// import { connectDataBase } from "./database/config";
-// import { MessageModel } from "./database/models/message.model";
-// import userRouter from "./routers/users/userRouters";
-// import postRouter from "./routers/postRouter/postsRouter";
-// import cloudflareRouter from "./routers/cloudflareRouter";
+// "use client";
 
-// require("dotenv").config();
+// import { useEffect, useState } from "react";
+// import AdminHeader from "./AdminHeader";
+// import SideBar from "./SideBar";
+// import Specialist from "./Specialist";
+// import Analytics from "./Analytics";
+// import Settings from "./Settings";
+// import Clients from "./Clients";
+// import { AdminAllPost } from "./Post";
+// import axios from "axios";
+// import { useRouter } from "next/navigation";
 
-// connectDataBase();
-// const app = express();
-// app.use(express.json());
+// type AdminData = {
+//   authId: string;
+//   createdAt: string;
+//   email: string;
+//   image: string;
+//   isAdmin: boolean;
+//   updatedAt: string;
+//   username: string;
+//   _id: string;
+// };
 
-// const server = http.createServer(app);
-// const io = new Server(server, {
-//   cors: {
-//     origin: true, // Allow all origins
-//     methods: ["GET", "POST"],
-//   },
-// });
+// const Home = () => {
+//   const [toggle, setToggle] = useState("Clients");
+//   const [admin, setAdmin] = useState<AdminData | null>(null); // Updated to store a single admin object
+//   const router = useRouter();
 
-// const users: { [key: string]: { name: string; room: string } } = {};
-// io.on("connection", (socket) => {
-//   socket.on("join-room", (room: string, name: string) => {
-//     users[socket.id] = { name, room };
+//   const toggleHandler = (word: string) => {
+//     setToggle(word);
+//   };
 
-//     socket.join(room);
+//   useEffect(() => {
+//     const fetchAdmin = async () => {
+//       try {
+//         const response = await axios.get("http://localhost:8000/user/userdetail");
 
-//     socket.to(room).emit("user-connected", name);
-//   });
+//         if (response.data.isAdmin) {
+//           setAdmin(response.data); // Set the admin data if the user is an admin
+//         } else {
+//           router.push("/"); // Redirect non-admin users to the homepage
+//         }
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//         router.push("/"); // Redirect to homepage in case of an error
+//       }
+//     };
 
-//   socket.on("send-chat-message", async (message: Record<any, any>) => {
-//     const timeStamp = new Date();
+//     fetchAdmin();
+//   }, [router]);
 
-//     io.emit("chat-message", {
-//       isRead: true,
-//       content: message.inputValue,
-//       senderId: { authId: message.user.authId },
-//       timeStamp: timeStamp,
-//     });
-//   });
+//   if (!admin) {
+//     return null; // Render nothing while checking admin status
+//   }
 
-//   // Add typing event handlers
-//   socket.on("typing", ({ room }) => {
-//     socket.to(room).emit("user-typing", users[socket.id]?.name);
-//   });
+//   return (
+//     <div className="flex w-full flex-col">
+//       <div className="flex pt-4 mx-2">
+//         <AdminHeader />
+//       </div>
+//       <div className="flex flex-row gap-20 pt-12">
+//         <SideBar toggleHandler={toggleHandler} toggle={toggle} />
+//         {toggle === "Clients" && <Clients />}
+//         {toggle === "Specialist" && <Specialist />}
+//         {toggle === "Post" && <AdminAllPost />}
+//         {toggle === "Analytics" && <Analytics />}
+//         {toggle === "Setting" && <Settings />}
+//       </div>
+//     </div>
+//   );
+// };
 
-//   socket.on("stop-typing", ({ room }) => {
-//     socket.to(room).emit("user-stop-typing", users[socket.id]?.name);
-//   });
-
-//   // Handle user disconnection
-//   socket.on("disconnect", () => {
-//     const userName = users[socket.id]?.name || "Anonymous";
-//     const room = users[socket.id]?.room;
-
-//     if (room) {
-//       socket.to(room).emit("user-disconnected", userName);
-//     }
-
-//     delete users[socket.id];
-//   });
-// });
-
-// app.use(cors());
-// app.use("/", userRouter);
-// app.use("/", postRouter);
-// app.use("/", cloudflareRouter);
-
-// server.listen(process.env.PORT || 8000, () => {
-//   console.log("Server running on port 8000");
-// });
-
-// // Log to confirm the typing events are set up
-// console.log("Server is set up with typing event handlers");
+// export default Home;

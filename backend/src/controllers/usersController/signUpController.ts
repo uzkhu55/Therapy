@@ -12,6 +12,7 @@ export const signUpController = async (req: any, res: any) => {
       authId,
       email,
       image,
+      isAdmin: false,
     });
 
     res.status(201).send({ message: "User created successfully", data: user });

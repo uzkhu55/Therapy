@@ -24,6 +24,7 @@ type PostsData = {
   userId: userDataType;
   content: string;
   _id: string;
+  username: string;
 };
 
 type userDataType = {
@@ -51,8 +52,7 @@ export const AdminAllPost = () => {
     getAllPosts();
   }, []);
 
-  // console.log(posts, "postsposts");
-
+  console.log(posts, "postsposts");
   return (
     <div className="flex flex-col w-full gap-10">
       <div className="flex w-[600px] flex-row-reverse">
@@ -73,22 +73,22 @@ export const AdminAllPost = () => {
           </TableHeader>
           <TableBody>
             {posts
-              .filter((post) =>
-                post.userId.username
-                  .toLocaleLowerCase()
-                  .includes(inputValue.toLocaleLowerCase())
-              )
+              // .filter((post) =>
+              //   post.userId.email
+              //     .toLocaleLowerCase()
+              //     .includes(inputValue.toLocaleLowerCase())
+              // )
               .map((posts, i) => {
                 return (
                   <TableRow key={i}>
                     <TableCell className="font-medium">{i + 1}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <img
+                        {/* <img
                           src={posts.image?.[0]}
                           alt="profile"
                           className="w-8 h-8 rounded-full"
-                        />
+                        /> */}
                         <p>{posts.userId.email}</p>
                       </div>
                     </TableCell>
