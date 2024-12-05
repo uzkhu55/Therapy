@@ -25,7 +25,7 @@ const STEP_COMPONENTS = [Name, Age, Gender, Year, Zuvluguu, TheraExpectations];
 
 const TheraDetail: React.FC = () => {
   const router = useRouter();
-  const { isLoaded, user } = useUser();
+  const { user } = useUser();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -35,8 +35,9 @@ const TheraDetail: React.FC = () => {
     zuvluguu: "Хувь хүн",
     expectations: "Ярилцах",
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [isChecking, setIsChecking] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  console.log(formData, "formDataformDataformData");
 
   const RenderComponent = STEP_COMPONENTS[step];
 
@@ -61,9 +62,7 @@ const TheraDetail: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      setIsLoading(true);
-
-      await axios.post("https://if-project8.onrender.com/user/theradetail", {
+      await axios.post("http://localhost:8000/user/theradetail", {
         formData,
         authId: user?.id,
       });
@@ -74,36 +73,29 @@ const TheraDetail: React.FC = () => {
     } finally {
     }
   };
+
   useEffect(() => {
     const initializeUser = async () => {
       try {
-        if (!user) return;
-
-        setIsChecking(true);
-
         const { data } = await axios.get(
-          `https://if-project8.onrender.com/user/theradetail/${user.id}`
+          `https://if-project8.onrender.com/user/theradetail/${user?.id}`
         );
-        console.log({ data });
 
+        setLoading(false);
         if (data.form) {
           router.push("/");
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error initializing user:", error);
-      } finally {
-        setIsChecking(false);
+        setLoading(false);
       }
     };
-
-    if (isLoaded) {
+    if (user) {
       initializeUser();
     }
-  }, [isLoaded, user, router]);
+  }, [user]);
 
-  if (isChecking || isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
         <Loading />

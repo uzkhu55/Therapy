@@ -38,9 +38,12 @@ const Page = () => {
         setIsLoading(false);
       }
     };
-    getUserDetails();
+    if (user) {
+      getUserDetails();
+    }
+
     setIsLoading(false);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const addUserToDatabase = async () => {
