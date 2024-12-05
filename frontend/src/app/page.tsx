@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const Page = () => {
-  console.log("hho");
-
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFirstLogin, setIsFirstLogin] = useState<boolean>(true);
