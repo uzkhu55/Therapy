@@ -154,7 +154,13 @@ export const Post: React.FC<PostProps> = ({ post }) => {
             onClick={handleLiked}
           />
         </div>
-        <Link href={`/createPost/${post._id}`}> Сэтгэгдэл харах</Link>
+        <Link
+          className="hover:text-blue-600 hover:bg-blue-50 rounded-md p-2"
+          href={`/createPost/${post._id}`}
+        >
+          {" "}
+          Сэтгэгдэл харах
+        </Link>
       </div>
 
       <div className="flex w-[558px] border-t-[1px] pt-3">

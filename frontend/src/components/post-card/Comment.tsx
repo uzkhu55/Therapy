@@ -61,9 +61,17 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
       <div className="flex flex-col gap-3 ">
         <div className="flex justify-between ">
           <div className="flex gap-3">
-            <button onClick={handleReplyClick}>Сэтгэгдэлд хариулах</button>
+            <button
+              className="hover:text-blue-600 hover:bg-blue-50 rounded-md p-2"
+              onClick={handleReplyClick}
+            >
+              Хариулах
+            </button>
           </div>
-          <button onClick={handleViewRepliesClick}>
+          <button
+            className="hover:text-blue-600 hover:bg-blue-50 rounded-md p-2"
+            onClick={handleViewRepliesClick}
+          >
             {!viewReplies ? "Хариултуудыг харах" : "Хариултуудыг нуух"}
           </button>
         </div>

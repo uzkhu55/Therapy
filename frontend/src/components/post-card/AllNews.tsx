@@ -75,7 +75,7 @@ export const AllNews = () => {
   };
 
   return (
-    <div className="flex flex-wrap gap-4 items-center justify-center lg:flex-row md:flex-col relative">
+    <div className="flex mt-6 mb-7 flex-wrap gap-4 items-center justify-center lg:flex-row md:flex-col relative">
       {/* Sidebar for tablets and larger */}
       <div
         className={`lg:w-[300px] p-4 bg-[#f8f8f8] shadow-xl rounded-xl ${

@@ -29,7 +29,7 @@ export const CreatePost = () => {
   };
 
   return (
-    <div className="w-[590px] h-[135px] p-3 rounded-md mx-auto shadow-md bg-[#fdfcf6]">
+    <div className="w-[590px] h-[135px] p-3 rounded-md mx-auto shadow-md mt-7 bg-[#fdfcf6]">
       <div className="flex gap-3 w-[558px] mb-2">
         <div className="flex gap-2 mt-1">
           <img className="w-10 h-10 rounded-full" src={user?.imageUrl} alt="" />

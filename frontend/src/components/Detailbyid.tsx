@@ -12,7 +12,17 @@ interface TheraDetail {
   authId: string;
   expectations: string;
   gender: string;
+  year: string;
+  zuvluguu: string;
   age: string;
+  allAppointments: [
+    {
+      time: string;
+      date: string;
+      idTwo: string;
+      createdAt: string;
+    }
+  ];
 }
 
 interface DetailData {
@@ -26,6 +36,20 @@ interface DetailData {
   authId: {
     email: string;
   };
+  allAppointments: [
+    {
+      time: string;
+      date: string;
+      idOne: string;
+      createdAt: string;
+    }
+  ];
+}
+interface AppointmentData {
+  idOne: string;
+  idTwo: string;
+  data: string;
+  time: string;
 }
 
 const Detailbyid = () => {
@@ -47,7 +71,6 @@ const Detailbyid = () => {
           router.push("/login");
           return;
         }
-
         const [detailResponse, theraDetailResponse] = await Promise.all([
           axios.get(`https://if-project8.onrender.com/user/detail/${user?.id}`),
           axios.get(
@@ -76,7 +99,7 @@ const Detailbyid = () => {
   return (
     <div className="h-lvh bg-[#f1ede8]">
       <Header />
-      <div className="flex max-w-[1190px] items-center h-full mx-auto">
+      <div className="flex max-w-[1000px] items-center h-full mx-auto">
         {(detailData || theraDetailData) && (
           <div className="flex justify-between w-full">
             <div className="max-w-xl flex flex-col gap-3 rounded-lg bg-[#fdfcf6] shadow-lg p-4">
@@ -102,15 +125,26 @@ const Detailbyid = () => {
                   <strong>Хүйс:</strong>{" "}
                   {detailData?.gender || theraDetailData?.gender}
                 </p>
+                {theraDetailData?.year && (
+                  <p className="text-sm text-gray-700 flex gap-2">
+                    <strong>Ажилсан жил:</strong> {theraDetailData.year}
+                  </p>
+                )}
+                {theraDetailData?.zuvluguu && (
+                  <p className="text-sm text-gray-700 flex gap-2">
+                    <strong>Мэргэшсэн чиглэл:</strong>{" "}
+                    {theraDetailData.zuvluguu}
+                  </p>
+                )}
                 {theraDetailData?.expectations && (
                   <p className="text-sm text-gray-700 flex gap-2">
-                    <strong>Mэргэшсэн чиглэл:</strong>
+                    <strong>Үйлчлүүлэгчид:</strong>{" "}
                     {theraDetailData.expectations}
                   </p>
                 )}
                 {detailData?.relationshipStatus && (
                   <p className="text-sm text-gray-700 flex gap-2">
-                    <strong>Гэр бүлийн байдал:</strong>
+                    <strong>Гэр бүлийн байдал:</strong>{" "}
                     {detailData.relationshipStatus}
                   </p>
                 )}
@@ -124,19 +158,86 @@ const Detailbyid = () => {
                 )}
                 {detailData?.lookingFor && (
                   <p className="text-sm text-gray-700 flex gap-2">
-                    <strong>Сэтгэл зүйн зөвлөгөө хэнд авах:</strong>
+                    <strong>Сэтгэл зүйн зөвлөгөө хэнд авах:</strong>{" "}
                     {detailData.lookingFor}
                   </p>
                 )}
-                <p className="text-sm text-gray-700 flex gap-2">
-                  <strong>Сэтгэл зүйчээс хүлээх хүлээлт:</strong>{" "}
-                  {detailData?.expectations || theraDetailData?.expectations}
-                </p>
+                {detailData?.expectations && (
+                  <p className="text-sm text-gray-700 flex gap-2">
+                    <strong>Сэтгэл зүйчээс хүлээх хүлээлт:</strong>{" "}
+                    {detailData.expectations}
+                  </p>
+                )}
                 <p className="flex items-center text-sm text-gray-700 gap-1">
                   <Mail className="w-4 h-4 mr-2" />
-                  {user?.emailAddresses[0].emailAddress || "No email available"}
+                  {user?.emailAddresses?.[0]?.emailAddress ||
+                    "No email available"}
                 </p>
               </div>
+            </div>
+
+            <div className="flex gap-2 flex-col overflow-y-scroll">
+              <div className="font-medium text-lg pl-2">Цаг захиалга</div>
+              {(theraDetailData?.allAppointments || []).map((el, i) => (
+                <div
+                  className="max-w-xl flex flex-col gap-2 rounded-lg bg-[#fdfcf6] shadow-lg p-4"
+                  key={i}
+                >
+                  <div className="flex gap-2 items-center">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Цаг захиалсан үйлчлүүлэгч: {el.idTwo}
+                    </h3>
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex gap-2">
+                      <span className="font-medium text-gray-700">Өдөр:</span>
+                      <span className="text-gray-600">{el.date}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="font-medium text-gray-700">Цаг:</span>
+                      <span className="text-gray-600">{el.time}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="font-medium text-gray-700">
+                        Захиалга хийгдсэн өдөр:
+                      </span>
+                      <span className="text-gray-600">
+                        {new Date(el.createdAt).toISOString().split("T")[0]}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {(detailData?.allAppointments || []).map((el, i) => (
+                <div
+                  className="max-w-xl flex flex-col gap-2 rounded-lg bg-[#fdfcf6] shadow-lg p-4"
+                  key={i}
+                >
+                  <div className="flex gap-2 items-center">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Цаг захиалсан эмч: {el.idOne}
+                    </h3>
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex gap-2">
+                      <span className="font-medium text-gray-700">Өдөр:</span>
+                      <span className="text-gray-600">{el.date}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="font-medium text-gray-700">Цаг:</span>
+                      <span className="text-gray-600">{el.time}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="font-medium text-gray-700">
+                        Захиалга хийгдсэн өдөр:
+                      </span>
+                      <span className="text-gray-600">
+                        {new Date(el.createdAt).toISOString().split("T")[0]}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

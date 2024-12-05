@@ -9,8 +9,8 @@ interface Appointment extends Document {
 }
 
 const appointmentSchema = new Schema<Appointment>({
-  idOne: { type: String, required: true },
-  idTwo: { type: String, required: true },
+  idOne: { type: String, required: true, ref: "UserDetail" },
+  idTwo: { type: String, required: true, ref: "UserDetail" },
   date: { type: String, required: true },
   time: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
