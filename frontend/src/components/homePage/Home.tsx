@@ -10,11 +10,7 @@ import { Section5 } from "./Section5";
 import { useEffect } from "react";
 
 const Homepage = () => {
-  console.log("hhe");
-
-  useEffect(() => {
-    console.log("a");
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="relative h-full bg-white w-screen ">
