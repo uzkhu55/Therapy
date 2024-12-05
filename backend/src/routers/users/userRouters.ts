@@ -16,8 +16,6 @@ import { neguser } from "../../controllers/usersController/neguser";
 import { upload, uploadFile } from "../../controllers/messageController/file";
 import { createTheraDetail } from "../../controllers/usersController/createTheraDetail";
 import { getTheraDetailById } from "../../controllers/usersController/getTheraDetailById";
-import { createAppointment } from "../../controllers/usersController/timeappointment";
-import { sendMailer } from "../../controllers/emailsender";
 
 const userRouter = Router();
 
@@ -46,5 +44,6 @@ userRouter.route("/user/theradetail/:authId").get(getTheraDetailById);
 userRouter.route("/user/detail/:authId").get(getUserDetailById);
 userRouter.route("/user/detail").post(createUserDetail);
 userRouter.route("/user/theradetail").post(createTheraDetail);
+userRouter.route("/user/isthera").post(isThrepapist);
 
 export default userRouter;

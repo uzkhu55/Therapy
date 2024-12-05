@@ -43,6 +43,7 @@ const UserDetail: React.FC = () => {
     lookingFor: "Хувь хүн",
     expectations: "Ярилцах",
   });
+
   const [isLoading, setIsLoading] = useState(true);
 
   const RenderComponent = STEP_COMPONENTS[step];
@@ -67,11 +68,6 @@ const UserDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!user?.id) {
-      router.push("/");
-      return;
-    }
-
     const getUserDetails = async () => {
       try {
         const [detailResponse, theraDetailResponse] = await Promise.all([
@@ -92,9 +88,9 @@ const UserDetail: React.FC = () => {
           return;
         }
 
-        if (!detailData.form || !theraDetailData.form) {
-          // router.push("/");
-        }
+        // if (!detailData.form || !theraDetailData.form) {
+        // router.push("/");
+        // }
         // if (detailData.form && theraDetailData.form) {
         //   router.push("/userDetail");
         //   return;

@@ -3,28 +3,19 @@ import { theraDetailModel } from "../../database/models/theradetail.model";
 export const createTheraDetail = async (req: any, res: any) => {
   const { formData, form, authId } = req.body;
 
-  const {
-    gender,
-    age,
-    relationshipStatus,
-    prevTherapy,
-    lookingFor,
-    expectations,
-  } = formData;
-
+  const { name, gender, age, year, zuvluguu, expectations } = formData;
   try {
     const existingUser = await theraDetailModel.findOne({ authId });
-
     if (existingUser) {
       return res.status(400).json({ message: "User details already exist." });
     }
 
-    const newUserDetail = await theraDetailModel.create({
+    await theraDetailModel.create({
+      name,
       gender,
       age,
-      relationshipStatus,
-      prevTherapy,
-      lookingFor,
+      year,
+      zuvluguu,
       expectations,
       form: true,
       authId,

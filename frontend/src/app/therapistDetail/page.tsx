@@ -8,6 +8,11 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Loading } from "@/components/Loading";
 import TheraExpectations from "@/components/theraQuestions/TheraExp";
+import Name from "@/components/theraQuestions/Name";
+import Age from "@/components/theraQuestions/Age";
+import Gender from "@/components/theraQuestions/Gender";
+import Year from "@/components/theraQuestions/Year";
+import Zuvluguu from "@/components/theraQuestions/Zuvluguu";
 
 export type StepComponentPropsTypes = {
   formData: Record<string, string>;
@@ -16,17 +21,23 @@ export type StepComponentPropsTypes = {
   formHandler: (_form: Record<string, string>) => void;
 };
 
-const STEP_COMPONENTS = [TheraExpectations];
+const STEP_COMPONENTS = [Name, Age, Gender, Year, Zuvluguu, TheraExpectations];
 
 const TheraDetail: React.FC = () => {
   const router = useRouter();
-  const { isLoaded, user } = useUser();
+  const { user } = useUser();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
+    name: "",
+    age: "1",
+    gender: "Эр",
+    year: "1",
+    zuvluguu: "Хувь хүн",
     expectations: "Ярилцах",
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [isChecking, setIsChecking] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  console.log(formData, "formDataformDataformData");
 
   const RenderComponent = STEP_COMPONENTS[step];
 
@@ -51,9 +62,7 @@ const TheraDetail: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      setIsLoading(true);
-
-      await axios.post("https://if-project8.onrender.com/user/theradetail", {
+      await axios.post("http://localhost:8000/user/theradetail", {
         formData,
         authId: user?.id,
       });
@@ -64,36 +73,29 @@ const TheraDetail: React.FC = () => {
     } finally {
     }
   };
+
   useEffect(() => {
     const initializeUser = async () => {
       try {
-        if (!user) return;
-
-        setIsChecking(true);
-
         const { data } = await axios.get(
-          `https://if-project8.onrender.com/user/theradetail/${user.id}`
+          `https://if-project8.onrender.com/user/theradetail/${user?.id}`
         );
-        console.log({ data });
 
+        setLoading(false);
         if (data.form) {
           router.push("/");
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error initializing user:", error);
-      } finally {
-        setIsChecking(false);
+        setLoading(false);
       }
     };
-
-    if (isLoaded) {
+    if (user) {
       initializeUser();
     }
-  }, [isLoaded, user, router]);
+  }, [user]);
 
-  if (isChecking || isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
         <Loading />
@@ -108,13 +110,7 @@ const TheraDetail: React.FC = () => {
           <HomeLogo />
         </div>
 
-        {step !== 0 && (
-          <>
-            <div className="font-bold text-[40px] mt-[70px] text-white">
-              Таныг зөв эмчтэй тааруулахад тусална уу
-            </div>
-          </>
-        )}
+        {step !== 0 && <></>}
 
         <div className="flex justify-center items-center">
           <RenderComponent
