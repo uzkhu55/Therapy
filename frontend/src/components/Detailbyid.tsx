@@ -72,10 +72,8 @@ const Detailbyid = () => {
           return;
         }
         const [detailResponse, theraDetailResponse] = await Promise.all([
-          axios.get(`https://if-project8.onrender.com/user/detail/${user?.id}`),
-          axios.get(
-            `https://if-project8.onrender.com/user/theradetail/${user?.id}`
-          ),
+          axios.get(`http://localhost:8000/user/detail/${user?.id}`),
+          axios.get(`http://localhost:8000/user/theradetail/${user?.id}`),
         ]);
 
         setDetailData(detailResponse.data || null);
