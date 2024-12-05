@@ -9,7 +9,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   try {
     const { data } = await axios.get(
-      `http://localhost:8000/posts/fetchPost/${id}`
+      `https://if-project8.onrender.com/posts/fetchPost/${id}`
     );
 
     return (

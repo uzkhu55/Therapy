@@ -66,7 +66,7 @@ export function PostModal({
 
     if (uploadedImageUrl || input.trim()) {
       try {
-        await axios.post("http://localhost:8000/posts/createPost", {
+        await axios.post("https://if-project8.onrender.com/posts/createPost", {
           authId: user?.id,
           content: input,
           image: uploadedImageUrl,

@@ -37,8 +37,6 @@ const TheraDetail: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  console.log(formData, "formDataformDataformData");
-
   const RenderComponent = STEP_COMPONENTS[step];
 
   const formHandler = (form: Record<string, string>) => {
@@ -62,7 +60,7 @@ const TheraDetail: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:8000/user/theradetail", {
+      await axios.post("https://if-project8.onrender.com/user/theradetail", {
         formData,
         authId: user?.id,
       });

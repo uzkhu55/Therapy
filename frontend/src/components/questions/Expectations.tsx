@@ -35,12 +35,12 @@ const Expectations = ({
             <option value={"Бусад"}>Бусад</option>
           </select>
           <div className="flex">
-            <button>
+            {/* <button>
               <GoArrowLeft
                 onClick={backHandler}
                 className="h-[30px] w-[100px] text-[20px] rounded-3xl text-[#325343] bg-[#deebc0] mt-[40px] "
               />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

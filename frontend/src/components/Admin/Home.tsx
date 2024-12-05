@@ -35,9 +35,8 @@ const Home = () => {
     const fetchAdmin = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/user/neguser/${user?.id}`
+          `https://if-project8.onrender.com/user/neguser/${user?.id}`
         );
-        console.log(response.data);
 
         if (response.data.isAdmin) {
           setAdmin(response.data);

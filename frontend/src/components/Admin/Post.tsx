@@ -45,14 +45,13 @@ export const AdminAllPost = () => {
   useEffect(() => {
     const getAllPosts = async () => {
       const { data } = await axios.get(
-        "http://localhost:8000/posts/fetchPosts"
+        "https://if-project8.onrender.com/posts/fetchPosts"
       );
       setPosts(data);
     };
     getAllPosts();
   }, []);
 
-  console.log(posts, "postsposts");
   return (
     <div className="flex flex-col w-full gap-10">
       <div className="flex w-[600px] flex-row-reverse">

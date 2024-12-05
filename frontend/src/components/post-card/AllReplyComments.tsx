@@ -14,7 +14,7 @@ export const AllReplyComments = ({ commentId }: { commentId: string }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://localhost:8000/posts/fetchReplyComments/${commentId}`
+          `https://if-project8.onrender.com/posts/fetchReplyComments/${commentId}`
         );
 
         setReplyComments(data);

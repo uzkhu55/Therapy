@@ -47,11 +47,14 @@ export const ReplyCommentComponent: React.FC<CommentProps> = ({
     if (input.trim()) {
       setLoading(true);
       try {
-        await axios.post("http://localhost:8000/posts/createReplyComment", {
-          authId: user?.id,
-          content: input,
-          _id: comment._id,
-        });
+        await axios.post(
+          "https://if-project8.onrender.com/posts/createReplyComment",
+          {
+            authId: user?.id,
+            content: input,
+            _id: comment._id,
+          }
+        );
         setLoading(false);
         setCommentIsOpen(false);
         toast.success("Амжилттай!");

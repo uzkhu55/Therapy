@@ -73,7 +73,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
     setIsLiked((prev) => !prev);
     try {
       const response = await axios.post(
-        "http://localhost:8000/posts/createLike",
+        "https://if-project8.onrender.com/posts/createLike",
         {
           authId: user?.id,
           _id: post._id,

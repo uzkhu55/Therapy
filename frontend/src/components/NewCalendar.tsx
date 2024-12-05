@@ -46,7 +46,6 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log("Form data:", data);
     appointment(data);
     form.reset();
   };
@@ -56,17 +55,12 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
   // Format the date to "YYYY-MM-DD"
   const formattedDate = new Date(selectedDate).toLocaleDateString("en-CA"); // 'en-CA' is the format YYYY-MM-DD
 
-  console.log(formattedDate); // Output will be in the format: 2024-12-04
-
   const selectedTime = form.watch("time");
-  console.log(selectedDate, selectedTime);
 
   const appointment = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
-
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/appointment",
+        "https://if-project8.onrender.com/user/appointment",
         {
           date: formattedDate,
           time: selectedTime,
@@ -75,7 +69,7 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
         }
       );
       try {
-        await axios.post("http://localhost:8000/user/mail", {
+        await axios.post("https://if-project8.onrender.com/user/mail", {
           sendEmail: specialist.email,
           subject: "asdasd",
           html: `<!DOCTYPE html>

@@ -42,7 +42,9 @@ export function DeletePostModal({ post }: PostModalProps) {
     const { _id } = post;
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/posts/deletePost/${_id}`);
+      await axios.delete(
+        `https://if-project8.onrender.com/posts/deletePost/${_id}`
+      );
       setLoading(false);
       setMove(false);
       toast.success("Амжилттай устлаа!");

@@ -13,7 +13,7 @@ export const AllPosts = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          "http://localhost:8000/posts/fetchPosts"
+          "https://if-project8.onrender.com/posts/fetchPosts"
         );
         setPosts(data);
         setLoading(false);

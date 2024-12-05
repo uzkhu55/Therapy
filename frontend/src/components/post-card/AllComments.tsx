@@ -14,7 +14,7 @@ export const AllComments = ({ postId }: { postId: string }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://localhost:8000/posts/fetchComments/${postId}`
+          `https://if-project8.onrender.com/posts/fetchComments/${postId}`
         );
         setComments(data);
         setLoading(false);

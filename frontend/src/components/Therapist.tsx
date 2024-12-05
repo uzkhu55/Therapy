@@ -55,7 +55,7 @@ const Therapist = () => {
         const res = await axios.get(
           "https://if-project8.onrender.com/user/getSpecialists"
         );
-        console.log(res.data);
+
         setData(res.data);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -71,12 +71,15 @@ export const CommentComponent: React.FC<CommentProps> = ({
     if (uploadedImageUrl || input.trim()) {
       setLoading(true);
       try {
-        await axios.post("http://localhost:8000/posts/createComment", {
-          authId: user?.id,
-          content: input,
-          image: uploadedImageUrl,
-          _id: post._id,
-        });
+        await axios.post(
+          "https://if-project8.onrender.com/posts/createComment",
+          {
+            authId: user?.id,
+            content: input,
+            image: uploadedImageUrl,
+            _id: post._id,
+          }
+        );
         setLoading(false);
         setCommentIsOpen(false);
         toast.success("Амжилттай!");

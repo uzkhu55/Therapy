@@ -13,7 +13,7 @@ const Therapist = ({ nextHandler }: StepComponentPropsTypes) => {
 
   const handleSelectClick = async () => {
     if (selectedValue === "Сэтгэл зүйч") {
-      await axios.post(`http://localhost:8000/user/isthera`, {
+      await axios.post(`https://if-project8.onrender.com/user/isthera`, {
         authId: user?.id,
       }),
         router.push("/therapistDetail");

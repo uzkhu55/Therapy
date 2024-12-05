@@ -32,8 +32,6 @@ app.use("/uploads", express.static("uploads"));
 
 // Controller function to handle file upload
 const uploadFile = (req: Request, res: Response): void => {
-  console.log("File upload request received:", req.body); // Log the request body
-
   if (!req.file) {
     console.error("No file uploaded.");
     res.status(400).send("No file uploaded.");
@@ -41,7 +39,6 @@ const uploadFile = (req: Request, res: Response): void => {
   }
 
   const fileUrl = `https://if-project8.onrender.com/uploads/${req.file.filename}`;
-  console.log("File uploaded:", req.file);
 
   res.json({ url: fileUrl });
 };

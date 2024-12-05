@@ -45,13 +45,10 @@ export default function Component({
         const response = await axios.get(
           "https://if-project8.onrender.com/user/userdetail"
         );
-        console.log(response.data);
 
         setGetUserdetail(response.data);
-        console.log("User details fetched:", response.data); // Check the entire response
 
         setAuthId(response.data[0]._id); // Assuming the first item has _id
-        console.log("Authenticated user ID set:", response.data[0]._id); // Ensure _id is set properly
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
@@ -73,19 +70,11 @@ export default function Component({
       return;
     }
 
-    console.log(
-      "Creating folder with authId:",
-      authId,
-      "and chosenUserId:",
-      chosenUserId
-    ); // Added log for debugging
-
     try {
       const response = await axios.post(
         "https://if-project8.onrender.com/folder", // Update with your API endpoint
         { authId, chosenUserId }
       );
-      console.log("Folder created successfully:", response.data);
     } catch (error) {
       console.error("Error creating folder:", error);
     }

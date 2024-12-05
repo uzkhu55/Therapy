@@ -2,7 +2,6 @@ import { UserModel } from "../../database/models/user.model";
 
 export const setAdmin = async (req: any, res: any) => {
   const { adminType, authId } = req.body;
-  console.log(authId, adminType, 132123123);
 
   try {
     const existingUser = await UserModel.findOne({ authId });

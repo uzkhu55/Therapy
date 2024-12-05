@@ -67,10 +67,13 @@ export function UpdatePostModal({
       setLoading(true);
 
       try {
-        await axios.put(`http://localhost:8000/posts/updatePost/${_id}`, {
-          content: input,
-          image: uploadedImageUrl,
-        });
+        await axios.put(
+          `https://if-project8.onrender.com/posts/updatePost/${_id}`,
+          {
+            content: input,
+            image: uploadedImageUrl,
+          }
+        );
         setLoading(false);
         setIsOpen(false);
         toast.success("Амжилттай засагдлаа!");

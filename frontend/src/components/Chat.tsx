@@ -68,7 +68,6 @@ const Chat: React.FC = () => {
     isSignedIn: boolean;
     isLoaded: boolean;
   };
-  console.log(user);
 
   const router = useRouter();
   const searchParams = useSearchParams();

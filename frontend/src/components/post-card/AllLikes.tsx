@@ -34,7 +34,7 @@ export const AllLikes = ({
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://localhost:8000/posts/fetchLikes/${postId}`
+          `https://if-project8.onrender.com/posts/fetchLikes/${postId}`
         );
         const userHasLiked = data.some(
           (like: LikeModelType) => like.userId.authId === user?.id

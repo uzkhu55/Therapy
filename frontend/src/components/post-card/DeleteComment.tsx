@@ -40,7 +40,9 @@ export function DeleteComment({ comment }: CommentProps) {
     const { _id } = comment;
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/posts/deleteComment/${_id}`);
+      await axios.delete(
+        `https://if-project8.onrender.com/posts/deleteComment/${_id}`
+      );
       setLoading(false);
       setMove(false);
     } catch (error) {

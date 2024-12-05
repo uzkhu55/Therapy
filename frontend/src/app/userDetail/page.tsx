@@ -80,9 +80,6 @@ const UserDetail: React.FC = () => {
         const detailData = detailResponse.data;
         const theraDetailData = theraDetailResponse.data;
 
-        console.log("Detail Data:", detailData);
-        console.log("Thera Detail Data:", theraDetailData);
-
         if (detailData.form || theraDetailData.form) {
           router.push("/");
           return;

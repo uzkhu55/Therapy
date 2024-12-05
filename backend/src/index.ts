@@ -54,7 +54,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle user disconnection
   socket.on("disconnect", () => {
     const userName = users[socket.id]?.name || "Anonymous";
     const room = users[socket.id]?.room;

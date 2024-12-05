@@ -27,7 +27,6 @@ const PaymentQRCode: React.FC = () => {
 
     // Listen for 'qrScanned' event to show the modal
     socket.on("qrScanned", (data) => {
-      console.log("QR Scanned Event Received:", data); // Log the event data
       setIsQRScanned(true); // Set scanned status to true when event is received
       setShowDoneModal(true); // Show the modal
     });
@@ -40,7 +39,7 @@ const PaymentQRCode: React.FC = () => {
 
   const checkIfQRScanned = () => {
     // Emit an event to the server to check if the QR code was scanned
-    console.log("Checking if QR code is scanned...");
+
     socket.emit("checkQRScanStatus", {}); // Send a request to the server for QR scan status
   };
 
