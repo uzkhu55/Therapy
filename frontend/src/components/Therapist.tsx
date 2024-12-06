@@ -38,7 +38,9 @@ export interface Specialist {
   username: string;
   theraDetail: TheraDetail | null;
   name: string;
+  zuvluguu: string;
   description: string;
+  year: string;
 }
 
 const Therapist = () => {
@@ -75,7 +77,9 @@ const Therapist = () => {
               <TableHead className="w-[200px] text-center">
                 Сэтгэл зүйчийн төрөл
               </TableHead>
-              <TableHead className="w-[200px] text-center">Байршил</TableHead>
+              <TableHead className="w-[200px] text-center">
+                Ажиллаж байгаа жил
+              </TableHead>
               <TableHead className="w-[200px] text-center">
                 Эмч Дэлгэрэнгүй
               </TableHead>
@@ -87,16 +91,16 @@ const Therapist = () => {
               <TableRow key={specialist.authId}>
                 <TableCell className="flex justify-center">
                   <img
-                    src={user?.imageUrl || "/default-avatar.png"}
+                    src={"/avatar1.png"}
                     alt="User Profile"
                     className="rounded-full w-16 h-16"
                   />
                 </TableCell>
                 <TableCell className="font-medium text-center">
-                  {specialist.username || "Unknown"}
+                  {specialist.zuvluguu || "Unknown"}
                 </TableCell>
                 <TableCell className="text-center font-medium">
-                  {specialist.theraDetail?.expectations || "No data available"}
+                  {specialist.year || "No data available"}
                 </TableCell>
                 <TableCell className="text-center font-medium">
                   <Dialog>

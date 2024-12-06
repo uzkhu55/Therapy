@@ -52,7 +52,6 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
 
   const selectedDate = form.watch("dob");
 
-  // Format the date to "YYYY-MM-DD"
   const formattedDate = new Date(selectedDate).toLocaleDateString("en-CA"); // 'en-CA' is the format YYYY-MM-DD
 
   const selectedTime = form.watch("time");
@@ -145,9 +144,7 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
 `,
         });
 
-        toast.success(
-          "Appointment scheduled successfully! and Email sent to the Therapist"
-        );
+        toast.success("Таны цаг амжилттай захилагдлаа");
       } catch (err) {
         toast.error("Failed to send email");
       }
