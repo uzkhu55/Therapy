@@ -21,10 +21,10 @@ const Homepage = () => {
       <Section1 />
 
       <Section2 />
-      <div className="w-full  flex bg-[#F3EFE9] flex-col-reverse items-center gap-8  md:flex md:flex-row  md:px-[500px]  pt-[100px] relative z-40">
-        <div className="px-4">
+      <div className="w-full  flex bg-[#F3EFE9] justify-center flex-col-reverse items-center gap-8 md:gap-[200px]  md:flex md:flex-row  md:px-[200px]  pt-[100px] relative z-40">
+        <div className="px-4 w-[300px] md:w-[500px] text-2xl">
           Та өөрийн хэрэглэгчийн нэр болон нууц үгээр нэвтэрч, эсвэл шинэ
-          бүртгэл үүсгэн оролцоно уу. Харилцаа холбоогоо илүү ойртуулъя! <br />{" "}
+          бүртгэл үүсгэн оролцоно уу. Харилцаа холбоогоо илүү ойртуулъя! <br />
           Та чатлахад бэлэн үү? Одоо эхэлцгээе! 🚀
           <br />© Таны найдвартай чат апп
         </div>
@@ -35,8 +35,8 @@ const Homepage = () => {
         />
       </div>
       <Section3 />
-      <div className="w-full px-4 flex flex-col-reverse items-center gap-8  md:flex md:flex-row  md:px-[500px]  pt-[100px] relative z-40">
-        <div>
+      <div className="w-full px-4 flex flex-col-reverse pb-12 justify-center items-center gap-8 md:gap-[200px]  md:flex md:flex-row  md:px-[200px]  pt-[100px] relative z-40">
+        <div className="px-4 w-[300px] md:w-[500px]">
           Холбогдох, Хуваалцах, Бүтээх! Та өөрийн хэрэглэгчийн нэр болон нууц
           үгээр нэвтэрч, эсвэл шинэ бүртгэл үүсгэн, олон нийттэй илүү ойртоорой.
           Одоо өөрийн үзэл бодол, санаа бодол, зураг, бичлэгүүдээ хуваалцахад
@@ -55,7 +55,7 @@ const Homepage = () => {
         />
       </div>
       <Section4 />
-      <div className="w-full px-4 flex flex-col items-center gap-8  md:flex md:flex-row  md:px-[500px] bg-[#F3EFE9] pt-[100px] relative z-40">
+      <div className="w-full px-4 flex flex-col items-center gap-8  md:flex md:flex-row  md:px-[200px] bg-[#F3EFE9] pt-[100px] relative z-40">
         <img
           src="/postui.png"
           className="w-[250px] md:w-[400px] md:h-[250px] h-[200px]"

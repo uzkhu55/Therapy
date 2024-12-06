@@ -186,15 +186,6 @@ export default async function Page({
         Өнөөдөр бүртгүүлээд сэтгэл зүйгээ дэмжих олон янзын сэдвүүдээс
         сонирхоорой.
       </div>
-      <Link href={"/sign-up"}>
-        <Button
-          className="bg-[#FECE57] text-[#325343] items-center rounded-full
-    w-[230px] text-center text-base font-bold font-['Inter'] leading-9 
-    hover:bg-[#F9B927] transition-colors duration-300 ease-in-out mb-[40px]"
-        >
-          ХЯЛБАР БҮРТГЭЛ
-        </Button>
-      </Link>
 
       <Footer />
     </div>
