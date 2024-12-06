@@ -140,7 +140,7 @@ const Therapist = () => {
                       <div className="flex  flex-col items-center">
                         <div className="flex items-center mb-12  gap-12 flex-col">
                           <img
-                            src={user?.imageUrl || "/default-avatar.png"}
+                            src={"/avatar1.png"}
                             alt="User Profile"
                             className="rounded-full w-16 h-16"
                           />

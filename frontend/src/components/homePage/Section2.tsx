@@ -25,11 +25,6 @@ const Section2 = () => {
                 л чатлах хүсэлтээ илгээгээрэй.
               </div>
             </div>
-            <Link href="" className="text-center">
-              <Button className="w-[160px] rounded-full bg-[#6A915C] text-center text-base font-semibold hover:bg-[#5A7A46] transition-colors">
-                Дэлгэрэнгүй
-              </Button>
-            </Link>
           </div>
 
           {/* Community support */}
@@ -43,11 +38,6 @@ const Section2 = () => {
                 хүмүүс хоорондоо асуудлаа хуваалцаж, хэлэлцэх боломжийг олгодог.
               </div>
             </div>
-            <Link href="" className="text-center">
-              <Button className="w-[160px] rounded-full bg-[#6A915C] text-center text-base font-semibold hover:bg-[#5A7A46] transition-colors">
-                Дэлгэрэнгүй
-              </Button>
-            </Link>
           </div>
 
           {/* Personal development tools */}
@@ -61,11 +51,6 @@ const Section2 = () => {
                 сэтгэл хөдлөлөө хянах, зорилго тавих боломжийг олгодог.
               </div>
             </div>
-            <Link href="" className="text-center">
-              <Button className="w-[160px] rounded-full bg-[#6A915C] text-center text-base font-semibold hover:bg-[#5A7A46] transition-colors">
-                Дэлгэрэнгүй
-              </Button>
-            </Link>
           </div>
         </div>
       </div>
