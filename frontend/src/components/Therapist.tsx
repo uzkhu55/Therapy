@@ -31,7 +31,6 @@ interface TheraDetail {
   description?: string;
   [key: string]: any;
   year: string;
-  zuvluguu: string;
 }
 
 export interface Specialist {
@@ -100,10 +99,10 @@ const Therapist = () => {
                   />
                 </TableCell>
                 <TableCell className="font-medium text-center">
-                  {specialist.theraDetail.zuvluguu || "Unknown"}
+                  {specialist.theraDetail?.zuvluguu || "Unknown"}
                 </TableCell>
                 <TableCell className="text-center font-medium">
-                  {specialist.theraDetail.year || "No data available"}
+                  {specialist.theraDetail?.year || "No data available"}
                 </TableCell>
                 <TableCell className="text-center font-medium">
                   <Dialog>
