@@ -30,13 +30,15 @@ interface TheraDetail {
   form?: boolean;
   description?: string;
   [key: string]: any;
+  year: string;
+  zuvluguu: string;
 }
 
 export interface Specialist {
   email: string;
   authId: string;
   username: string;
-  theraDetail: TheraDetail | null;
+  theraDetail: TheraDetail;
   name: string;
   zuvluguu: string;
   description: string;
@@ -59,6 +61,7 @@ const Therapist = () => {
         );
 
         setData(res.data);
+        console.log(res);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -97,10 +100,10 @@ const Therapist = () => {
                   />
                 </TableCell>
                 <TableCell className="font-medium text-center">
-                  {specialist.zuvluguu || "Unknown"}
+                  {specialist.theraDetail.zuvluguu || "Unknown"}
                 </TableCell>
                 <TableCell className="text-center font-medium">
-                  {specialist.year || "No data available"}
+                  {specialist.theraDetail.year || "No data available"}
                 </TableCell>
                 <TableCell className="text-center font-medium">
                   <Dialog>
