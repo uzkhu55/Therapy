@@ -10,11 +10,14 @@ import Footer from "./homePage/Footer";
 
 interface TheraDetail {
   authId: string;
-  expectations: string;
-  gender: string;
-  year: string;
-  zuvluguu: string;
-  age: string;
+  user: {
+    expectations: string;
+    gender: string;
+    year: string;
+    zuvluguu: string;
+    age: string;
+  };
+
   allAppointments: [
     {
       time: string;
@@ -27,12 +30,15 @@ interface TheraDetail {
 
 interface DetailData {
   someProperty: string;
-  gender: string;
-  age: string;
-  relationshipStatus: string;
-  prevTherapy: string;
-  lookingFor: string;
-  expectations: string;
+  user: {
+    gender: string;
+    age: string;
+    relationshipStatus: string;
+    prevTherapy: string;
+    lookingFor: string;
+    expectations: string;
+  };
+
   authId: {
     email: string;
   };
@@ -72,12 +78,14 @@ const Detailbyid = () => {
           return;
         }
         const [detailResponse, theraDetailResponse] = await Promise.all([
-          axios.get(`http://localhost:8000/user/detail/${user?.id}`),
-          axios.get(`http://localhost:8000/user/theradetail/${user?.id}`),
+          axios.get(`https://if-project8.onrender.com/user/detail/${user?.id}`),
+          axios.get(
+            `https://if-project8.onrender.com/user/theradetail/${user?.id}`
+          ),
         ]);
 
-        setDetailData(detailResponse.data || null);
-        setTheraDetailData(theraDetailResponse.data || null);
+        setDetailData(detailResponse.data);
+        setTheraDetailData(theraDetailResponse.data);
       } catch (error) {
         console.error("Error fetching user data", error);
       } finally {
@@ -117,53 +125,53 @@ const Detailbyid = () => {
               <div className="mt-4 space-y-2 m-6 flex flex-col gap-2">
                 <p className="text-sm text-gray-700 flex gap-2">
                   <strong>Нас:</strong>{" "}
-                  {detailData?.age || theraDetailData?.age}
+                  {detailData?.user?.age || theraDetailData?.user?.age}
                 </p>
                 <p className="text-sm text-gray-700 flex gap-2">
                   <strong>Хүйс:</strong>{" "}
-                  {detailData?.gender || theraDetailData?.gender}
+                  {detailData?.user?.gender || theraDetailData?.user?.gender}
                 </p>
-                {theraDetailData?.year && (
+                {theraDetailData?.user?.year && (
                   <p className="text-sm text-gray-700 flex gap-2">
-                    <strong>Ажилсан жил:</strong> {theraDetailData.year}
+                    <strong>Ажилсан жил:</strong> {theraDetailData.user?.year}
                   </p>
                 )}
-                {theraDetailData?.zuvluguu && (
+                {theraDetailData?.user?.zuvluguu && (
                   <p className="text-sm text-gray-700 flex gap-2">
                     <strong>Мэргэшсэн чиглэл:</strong>{" "}
-                    {theraDetailData.zuvluguu}
+                    {theraDetailData.user?.zuvluguu}
                   </p>
                 )}
-                {theraDetailData?.expectations && (
+                {theraDetailData?.user?.expectations && (
                   <p className="text-sm text-gray-700 flex gap-2">
                     <strong>Үйлчлүүлэгчид:</strong>{" "}
-                    {theraDetailData.expectations}
+                    {theraDetailData.user?.expectations}
                   </p>
                 )}
-                {detailData?.relationshipStatus && (
+                {detailData?.user?.relationshipStatus && (
                   <p className="text-sm text-gray-700 flex gap-2">
                     <strong>Гэр бүлийн байдал:</strong>{" "}
-                    {detailData.relationshipStatus}
+                    {detailData.user?.relationshipStatus}
                   </p>
                 )}
-                {detailData?.prevTherapy && (
+                {detailData?.user?.prevTherapy && (
                   <p className="text-sm text-gray-700 flex gap-2">
                     <strong>
                       Сэтгэл зүйн зөвлөгөө өмнө нь авч байсан эсэх:
                     </strong>{" "}
-                    {detailData.prevTherapy}
+                    {detailData.user?.prevTherapy}
                   </p>
                 )}
-                {detailData?.lookingFor && (
+                {detailData?.user?.lookingFor && (
                   <p className="text-sm text-gray-700 flex gap-2">
                     <strong>Сэтгэл зүйн зөвлөгөө хэнд авах:</strong>{" "}
-                    {detailData.lookingFor}
+                    {detailData.user?.lookingFor}
                   </p>
                 )}
-                {detailData?.expectations && (
+                {detailData?.user?.expectations && (
                   <p className="text-sm text-gray-700 flex gap-2">
                     <strong>Сэтгэл зүйчээс хүлээх хүлээлт:</strong>{" "}
-                    {detailData.expectations}
+                    {detailData.user?.expectations}
                   </p>
                 )}
                 <p className="flex items-center text-sm text-gray-700 gap-1">
