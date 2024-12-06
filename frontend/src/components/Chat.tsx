@@ -227,25 +227,19 @@ const Chat: React.FC = () => {
   };
 
   useEffect(() => {
-    // Join the room when the component mounts
     socket.emit("join-room", room);
 
-    // Handle incoming chat messages
     socket.on("chat-message", (newMessage: Message) => {
       setGetmessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    // Show typing indicator when "user-typing" event is received
     socket.on("user-typing", () => {
       setIsTyping(true);
     });
 
-    // Hide typing indicator when "user-stop-typing" event is received
     socket.on("user-stop-typing", () => {
       setIsTyping(false);
     });
-
-    // Cleanup listeners on unmount
     return () => {
       socket.off("chat-message");
       socket.off("user-typing");

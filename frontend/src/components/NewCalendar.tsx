@@ -71,7 +71,7 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
       try {
         await axios.post("https://if-project8.onrender.com/user/mail", {
           sendEmail: specialist.email,
-          subject: "asdasd",
+          subject: "Цаг захиалга",
           html: `<!DOCTYPE html>
 <html lang="mn">
   <head>
@@ -91,9 +91,9 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
       </tr>
       <tr>
         <td style="padding: 40px 30px;">
-          <h2 style="color: #333333; font-size: 24px; margin-top: 0;">Тавтай морилно уу ба Баярлалаа!</h2>
+          <h2 style="color: #333333; font-size: 24px; margin-top: 0;">Захиалга!</h2>
           <p style="color: #666666; font-size: 16px;">
-            Эмчилгээний уулзалт захиалгаа баталгаажуулсан байна. Сэтгэл санааны эдгэрэлтийг эрэлхийлэх энэ алхамыг хийсэнд бид маш их талархаж байна.
+            Эмчилгээний уулзалт захиалсан байна. Сэтгэл санааны эдгэрэлтийг эрэлхийлэх энэ алхамыг хийсэнд бид маш их талархаж байна.
           </p>
           <p style="color: #666666; font-size: 16px;">
             Энэ бол өөртөө анхаарал тавих чухал мөч бөгөөд бид танд энэ аялалд хамтран оролцож байгаадаа баяртай байна. Бид таныг энэ замд бүрэн дэмжих болно.
@@ -121,7 +121,7 @@ export const NewCalendar = ({ specialist }: NewCalendarProps) => {
 
           <div style="font-size: 16px; color: #6b8e23; font-weight: bold; display: flex; flex-direction: column; gap: 4px;">
             Таны Сонгосон Эмч:
-            <p style="margin: 0; color: #666666;">Эмчийн нэр: ${specialist.username}</p>
+            <p style="margin: 0; color: #666666;">Үйлчлүүлэгчийн нэр: ${user?.username}</p>
           </div>
 
           <p style="color: #666666; font-size: 16px;">

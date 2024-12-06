@@ -58,7 +58,7 @@ const Page = () => {
         );
 
         if (data != "Profile updated successfully") {
-          toast.success("Logged in successfully!");
+          toast.success("Амжилттай нэвтэрлээ!");
         }
 
         await axios.post("https://if-project8.onrender.com/user/signup", {
