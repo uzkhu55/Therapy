@@ -28,8 +28,9 @@ const Page = () => {
         const theraDetailData = theraDetailResponse.data;
 
         if (!detailData.form && !theraDetailData.form) {
-          router.push("/userDetail");
+          // router.push("/userDetail");
         }
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data", error);
