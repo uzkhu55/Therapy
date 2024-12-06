@@ -85,9 +85,9 @@ const UserDetail: React.FC = () => {
           return;
         }
 
-        if (!detailData.form || !theraDetailData.form) {
-          router.push("/");
-        }
+        // if (!detailData.form || !theraDetailData.form) {
+        // router.push("/");
+        // }
         if (detailData.form && theraDetailData.form) {
           router.push("/userDetail");
           return;
