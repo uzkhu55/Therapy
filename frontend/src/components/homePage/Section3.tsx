@@ -7,6 +7,7 @@ import { DavuuSVG1 } from "./DavuuSVG1";
 import { DavuuSVG2 } from "./DavuuSVG2";
 import { DavuuSVG3 } from "./DavuuSVG3";
 import { Section3svg } from "./Section3svg";
+import Link from "next/link";
 
 interface Article {
   id: number;
@@ -49,7 +50,9 @@ const Section3: React.FC = () => {
           </div>
 
           <div className="font-bold text-xl text-[#102d3f] flex items-center justify-end max-w-[1120px] mb-[50px]">
-            <div>Бүгдийг унших</div>
+            <Link href="niitlel">
+              <div>Бүгдийг унших</div>
+            </Link>
             <GoArrowRight className="ml-[10px] mt-[5px]" />
           </div>
 
