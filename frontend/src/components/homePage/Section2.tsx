@@ -19,21 +19,19 @@ const Section2 = () => {
               <div className="w-full text-[#102d3f] text-[22px] font-bold font-['Inter']">
                 Мэргэжлийн дэмжлэг
               </div>
-              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
+              <div className="w-full text-[#102d3f] text-lg mb-6">
                 Манай мэргэжлийн баг таны том жижиг ямар ч асуудалд дэмжлэг
                 үзүүлэхэд бэлэн байна. Ямар нэгэн лавлагаа шаардлагагүй, зүгээр
                 л чатлах хүсэлтээ илгээгээрэй.
               </div>
             </div>
           </div>
-
-          {/* Community support */}
           <div className="">
             <div className="flex flex-col justify-center items-center gap-6">
               <div className="w-full text-[#102d3f] text-[22px] font-bold font-['Inter']">
                 Нийгмийн дэмжлэг
               </div>
-              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
+              <div className="w-full text-[#102d3f] text-lg mb-6">
                 Манай хамтын форум аюулгүй байдлыг харгалзан үзэж хянадаг бөгөөд
                 хүмүүс хоорондоо асуудлаа хуваалцаж, хэлэлцэх боломжийг олгодог.
               </div>
@@ -46,7 +44,7 @@ const Section2 = () => {
               <div className="w-full text-[#102d3f] text-[22px] font-bold font-['Inter']">
                 Хувийн хөгжлийн хэрэгсэл
               </div>
-              <div className="w-full text-justify text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
+              <div className="w-full text-[#102d3f] text-lg font-normal font-['Inter'] mb-6">
                 Манай өөртөө туслах хэрэгслийн багц нь танд тэмдэглэл хөтлөх,
                 сэтгэл хөдлөлөө хянах, зорилго тавих боломжийг олгодог.
               </div>

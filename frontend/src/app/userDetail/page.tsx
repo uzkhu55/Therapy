@@ -80,7 +80,7 @@ const UserDetail: React.FC = () => {
         const detailData = detailResponse.data;
         const theraDetailData = theraDetailResponse.data;
 
-        if (detailData.form || theraDetailData.form) {
+        if (detailData.form && theraDetailData.form) {
           router.push("/");
           return;
         }

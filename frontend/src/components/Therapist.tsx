@@ -34,6 +34,7 @@ interface TheraDetail {
 }
 
 export interface Specialist {
+  image: string;
   email: string;
   authId: string;
   username: string;
@@ -93,7 +94,7 @@ const Therapist = () => {
               <TableRow key={specialist.authId}>
                 <TableCell className="flex justify-center">
                   <img
-                    src={"/avatar1.png"}
+                    src={specialist.image}
                     alt="User Profile"
                     className="rounded-full w-16 h-16"
                   />
@@ -146,7 +147,7 @@ const Therapist = () => {
                       <div className="flex  flex-col items-center">
                         <div className="flex items-center mb-12  gap-12 flex-col">
                           <img
-                            src={"/avatar1.png"}
+                            src={specialist.image}
                             alt="User Profile"
                             className="rounded-full w-16 h-16"
                           />

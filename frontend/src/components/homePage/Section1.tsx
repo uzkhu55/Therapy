@@ -12,7 +12,6 @@ const Section1 = () => {
   return (
     <div className="flex absolute top-0 justify-center items-center w-screen z-40">
       <div className="flex lg:flex-row justify-center items-center w-full z-50">
-        {/* Mobile Layout */}
         <div className="block md:hidden absolute top-[130px] w-full p-3 z-60">
           <div className="flex flex-col items-center justify-center w-full gap-8">
             <img
@@ -48,8 +47,6 @@ const Section1 = () => {
             )}
           </div>
         </div>
-
-        {/* Desktop Layout */}
         <div className="hidden lg:flex absolute top-[190px] justify-center p-8 items-center w-full z-60">
           <div className="flex lg:flex-row justify-between items-center w-full max-w-[1120px]">
             <div className="flex flex-col w-full max-w-[651px] gap-8">
@@ -71,8 +68,6 @@ const Section1 = () => {
             <img src="/Hero.png" alt="Hero" className="w-[488px] h-[408px]" />
           </div>
         </div>
-
-        {/* Tablet Layout */}
         <div className="hidden md:block absolute top-[105px] lg:hidden p-6 w-full z-60">
           <div className="flex lg:flex-row justify-between items-center w-full max-w-[1120px]">
             <div className="flex flex-col w-full max-w-[651px] gap-8">
@@ -95,7 +90,6 @@ const Section1 = () => {
           </div>
         </div>
       </div>
-
       <Section1svg />
     </div>
   );

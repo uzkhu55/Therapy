@@ -78,6 +78,7 @@ const Chat: React.FC = () => {
 
   const [getUserdetail, setGetUserdetail] = useState<Detail[]>([]);
   const [recentChats, setRecentChats] = useState<string[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -92,6 +93,32 @@ const Chat: React.FC = () => {
       inputRef.current.focus();
     }
   }, [chosenUserId]);
+
+  useEffect(() => {
+    // Function to determine if it's a mobile device
+    const detectMobile = () => {
+      const userAgent = window.navigator.userAgent;
+      const mobileRegex =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+      return mobileRegex.test(userAgent);
+    };
+
+    // Set the initial value of isMobile
+    setIsMobile(detectMobile());
+
+    // Function to handle window resize
+    const handleResize = () => {
+      setIsMobile(detectMobile());
+    };
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -233,17 +260,8 @@ const Chat: React.FC = () => {
       setGetmessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    socket.on("user-typing", () => {
-      setIsTyping(true);
-    });
-
-    socket.on("user-stop-typing", () => {
-      setIsTyping(false);
-    });
     return () => {
       socket.off("chat-message");
-      socket.off("user-typing");
-      socket.off("user-stop-typing");
     };
   }, [room]); // Only runs when the room changes
 
@@ -270,247 +288,267 @@ const Chat: React.FC = () => {
     <div className="h-screen w-screen gap-12 flex flex-col bg-white">
       <Header />
       <div className="flex absolute h-full w-full bg-white">
-        <div className="flex relative w-full lg:h-[89%] md:h-[90%] h-[90%] rounded-lg top-[81px]">
-          <div
-            className={`${
-              isSidebarVisible
-                ? "translate-x-0 w-1/4"
-                : "-translate-x-full w-24"
-            } transform transition-all duration-300 ease-in-out flex h-full rounded-l-lg bg-[#f3f3f3] text-black overflow-hidden`}
-          >
-            <div className="flex w-full flex-col">
-              <div className="flex w-[97%] bg-white rounded-2xl p-5 m-[10px] items-center justify-evenly">
-                <div className="font-bold text-xl pl-8 text-[#325343]">
-                  Chat
-                </div>
-                <div className="w-[220px] relative">
-                  <Input
-                    className="focus-visible:outline-none rounded-2xl"
-                    placeholder="Search username"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                  />
-                  <div className="absolute flex flex-col gap-2 top-14 rounded-xl z-10 w-full">
-                    {searchValue &&
-                      getUserdetail
-                        .filter((user) =>
-                          user.username
-                            .toLowerCase()
-                            .includes(searchValue.toLowerCase())
-                        )
-                        .map((el, index) => (
-                          <div
-                            className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
-                            key={index}
-                            onClick={() => {
-                              handleAddToRecentChats(el.username);
-                              setSearchValue("");
-                            }}
-                          >
-                            {el.username}
-                          </div>
-                        ))}
+        {isMobile ? (
+          <div className="flex items-center justify-center h-full w-full">
+            <div className="text-center">
+              <p className="text-xl font-bold">Mobile Version Not Supported</p>
+              <p className="mt-4">
+                The chat feature is not available on mobile devices at this
+                time. Please access it on a desktop or laptop for the best
+                experience.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex relative w-full lg:h-[89%] md:h-[90%] h-[90%] rounded-lg top-[81px]">
+            <div
+              className={`${
+                isSidebarVisible
+                  ? "translate-x-0 w-1/4"
+                  : "-translate-x-full w-24"
+              } transform transition-all duration-300 ease-in-out flex h-full rounded-l-lg bg-[#f3f3f3] text-black overflow-hidden`}
+            >
+              <div className="flex w-full flex-col">
+                <div className="flex w-[97%] bg-white rounded-2xl p-5 m-[10px] items-center justify-evenly">
+                  <div className="font-bold text-xl pl-8 text-[#325343]">
+                    Chat
                   </div>
-                  <Search className="absolute top-2 right-2 text-gray-400" />
-                </div>
-              </div>
-              <div
-                className="bg-white h-full mb-4 p-4 ml-[10px] rounded-2xl px-4"
-                style={{ overflow: "visible" }}
-              >
-                <div className="text-sm font-black z-100 pb-4 px-2 text-black">
-                  Recent Chats
-                </div>
-                <div className="flex cursor-pointer flex-col gap-2">
-                  {getUserdetail.length > 0 ? (
-                    getUserdetail
-                      .filter((el) => recentChats.includes(el.username))
-                      .map((el, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                          <div
-                            className="p-2 flex items-center gap-4 w-[400px] bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
-                            onClick={() => handleAddToRecentChats(el.username)}
-                          >
-                            <img
-                              src={
-                                avatar[index % avatar.length]?.img ||
-                                "/default-avatar.png"
-                              }
-                              alt={`Avatar of ${el.username}`}
-                              className="w-10 h-10 rounded-full"
-                            />
-                            <div className="text-sm font-serif">
+                  <div className="w-[220px] relative">
+                    <Input
+                      className="focus-visible:outline-none rounded-2xl"
+                      placeholder="Search username"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                    <div className="absolute flex flex-col gap-2 top-14 rounded-xl z-10 w-full">
+                      {searchValue &&
+                        getUserdetail
+                          .filter((user) =>
+                            user.username
+                              .toLowerCase()
+                              .includes(searchValue.toLowerCase())
+                          )
+                          .map((el, index) => (
+                            <div
+                              className="p-2 bg-[#325342] text-white rounded-xl cursor-pointer hover:bg-[#2a4537] text-sm"
+                              key={index}
+                              onClick={() => {
+                                handleAddToRecentChats(el.username);
+                                setSearchValue("");
+                              }}
+                            >
                               {el.username}
                             </div>
+                          ))}
+                    </div>
+                    <Search className="absolute top-2 right-2 text-gray-400" />
+                  </div>
+                </div>
+                <div
+                  className="bg-white h-full mb-4 p-4 ml-[10px] rounded-2xl px-4"
+                  style={{ overflow: "visible" }}
+                >
+                  <div className="text-sm font-black z-100 pb-4 px-2 text-black">
+                    Recent Chats
+                  </div>
+                  <div className="flex cursor-pointer flex-col gap-2">
+                    {getUserdetail.length > 0 ? (
+                      getUserdetail
+                        .filter((el) => recentChats.includes(el.username))
+                        .map((el, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <div
+                              className="p-2 flex items-center gap-4 w-[400px] bg-[#325342] text-white hover:bg-[#325040] rounded-xl text-md font-bold shadow-sm"
+                              onClick={() =>
+                                handleAddToRecentChats(el.username)
+                              }
+                            >
+                              <img
+                                src={
+                                  avatar[index % avatar.length]?.img ||
+                                  "/default-avatar.png"
+                                }
+                                alt={`Avatar of ${el.username}`}
+                                className="w-10 h-10 rounded-full"
+                              />
+                              <div className="text-sm font-serif">
+                                {el.username}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      ))
-                  ) : (
-                    <div className="text-gray-500 text-sm">No recent chats</div>
-                  )}
+                        ))
+                    ) : (
+                      <div className="text-gray-500 text-sm">
+                        No recent chats
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            className={`${
-              isSidebarVisible ? "w-3/4" : "w-full"
-            } bg-[#f3f3f3] flex flex-col rounded-r-lg transition-all duration-300 ease-in-out`}
-          >
-            <div className="py-2 rounded-lg absolute top-[25px] left-6">
-              <button
-                onClick={toggleSidebar}
-                className="z-50 p-2 bg-[#325342] text-xs flex flex-col text-white rounded-full shadow-md"
-              >
-                {isSidebarVisible ? "Hide" : "Show"}
-              </button>
-            </div>
-            <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
-              <div className="flex items-center gap-4">
-                <img
-                  src={user?.imageUrl || "/default-avatar.png"}
-                  alt="User Profile"
-                  className="rounded-full w-8 h-8"
-                />
-                <div className="text-green-400">Online</div>
+            <div
+              className={`${
+                isSidebarVisible ? "w-3/4" : "w-full"
+              } bg-[#f3f3f3] flex flex-col rounded-r-lg transition-all duration-300 ease-in-out`}
+            >
+              <div className="py-2 rounded-lg absolute top-[25px] left-6">
+                <button
+                  onClick={toggleSidebar}
+                  className="z-50 p-2 bg-[#325342] text-xs flex flex-col text-white rounded-full shadow-md"
+                >
+                  {isSidebarVisible ? "Hide" : "Show"}
+                </button>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Ellipsis />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Block</DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-600">
-                    Report
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white gap-4 overflow-auto h-[800px]">
-              {getmessages?.map((msg, index) => {
-                const timestamp = new Date(msg.timeStamp);
-                const formattedTime = timestamp.toLocaleString("en-US", {
-                  timeZone: "Asia/Ulaanbaatar",
-                  hour12: false,
-                  hour: "numeric",
-                  minute: "numeric",
-                });
-                return (
-                  <div
-                    key={index}
-                    className={`flex w-full ${
-                      msg?.senderId?.authId === user?.id
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={`font-medium text-base flex gap-2 flex-col`}
-                    >
-                      <div className="flex flex-col gap-2">
-                        {msg?.senderId?.authId !== user?.id ? (
-                          // If the message sender is not the user
-                          <div className="flex pl-4 pt-4 items-center gap-2">
-                            <img
-                              src={
-                                msg?.senderId?.authId !== user?.id
-                                  ? "/default-avatar.png"
-                                  : user?.imageUrl
-                              }
-                              alt="User Profile"
-                              className="rounded-full w-8 h-8"
-                            />
-                            <div className="flex bg-gray-200 p-2 rounded-xl justify-end">
-                              {msg?.content}
-                            </div>
-                          </div>
-                        ) : (
-                          // If the message sender is the user
-                          <div className="flex pt-4 pr-4 items-center gap-2">
-                            <div className="flex bg-blue-600 p-2 rounded-xl text-white justify-start">
-                              {msg?.content}
-                            </div>
-                            <img
-                              src={
-                                msg?.senderId?.authId !== user?.id
-                                  ? "/default-avatar.png"
-                                  : user?.imageUrl
-                              }
-                              alt="User Profile"
-                              className="rounded-full w-8 h-8"
-                            />
-                          </div>
-                        )}
-
+              <div className="flex rounded-2xl m-[10px] bg-[#ffffff] p-6 justify-between">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={user?.imageUrl || "/default-avatar.png"}
+                    alt="User Profile"
+                    className="rounded-full w-8 h-8"
+                  />
+                  <div className="text-green-400">Online</div>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Ellipsis />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Block</DropdownMenuItem>
+                    <DropdownMenuItem className="text-red-600">
+                      Report
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="flex sticky-top flex-col mx-[10px] rounded-2xl bg-white gap-4 overflow-auto h-[800px]">
+                {chosenUserId ? (
+                  getmessages?.map((msg, index) => {
+                    const timestamp = new Date(msg.timeStamp);
+                    const formattedTime = timestamp.toLocaleString("en-US", {
+                      timeZone: "Asia/Ulaanbaatar",
+                      hour12: false,
+                      hour: "numeric",
+                      minute: "numeric",
+                    });
+                    return (
+                      <div
+                        key={index}
+                        className={`flex w-full ${
+                          msg?.senderId?.authId === user?.id
+                            ? "justify-end"
+                            : "justify-start"
+                        }`}
+                      >
                         <div
-                          className={`w-full text-sm ${
-                            msg?.senderId?.authId !== user?.id
-                              ? "text-left pl-4"
-                              : "text-right pr-4"
-                          } font-thin`}
+                          className={`font-medium text-base flex gap-2 flex-col`}
                         >
-                          {formattedTime}
+                          <div className="flex flex-col gap-2">
+                            {msg?.senderId?.authId !== user?.id ? (
+                              // If the message sender is not the user
+                              <div className="flex pl-4 pt-4 items-center gap-2">
+                                <img
+                                  src={
+                                    msg?.senderId?.authId !== user?.id
+                                      ? "/default-avatar.png"
+                                      : user?.imageUrl
+                                  }
+                                  alt="User Profile"
+                                  className="rounded-full w-8 h-8"
+                                />
+                                <div className="flex bg-gray-200 p-2 rounded-xl justify-end">
+                                  {msg?.content}
+                                </div>
+                              </div>
+                            ) : (
+                              // If the message sender is the user
+                              <div className="flex pt-4 pr-4 items-center gap-2">
+                                <div className="flex bg-blue-600 p-2 rounded-xl text-white justify-start">
+                                  {msg?.content}
+                                </div>
+                                <img
+                                  src={
+                                    msg?.senderId?.authId !== user?.id
+                                      ? "/default-avatar.png"
+                                      : user?.imageUrl
+                                  }
+                                  alt="User Profile"
+                                  className="rounded-full w-8 h-8"
+                                />
+                              </div>
+                            )}
+                          </div>
+                          <div
+                            className={`w-full text-sm ${
+                              msg?.senderId?.authId !== user?.id
+                                ? "text-left pl-4"
+                                : "text-right pr-4"
+                            } font-thin`}
+                          >
+                            {formattedTime}
+                          </div>
                         </div>
+                        <div className="w-4 h-4"></div>
                       </div>
-
-                      <div className="w-4 h-4"></div>
-                    </div>
+                    );
+                  })
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    Select a user to start chatting.
                   </div>
-                );
-              })}
-              {isTyping && (
-                <div className="flex w-full justify-start">
-                  <div className="flex pl-4 pt-4 items-center gap-2">
-                    <img
-                      src="/default-avatar.png"
-                      alt="User Profile"
-                      className="rounded-full w-8 h-8"
-                    />
+                )}
+                {isTyping && (
+                  <div className="flex w-full justify-start pl-4">
                     <TypingIndicator />
                   </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+              {chosenUserId && (
+                <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
+                  <div className="flex gap-4">
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="shrink-0"
+                    >
+                      <SmilePlus className="w-5 h-5" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="shrink-0 relative"
+                    >
+                      <input
+                        type="file"
+                        id="file-input"
+                        onChange={handleFileSelect}
+                        multiple
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                      />
+                      <Link2 className="w-5 h-5" />
+                    </Button>
+                  </div>
+                  <input
+                    type="text"
+                    ref={inputRef}
+                    className="flex-1 pl-2 bg-transparent border-none focus:outline-none text-sm"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Type a message..."
+                  />
+                  <button
+                    onClick={addMessage}
+                    className="px-4 py-2 bg-[#325342] text-white rounded-lg"
+                  >
+                    Send
+                  </button>
                 </div>
               )}
-              <div ref={messagesEndRef}></div>
-            </div>
-            <div className="flex mx-[10px] p-4 mb-4 mt-2 rounded-2xl bg-white items-center">
-              <div className="flex gap-4">
-                <Button variant="secondary" size="icon" className="shrink-0">
-                  <SmilePlus className="w-5 h-5" />
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="shrink-0 relative"
-                >
-                  <input
-                    type="file"
-                    id="file-input"
-                    onChange={handleFileSelect}
-                    multiple
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                  <Link2 className="w-5 h-5" />
-                </Button>
-              </div>
-              <input
-                type="text"
-                ref={inputRef}
-                className="flex-1 pl-2 bg-transparent border-none focus:outline-none text-sm"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Type a message..."
-              />
-              <button
-                onClick={addMessage}
-                className="px-4 py-2 bg-[#325342] text-white rounded-lg"
-              >
-                Send
-              </button>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

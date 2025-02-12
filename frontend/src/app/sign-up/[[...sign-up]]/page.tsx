@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <div className="flex items-center h-screen justify-center">
       <SignUp
-        forceRedirectUrl="/userDetail" // Redirects to /userDetail after successful sign-up
+        forceRedirectUrl="/" // Redirects to /userDetail after successful sign-up
         appearance={{
           elements: {
             card: "bg-[#325342]",
