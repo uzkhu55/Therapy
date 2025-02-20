@@ -17,7 +17,7 @@ type SpecialistData = {
   authId: string;
   createdAt: string;
   email: string;
-  image: string[];
+  image: string;
   isSpecialist: false;
   updatedAt: string;
   username: string;
@@ -50,6 +50,7 @@ const Specialist = () => {
             <TableHead>Email</TableHead>
             <TableHead>Username</TableHead>
             <TableHead className="text-left">Огноо</TableHead>
+            <TableHead className="text-left">Image</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,6 +65,13 @@ const Specialist = () => {
                 </TableCell>
                 <TableCell>{specialist.username}</TableCell>
                 <TableCell>{specialist.createdAt}</TableCell>
+                <TableCell>
+                  <img
+                    className="w-[24px] h-[24px]"
+                    src={specialist.image}
+                    alt=""
+                  />
+                </TableCell>
               </TableRow>
             );
           })}

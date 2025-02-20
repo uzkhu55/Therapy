@@ -5,7 +5,6 @@ import AdminHeader from "./AdminHeader";
 import SideBar from "./SideBar";
 import Specialist from "./Specialist";
 import Analytics from "./Analytics";
-import Settings from "./Settings";
 import Clients from "./Clients";
 import { AdminAllPost } from "./Post";
 import axios from "axios";
@@ -53,10 +52,6 @@ const Home = () => {
     }
   }, [user]);
 
-  // if (!admin) {
-  //   return null;
-  // }
-
   return (
     <div className="flex w-full flex-col ">
       <div className="flex pt-4 mx-2">
@@ -68,7 +63,6 @@ const Home = () => {
         {toggle === "Specialist" && <Specialist />}
         {toggle === "Post" && <AdminAllPost />}
         {toggle === "Analytics" && <Analytics />}
-        {toggle === "Setting" && <Settings />}
       </div>
     </div>
   );

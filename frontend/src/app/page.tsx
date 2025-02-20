@@ -11,17 +11,7 @@ import { toast } from "react-toastify";
 const Page = () => {
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const router = useRouter();
-
-  useEffect(() => {
-    // Check if modal was already shown
-    const modalShown = localStorage.getItem("modalShown");
-    if (!modalShown) {
-      setIsModalOpen(true);
-      localStorage.setItem("modalShown", "true"); // Save flag
-    }
-  }, []);
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -45,11 +35,15 @@ const Page = () => {
       } catch (error) {
         console.error("Error fetching user data", error);
         setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     };
     if (user) {
       getUserDetails();
     }
+
+    setIsLoading(false);
   }, [user]);
 
   useEffect(() => {
@@ -84,20 +78,6 @@ const Page = () => {
     }
   }, [user]);
 
-  // Close modal on "Esc" key press
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsModalOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#325343] text-white">
@@ -109,31 +89,6 @@ const Page = () => {
   return (
     <div className="flex items-center w-full">
       <Homepage />
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-          onClick={() => setIsModalOpen(false)} // Close when clicking outside
-        >
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg w-96 text-center"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-          >
-            <h2 className="text-lg font-semibold mb-4">
-              Website болон функц талаар танилцуулга Canva
-            </h2>
-            <a
-              href="https://www.canva.com/design/DAGe8NpNqHc/fornoa5zOCQAbOGblEOAUQ/edit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              Go to Canva
-            </a>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

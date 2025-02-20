@@ -25,7 +25,6 @@ const SideBar = ({ toggleHandler, toggle }: SideBarProps) => {
     { label: "Specialist", icon: <Users /> },
     { label: "Post", icon: <StickyNote /> },
     { label: "Analytics", icon: <CalendarDays /> },
-    { label: "Settings", icon: <Settings /> },
   ];
   // const toggleHandler = (word: string) => {
   //   setToggle(word);

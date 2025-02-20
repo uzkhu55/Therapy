@@ -18,7 +18,7 @@ type PostsData = {
   authId: string;
   createdAt: string;
   email: string;
-  image: string[];
+  image: string;
   isSpecialist: false;
   updatedAt: string;
   userId: userDataType;
@@ -48,7 +48,9 @@ export const AdminAllPost = () => {
         "https://if-project8.onrender.com/posts/fetchPosts"
       );
       setPosts(data);
+      console.log(data);
     };
+
     getAllPosts();
   }, []);
 
@@ -64,6 +66,7 @@ export const AdminAllPost = () => {
             <TableRow>
               <TableHead className="w-[100px]">ID</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Image</TableHead>
               <TableHead>Username</TableHead>
               <TableHead>Content</TableHead>
               <TableHead>CreatedAt</TableHead>
@@ -72,32 +75,39 @@ export const AdminAllPost = () => {
           </TableHeader>
           <TableBody>
             {posts
-              // .filter((post) =>
-              //   post.userId.email
-              //     .toLocaleLowerCase()
-              //     .includes(inputValue.toLocaleLowerCase())
-              // )
-              .map((posts, i) => {
-                return (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">{i + 1}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {/* <img
-                          src={posts.image?.[0]}
+              .filter(
+                (post) =>
+                  !inputValue ||
+                  (post.userId &&
+                    post.userId.email
+                      .toLowerCase()
+                      .includes(inputValue.toLowerCase()))
+              )
+              .map((post, i) => (
+                <TableRow key={i}>
+                  <TableCell className="font-medium">{i + 1}</TableCell>
+                  <TableCell className="font-medium">
+                    {post.userId?.email || "No Email"}
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {post.image?.[0] && (
+                        <img
+                          src={post.image}
                           alt="profile"
                           className="w-8 h-8 rounded-full"
-                        /> */}
-                        <p>{posts.userId.email}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell>{posts.userId.username}</TableCell>
-                    <TableCell>{posts.content}</TableCell>
-                    <TableCell>{posts.createdAt}</TableCell>
-                    <TableCell>{posts.updatedAt}</TableCell>
-                  </TableRow>
-                );
-              })}
+                        />
+                      )}
+                    </div>
+                  </TableCell>
+
+                  <TableCell>{post.userId?.username || "Unknown"}</TableCell>
+                  <TableCell>{post.content}</TableCell>
+                  <TableCell>{post.createdAt}</TableCell>
+                  <TableCell>{post.updatedAt}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>
