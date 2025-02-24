@@ -31,10 +31,15 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (!user) {
+      router.push("/"); // Redirect to homepage if not logged in
+      return;
+    }
+
     const fetchAdmin = async () => {
       try {
         const response = await axios.get(
-          `https://if-project8.onrender.com/user/neguser/${user?.id}`
+          `https://if-project8.onrender.com/user/neguser/${user.id}`
         );
 
         if (response.data.isAdmin) {
@@ -47,9 +52,8 @@ const Home = () => {
         router.push("/"); // Redirect to homepage in case of an error
       }
     };
-    if (user) {
-      fetchAdmin();
-    }
+
+    fetchAdmin();
   }, [user]);
 
   return (

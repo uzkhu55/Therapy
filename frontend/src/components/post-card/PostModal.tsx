@@ -74,11 +74,12 @@ export function PostModal({
         setIsOpen(false);
         setLoading(false);
         toast.success("Амжилттай нийтлэгдлээ!");
+        onClear();
+        window.location.reload(); // Refresh the page after successful post creation
       } catch (error) {
         console.log(error);
         setLoading(false);
       }
-      onClear();
     }
   };
 
