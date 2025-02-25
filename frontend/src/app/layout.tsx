@@ -23,6 +23,11 @@ export default function RootLayout({
   return (
     <ClerkProvider localization={localization}>
       <html lang="en">
+        <head>
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="icon" type="image/png" href="/browser.png" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </head>
         <body
           className={`${inter.className} ${rubik.className} flex flex-col antialiased`}
         >
