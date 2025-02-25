@@ -164,6 +164,11 @@ const Header: React.FC<HeaderProps> = ({
                         labelIcon={<DotIcon />}
                         href="/detailById"
                       />
+                      <UserButton.Link
+                        label="Admin"
+                        labelIcon={<DotIcon />}
+                        href="/admin"
+                      />
                     </UserButton.MenuItems>
                   </UserButton>
                 </SignedIn>
